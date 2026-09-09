@@ -1,0 +1,136 @@
+version: 1
+
+project:
+  name: "Website MPP dan Absensi Tenant Kabupaten Muara Enim"
+  description: "Government document and data storage platform"
+  domain: "government-web-app"
+  audience: "government staff"
+  language: "id"
+
+visual:
+  style: "minimalist"
+  secondary_style: "sleek"
+
+  personality:
+    - professional
+    - modern
+    - tactile
+    - trustworthy
+    - distinctive
+
+  creativity:
+    level: "bold"
+    allow_asymmetry: true
+    allow_visual_risk: false
+    signature_element: true
+
+theme:
+  mode: "light"
+
+colors:
+  primary: "#FFBA08"
+  primary_foreground: "#0A2472"   # kontras ~8.1:1 di atas primary, sekaligus reinforce brand navy
+
+  secondary: "#0A2472"
+  secondary_foreground: "#F8F9FC" # nyaris putih, kontras ~13:1 di atas navy
+
+  background: "#FAF9F6"           # warm off-white, menghangatkan area kosong
+  foreground: "#0F172A"           # dark slate-navy, netral tapi selaras dgn secondary
+
+  surface: "#FFFFFF"
+  surface_elevated: "#FFFDF8"     # sedikit lebih hangat, untuk card/modal yg "naik"
+
+  muted: "#E8EAF2"                # abu kebiruan lembut, turunan dari secondary
+  muted_foreground: "#5B6472"
+
+  border: "#E2E4EA"
+  input: "#D8DCE5"
+  ring: "#FFBA08"                 # fokus ring pakai primary biar konsisten
+
+  success: "#16A34A"
+  warning: "#F97316"              # sengaja dibuat oranye, bukan amber, biar tidak “tabrakan” makna dgn primary
+  destructive: "#DC2626"
+  info: "#0EA5E9"
+
+  typography:
+    font_family: "Poppins, sans-serif"
+    display_family: "Poppins, sans-serif"
+    body_family: "Poppins, sans-serif"
+
+  spacing:
+    density: "comfortable"
+
+  radius:
+    scale: "medium"
+
+  elevation:
+    intensity: "low"
+
+  clay:
+    enabled: false
+    intensity: "strong"
+    matte: true
+    diffuse_lighting: true
+    highlights: true
+    soft_shadows: true
+    inset_depth: true
+    pressed_state: true
+
+  glass:
+    enabled: false
+    intensity: "subtle"
+    blur: "medium"
+    opacity: 0.65
+    reflections: "subtle"
+
+components:
+  foundation:
+    - "shadcn"
+    - "radix"
+
+  reuse_existing: true
+
+ux:
+  responsive: true
+  mobile_first: true
+  accessibility: "strict"
+  reduced_motion: true
+
+  interaction:
+    tactile: true
+    feedback: true
+    hover_feedback: true
+    focus_visible: true
+
+references:
+  landing: ""
+  dashboard: ""
+  crud: ""
+  form: ""
+  detail: ""
+  search: ""
+  settings: ""
+  file_manager: ""
+
+assets:
+  logo: "/assets/img/logo.png"
+  brand_mark: "/assets/img/logo.png"
+  organization_logo: "/assets/img/logo.png"
+
+content:
+  tone: "professional"
+  factual_claims_only: true
+
+governance:
+  reference_first: true
+  reuse_components: true
+  audit_after_ui_task: true
+  no_unapproved_design_system: true
+  no_random_colors: true
+  no_random_radius: true
+  no_random_shadows: true
+  no_random_typography: true
+  no_random_spacing: true
+  no_page_specific_design_system: true
+  accessibility_over_visual_effects: true
+  limit_task_scope: true
