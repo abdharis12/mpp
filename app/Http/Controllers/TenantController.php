@@ -6,11 +6,12 @@ use App\Http\Requests\Tenant\StoreTenantRequest;
 use App\Http\Requests\Tenant\UpdateTenantRequest;
 use App\Models\Tenant;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\InertiaResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class TenantController extends Controller
 {
-    public function index(): InertiaResponse
+    public function index(): Response
     {
         $user = auth()->user();
         $tenants = Tenant::query()
@@ -18,14 +19,14 @@ class TenantController extends Controller
             ->orderBy('name')
             ->paginate(15);
 
-        return inertia('tenants/index', compact('tenants'));
+        return Inertia::render('tenants/index', compact('tenants'));
     }
 
-    public function create(): InertiaResponse
+    public function create(): Response
     {
         $this->authorize('create', Tenant::class);
 
-        return inertia('tenants/form', [
+        return Inertia::render('tenants/form', [
             'tenant' => null,
         ]);
     }
@@ -43,7 +44,7 @@ class TenantController extends Controller
     {
         $this->authorize('update', $tenant);
 
-        return inertia('tenants/form', [
+        return Inertia::render('tenants/form', [
             'tenant' => $tenant,
         ]);
     }

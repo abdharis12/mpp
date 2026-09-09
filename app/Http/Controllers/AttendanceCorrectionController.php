@@ -8,7 +8,8 @@ use App\Models\AttendanceCorrection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\InertiaResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AttendanceCorrectionController extends Controller
 {
@@ -24,10 +25,10 @@ class AttendanceCorrectionController extends Controller
             ->orderByDesc('created_at')
             ->paginate(15);
 
-        return inertia('corrections/index', compact('corrections'));
+        return Inertia::render('corrections/index', compact('corrections'));
     }
 
-    public function create(): InertiaResponse
+    public function create(): Response
     {
         $this->authorize('create', AttendanceCorrection::class);
 
@@ -37,7 +38,7 @@ class AttendanceCorrectionController extends Controller
             ->limit(30)
             ->get();
 
-        return inertia('corrections/form', [
+        return Inertia::render('corrections/form', [
             'correction' => null,
             'attendances' => $attendances,
             'correction_types' => config('attendance.correction_types'),

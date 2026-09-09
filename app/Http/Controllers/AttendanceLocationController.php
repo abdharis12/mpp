@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AttendanceLocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class AttendanceLocationController extends Controller
 {
@@ -16,7 +17,7 @@ class AttendanceLocationController extends Controller
             ->orderBy('name')
             ->get();
 
-        return inertia('locations/index', compact('locations'));
+        return Inertia::render('locations/index', compact('locations'));
     }
 
     public function update(Request $request, AttendanceLocation $location)

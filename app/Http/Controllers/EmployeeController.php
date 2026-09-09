@@ -10,7 +10,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\InertiaResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class EmployeeController extends Controller
 {
@@ -29,15 +30,15 @@ class EmployeeController extends Controller
             ->orderBy('name')
             ->paginate(15);
 
-        return inertia('employees/index', compact('employees'));
+        return Inertia::render('employees/index', compact('employees'));
     }
 
-    public function create(): InertiaResponse
+    public function create(): Response
     {
         $this->authorize('create', Employee::class);
         $tenants = Tenant::where('is_active', true)->orderBy('name')->get();
 
-        return inertia('employees/form', [
+        return Inertia::render('employees/form', [
             'employee' => null,
             'tenants' => $tenants,
         ]);
@@ -77,7 +78,7 @@ class EmployeeController extends Controller
         $this->authorize('update', $employee);
         $tenants = Tenant::where('is_active', true)->orderBy('name')->get();
 
-        return inertia('employees/form', [
+        return Inertia::render('employees/form', [
             'employee' => $employee->load('user'),
             'tenants' => $tenants,
         ]);

@@ -16,7 +16,7 @@ class SuperAdminSeeder extends Seeder
         $superAdminRole = Role::firstOrCreate(['name' => 'super_admin']);
 
         $admin = User::firstOrCreate(
-            ['email' => 'admin@dpmptspmuaraenimkab.go.id'],
+            ['email' => 'admin@dpmptsp.muaraenimkab.go.id'],
             [
                 'name' => 'Administrator',
                 'password' => '@Dpmptsp123!',

@@ -7,7 +7,8 @@ use App\Models\Leave;
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\InertiaResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class LeaveController extends Controller
 {
@@ -23,14 +24,14 @@ class LeaveController extends Controller
             ->orderByDesc('created_at')
             ->paginate(15);
 
-        return inertia('leaves/index', compact('leaves'));
+        return Inertia::render('leaves/index', compact('leaves'));
     }
 
-    public function create(): InertiaResponse
+    public function create(): Response
     {
         $this->authorize('create', Leave::class);
 
-        return inertia('leaves/form', [
+        return Inertia::render('leaves/form', [
             'leave' => null,
             'leave_types' => LeaveType::where('is_active', true)->get(),
         ]);

@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Inertia\InertiaResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class HolidayController extends Controller
 {
@@ -23,14 +24,14 @@ class HolidayController extends Controller
             ->orderByDesc('start_date')
             ->paginate(15);
 
-        return inertia('holidays/index', compact('holidays'));
+        return Inertia::render('holidays/index', compact('holidays'));
     }
 
-    public function create(): InertiaResponse
+    public function create(): Response
     {
         $this->authorize('create', Holiday::class);
 
-        return inertia('holidays/form', [
+        return Inertia::render('holidays/form', [
             'holiday' => null,
             'holiday_types' => config('attendance.holiday_types'),
         ]);
@@ -77,7 +78,7 @@ class HolidayController extends Controller
     {
         $this->authorize('update', $holiday);
 
-        return inertia('holidays/form', [
+        return Inertia::render('holidays/form', [
             'holiday' => $holiday->load('periods'),
             'holiday_types' => config('attendance.holiday_types'),
         ]);

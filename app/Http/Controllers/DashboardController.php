@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Tenant;
-use Inertia\InertiaResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index(): InertiaResponse
+    public function index(): Response
     {
         $user = auth()->user();
         $isAdminMpp = $user->hasAnyPermission(['manage_settings', 'view_audit_logs']);
@@ -36,7 +37,7 @@ class DashboardController extends Controller
         $monthQuery = ! $isAdminMpp && $user->employee ? $monthQuery->forTenant($user->employee->tenant_id) : $monthQuery;
         $monthlyAttendance = $monthQuery->count();
 
-        return inertia('dashboard', [
+        return Inertia::render('dashboard', [
             'summary' => [
                 'total_tenants' => $totalTenants,
                 'total_employees' => $totalEmployees,

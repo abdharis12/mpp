@@ -7,7 +7,8 @@ use App\Models\AttendanceScheduleDay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Inertia\InertiaResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AttendanceScheduleController extends Controller
 {
@@ -24,14 +25,14 @@ class AttendanceScheduleController extends Controller
             ->with('days')
             ->paginate(15);
 
-        return inertia('schedules/index', compact('schedules'));
+        return Inertia::render('schedules/index', compact('schedules'));
     }
 
-    public function create(): InertiaResponse
+    public function create(): Response
     {
         $this->authorize('create', AttendanceSchedule::class);
 
-        return inertia('schedules/form', [
+        return Inertia::render('schedules/form', [
             'schedule' => null,
             'days' => collect(range(1, 7))->map(fn ($d) => ['day_of_week' => $d]),
         ]);
@@ -62,7 +63,7 @@ class AttendanceScheduleController extends Controller
     {
         $this->authorize('update', $schedule);
 
-        return inertia('schedules/form', [
+        return Inertia::render('schedules/form', [
             'schedule' => $schedule->load('days'),
             'days' => collect(range(1, 7))->map(fn ($d) => ['day_of_week' => $d]),
         ]);

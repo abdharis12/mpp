@@ -12,7 +12,8 @@ use App\Services\Attendance\AttendanceEngine;
 use App\Services\Attendance\Exceptions\AttendanceException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\InertiaResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AttendanceController extends Controller
 {
@@ -22,7 +23,7 @@ class AttendanceController extends Controller
         private readonly ClockOut $clockOut,
     ) {}
 
-    public function today(): InertiaResponse
+    public function today(): Response
     {
         $this->authorize('viewToday');
 
@@ -40,7 +41,7 @@ class AttendanceController extends Controller
 
         $activeLocation = AttendanceLocation::where('is_active', true)->first();
 
-        return inertia('attendance/today', [
+        return Inertia::render('attendance/today', [
             'date' => $date->toDateString(),
             'schedule' => $plan->isWorkingDay && $plan->schedule?->day->is_working_day
                 ? [
