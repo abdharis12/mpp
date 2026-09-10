@@ -28,7 +28,7 @@ class ScheduleResolver
             $schedule = AttendanceSchedule::query()
                 ->where('is_active', true)
                 ->where($scope)
-                ->with(['days' => fn (Builder $query) => $query->where('day_of_week', $dayOfWeek)])
+                ->with(['days' => fn ($relation) => $relation->where('day_of_week', $dayOfWeek)])
                 ->orderBy('id')
                 ->first();
 

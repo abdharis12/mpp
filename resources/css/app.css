@@ -150,3 +150,25 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Leaflet overrides — undo Tailwind preflight conflicts */
+.leaflet-container {
+    background: #e5e3df;
+    font-family: inherit;
+}
+
+.leaflet-container img {
+    max-width: none;
+    height: auto;
+}
+
+.leaflet-pane {
+    z-index: unset;
+}
+
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-left,
+.leaflet-right {
+    z-index: unset;
+}

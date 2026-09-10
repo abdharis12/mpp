@@ -39,8 +39,9 @@ function jakartaParts(instant: Date) {
   };
 }
 function useJakartaNow() {
-  const [now, setNow] = useState(() => jakartaParts(new Date()));
+  const [now, setNow] = useState<ReturnType<typeof jakartaParts> | null>(null);
   useEffect(() => {
+    setNow(jakartaParts(new Date()));
     const id = window.setInterval(() => setNow(jakartaParts(new Date())), 1000);
     return () => window.clearInterval(id);
   }, []);
@@ -67,17 +68,17 @@ function BrandMark({ className }: { className?: string }) {
 export default function Welcome() {
   const { auth } = usePage().props;
   const now = useJakartaNow();
-  const isWeekend = now.dayOfWeek === 0 || now.dayOfWeek === 6;
-  const isFriday = now.dayOfWeek === 5;
+  const isWeekend = now ? now.dayOfWeek === 0 || now.dayOfWeek === 6 : false;
+  const isFriday = now ? now.dayOfWeek === 5 : false;
   const startMin = isFriday ? 7 * 60 : 8 * 60;
   const endMin = isFriday ? 16 * 60 + 30 : 16 * 60;
-  const curMin = now.hours * 60 + now.minutes;
-  const scheduleToday = isWeekend
+  const curMin = now ? now.hours * 60 + now.minutes : 0;
+  const scheduleToday = !now || isWeekend
     ? null
     : { startMin, endMin, label: isFriday ? "07.00 – 16.30 WIB" : "08.00 – 16.00 WIB" };
-  let jamStatus = "Libur pelayanan";
+  let jamStatus = !now ? "Memuat…" : "Libur pelayanan";
   let dotClass = "bg-muted-foreground";
-  if (!isWeekend && scheduleToday) {
+  if (now && !isWeekend && scheduleToday) {
     if (curMin < startMin) {
       jamStatus = "Belum buka";
       dotClass = "bg-[#FFBA08]";
@@ -180,14 +181,14 @@ export default function Welcome() {
                 Jam layanan hari ini
               </p>
 
-              <p className="mt-7 flex items-baseline gap-1 tabular-nums">
-                <span className="text-5xl font-bold tracking-tight">{now.timeLabel}</span>
-                <span className="text-2xl font-medium text-muted-foreground">:{now.secondsLabel}</span>
+              <p className="mt-7 flex items-baseline gap-1 tabular-nums" suppressHydrationWarning>
+                <span className="text-5xl font-bold tracking-tight">{now?.timeLabel ?? "--:--"}</span>
+                <span className="text-2xl font-medium text-muted-foreground">:{now?.secondsLabel ?? "--"}</span>
                 <span className="ml-2 text-xs font-medium tracking-[0.12em] text-muted-foreground">
                   WIB
                 </span>
               </p>
-              <p className="mt-2 text-sm text-muted-foreground">{now.dateLabel}</p>
+              <p className="mt-2 text-sm text-muted-foreground" suppressHydrationWarning>{now?.dateLabel ?? "Memuat tanggal…"}</p>
 
               <div className="mt-6 border-t border-border pt-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -198,6 +199,7 @@ export default function Welcome() {
                     <span
                       className={`inline-block size-2 rounded-full ${dotClass}`}
                       aria-hidden="true"
+                      suppressHydrationWarning
                     />
                     {jamStatus}
                   </span>
@@ -268,7 +270,7 @@ export default function Welcome() {
 
               <div className="mt-9 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
                 {SCHEDULE.map((item, index) => {
-                  const isToday = index === (isWeekend ? 2 : isFriday ? 1 : 0);
+                  const isToday = now ? index === (isWeekend ? 2 : isFriday ? 1 : 0) : false;
                   return (
                     <div
                       key={item.days}
