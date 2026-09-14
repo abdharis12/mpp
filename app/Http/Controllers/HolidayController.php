@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Holiday;
 use App\Models\HolidayPeriod;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,6 +72,14 @@ class HolidayController extends Controller
             }
         });
 
+        NotificationService::notifyUsersWithPermission(
+            ['manage_holiday', 'view_attendance'],
+            'Hari Libur Baru',
+            "Hari libur \"{$data['name']}\" telah ditambahkan.",
+            'holiday',
+            route('holidays.index'),
+        );
+
         return Redirect::route('holidays.index')->with('success', 'Hari libur berhasil dibuat.');
     }
 
@@ -118,6 +127,14 @@ class HolidayController extends Controller
                 ]);
             }
         });
+
+        NotificationService::notifyUsersWithPermission(
+            ['manage_holiday', 'view_attendance'],
+            'Hari Libur Diperbarui',
+            "Hari libur \"{$data['name']}\" telah diperbarui.",
+            'holiday',
+            route('holidays.index'),
+        );
 
         return Redirect::route('holidays.index')->with('success', 'Hari libur berhasil diperbarui.');
     }

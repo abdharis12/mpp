@@ -33,7 +33,7 @@ it('creates an attendance on successful clock-in with PRESENT status', function 
     $schedule = AttendanceSchedule::factory()->create(['grace_period_minutes' => 10, 'is_active' => true]);
     AttendanceScheduleDay::factory()->create([
         'attendance_schedule_id' => $schedule->id,
-        'day_of_week' => 3, // Wednesday (2026-09-10 is Wednesday)
+        'day_of_week' => 4, // Thursday (2026-09-10 is Thursday)
         'start_time' => '08:00:00',
         'end_time' => '16:00:00',
         'is_working_day' => true,
@@ -71,7 +71,7 @@ it('returns 409 when employee already clocked in', function () {
     $schedule = AttendanceSchedule::factory()->create(['grace_period_minutes' => 10, 'is_active' => true]);
     AttendanceScheduleDay::factory()->create([
         'attendance_schedule_id' => $schedule->id,
-        'day_of_week' => 3,
+        'day_of_week' => 4,
         'start_time' => '08:00:00',
         'end_time' => '16:00:00',
         'is_working_day' => true,
@@ -146,7 +146,7 @@ it('returns 422 when today is a full day holiday', function () {
     $schedule = AttendanceSchedule::factory()->create(['grace_period_minutes' => 10, 'is_active' => true]);
     AttendanceScheduleDay::factory()->create([
         'attendance_schedule_id' => $schedule->id,
-        'day_of_week' => 3,
+        'day_of_week' => 4,
         'start_time' => '08:00:00',
         'end_time' => '16:00:00',
         'is_working_day' => true,
@@ -193,7 +193,7 @@ it('returns 422 when clock-in is outside attendance window', function () {
     $schedule = AttendanceSchedule::factory()->create(['grace_period_minutes' => 10, 'is_active' => true]);
     AttendanceScheduleDay::factory()->create([
         'attendance_schedule_id' => $schedule->id,
-        'day_of_week' => 3,
+        'day_of_week' => 4,
         'start_time' => '08:00:00',
         'end_time' => '16:00:00',
         'is_working_day' => true,
@@ -231,7 +231,7 @@ it('returns 422 when GPS is outside radius', function () {
     $schedule = AttendanceSchedule::factory()->create(['grace_period_minutes' => 10, 'is_active' => true]);
     AttendanceScheduleDay::factory()->create([
         'attendance_schedule_id' => $schedule->id,
-        'day_of_week' => 3,
+        'day_of_week' => 4,
         'start_time' => '08:00:00',
         'end_time' => '16:00:00',
         'is_working_day' => true,
@@ -271,7 +271,7 @@ it('creates LATE attendance when clock-in is after grace period', function () {
     $schedule = AttendanceSchedule::factory()->create(['grace_period_minutes' => 10, 'is_active' => true]);
     AttendanceScheduleDay::factory()->create([
         'attendance_schedule_id' => $schedule->id,
-        'day_of_week' => 3,
+        'day_of_week' => 4,
         'start_time' => '08:00:00',
         'end_time' => '16:00:00',
         'is_working_day' => true,

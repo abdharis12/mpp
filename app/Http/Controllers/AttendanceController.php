@@ -9,8 +9,9 @@ use App\Http\Requests\Attendance\ClockOutRequest;
 use App\Models\Attendance;
 use App\Models\AttendanceLocation;
 use App\Services\Attendance\AttendanceEngine;
-use App\Services\Attendance\Exceptions\AttendanceException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,7 +24,7 @@ class AttendanceController extends Controller
         private readonly ClockOut $clockOut,
     ) {}
 
-    public function today(): Response
+    public function today(Request $request): Response|JsonResponse
     {
         $this->authorize('viewToday');
 
@@ -41,7 +42,7 @@ class AttendanceController extends Controller
 
         $activeLocation = AttendanceLocation::where('is_active', true)->first();
 
-        return Inertia::render('attendance/today', [
+        $payload = [
             'date' => $date->toDateString(),
             'schedule' => $plan->isWorkingDay && $plan->schedule?->day->is_working_day
                 ? [
@@ -71,44 +72,70 @@ class AttendanceController extends Controller
                 'radius_meter' => $activeLocation->radius_meter,
                 'maximum_gps_accuracy' => $activeLocation->maximum_gps_accuracy,
             ] : null,
-        ]);
+        ];
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                ...$payload,
+                'attendance' => $attendance ? array_filter([
+                    'clock_in' => $attendance->clock_in?->toIso8601String(),
+                    'clock_out' => $attendance->clock_out?->toIso8601String(),
+                    'status' => $attendance->status,
+                ], fn ($value) => $value !== null) : null,
+            ]);
+        }
+
+        return Inertia::render('attendance/today', $payload);
     }
 
-    public function clockIn(ClockInRequest $request): RedirectResponse
+    public function clockIn(ClockInRequest $request): RedirectResponse|JsonResponse
     {
         $this->authorize('clockIn');
 
-        try {
-            $this->clockIn->execute(
-                auth()->user()->employee,
-                $request->float('latitude'),
-                $request->float('longitude'),
-                $request->float('accuracy'),
-                $request,
-            );
+        $attendance = $this->clockIn->execute(
+            auth()->user()->employee,
+            $request->float('latitude'),
+            $request->float('longitude'),
+            $request->float('accuracy'),
+            $request,
+        );
 
-            return Redirect::route('attendance.today')->with('success', 'Clock-in berhasil.');
-        } catch (AttendanceException $e) {
-            return Redirect::back()->withErrors(['attendance' => $e->getMessage()]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'attendance' => [
+                    'id' => $attendance->id,
+                    'status' => $attendance->status->value,
+                    'late_minutes' => $attendance->late_minutes,
+                    'clock_in' => $attendance->clock_in?->toIso8601String(),
+                ],
+            ], 201);
         }
+
+        return Redirect::route('attendance.today')->with('success', 'Clock-in berhasil.');
     }
 
-    public function clockOut(ClockOutRequest $request): RedirectResponse
+    public function clockOut(ClockOutRequest $request): RedirectResponse|JsonResponse
     {
         $this->authorize('clockOut');
 
-        try {
-            $this->clockOut->execute(
-                auth()->user()->employee,
-                $request->float('latitude'),
-                $request->float('longitude'),
-                $request->float('accuracy'),
-                $request,
-            );
+        $attendance = $this->clockOut->execute(
+            auth()->user()->employee,
+            $request->float('latitude'),
+            $request->float('longitude'),
+            $request->float('accuracy'),
+            $request,
+        );
 
-            return Redirect::route('attendance.today')->with('success', 'Clock-out berhasil.');
-        } catch (AttendanceException $e) {
-            return Redirect::back()->withErrors(['attendance' => $e->getMessage()]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'attendance' => [
+                    'id' => $attendance->id,
+                    'work_duration_minutes' => $attendance->work_duration_minutes,
+                    'clock_out' => $attendance->clock_out?->toIso8601String(),
+                ],
+            ]);
         }
+
+        return Redirect::route('attendance.today')->with('success', 'Clock-out berhasil.');
     }
 }

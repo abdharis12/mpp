@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Users, MapPin, Building2, CalendarDays, CalendarOff, FileText, AlertCircle, Clock } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Users, MapPin, Building2, CalendarDays, CalendarOff, FileText, AlertCircle, Clock, BarChart3, Shield } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -54,6 +54,14 @@ export function AppSidebar() {
 
     if (permissions.includes('request_correction') || permissions.includes('view_attendance')) {
         mainNavItems.push({ title: 'Koreksi', href: '/corrections', icon: AlertCircle });
+    }
+
+    if (permissions.includes('view_reports')) {
+        mainNavItems.push({ title: 'Laporan Absensi', href: '/reports/attendance', icon: BarChart3 });
+    }
+
+    if (permissions.includes('view_audit_logs')) {
+        mainNavItems.push({ title: 'Log Aktivitas', href: '/audit-logs', icon: Shield });
     }
 
     return (

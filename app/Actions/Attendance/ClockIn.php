@@ -82,7 +82,7 @@ class ClockIn
             );
         }
 
-        if (Attendance::where('employee_id', $employee->id)->where('attendance_date', $date->toDateString())->exists()) {
+        if (Attendance::where('employee_id', $employee->id)->whereDate('attendance_date', $date->toDateString())->exists()) {
             throw AttendanceException::make(
                 AttendanceException::ALREADY_CLOCKED_IN,
                 'Anda sudah melakukan absensi masuk.',
@@ -138,11 +138,12 @@ class ClockIn
 
         $expectedStart = $period->start;
         $lateMinutes = $now->greaterThan($expectedStart)
-            ? (int) ceil($now->diffInMinutes($expectedStart))
+            ? (int) ceil($expectedStart->diffInMinutes($now))
             : 0;
         $status = $lateMinutes <= $plan->gracePeriodMinutes
             ? AttendanceStatus::Present
             : AttendanceStatus::Late;
+        $lateMinutes = $status === AttendanceStatus::Late ? $lateMinutes : 0;
 
         return DB::transaction(function () use (
             $employee,

@@ -13,6 +13,14 @@ const WEEKDAYS = [
   "Sabtu",
 ];
 
+// Palette — used deliberately, not as decoration:
+// blue  = identitas resmi MPP (header, tombol utama, aksen tenang)
+// kuning = sinyal/status (lampu indikator buka, garis penanda "hari ini")
+const BLUE = "#123C86";
+const BLUE_DARK = "#0B2657";
+const YELLOW = "#FFC72C";
+const BOARD_BG = "#0B1B33";
+
 function jakartaParts(instant: Date) {
   const parts = new Intl.DateTimeFormat("id-ID", {
     timeZone: "Asia/Jakarta",
@@ -32,12 +40,12 @@ function jakartaParts(instant: Date) {
     dayOfWeek: WEEKDAYS.indexOf(weekday),
     hours: Number(v("hour")),
     minutes: Number(v("minute")),
-    seconds: Number(v("second")),
     timeLabel: `${v("hour")}:${v("minute")}`,
     secondsLabel: v("second"),
     dateLabel: `${weekday}, ${Number(v("day"))} ${v("month")} ${v("year")}`,
   };
 }
+
 function useJakartaNow() {
   const [now, setNow] = useState<ReturnType<typeof jakartaParts> | null>(null);
   useEffect(() => {
@@ -54,49 +62,81 @@ const SCHEDULE = [
   { days: "Sabtu – Minggu", hours: "Libur" },
 ] as const;
 
-function BrandMark({ className }: { className?: string }) {
+const PILLARS = [
+  {
+    title: "Satu alur, bukan banyak pintu",
+    body: "Informasi loket, jenis layanan, dan jam buka disatukan sehingga warga tahu harus ke mana lebih dulu.",
+  },
+  {
+    title: "Jam yang bisa diandalkan",
+    body: "Senin–Kamis dan Jumat punya jam berbeda; Sabtu–Minggu libur. Statusnya tampil langsung di papan atas halaman ini.",
+  },
+  {
+    title: "Kehadiran petugas tercatat",
+    body: "Sistem internal mencatat kehadiran, sehingga jam layanan yang tertulis benar-benar berjalan di lapangan.",
+  },
+] as const;
+
+function BrandMark({ inverted = false }: { inverted?: boolean }) {
   return (
-    <span
-      className={`grid size-9 shrink-0 place-content-center rounded-md bg-[#0A2472] text-[11px] font-bold leading-none tracking-tight text-white not-dark:text-white ${className ?? ""}`}
-      aria-hidden="true"
-    >
-      MPP
-    </span>
+    <img 
+      className="relative grid size-9 shrink-0 place-content-center font-['Poppins',_sans-serif] text-[11px] font-bold leading-none"
+      src="/img/logo-mpp.png"
+      alt="Logo Mal Pelayanan Publik Muara Enim"
+    />
   );
 }
 
 export default function Welcome() {
   const { auth } = usePage().props;
   const now = useJakartaNow();
+
   const isWeekend = now ? now.dayOfWeek === 0 || now.dayOfWeek === 6 : false;
   const isFriday = now ? now.dayOfWeek === 5 : false;
   const startMin = isFriday ? 7 * 60 : 8 * 60;
   const endMin = isFriday ? 16 * 60 + 30 : 16 * 60;
   const curMin = now ? now.hours * 60 + now.minutes : 0;
-  const scheduleToday = !now || isWeekend
-    ? null
-    : { startMin, endMin, label: isFriday ? "07.00 – 16.30 WIB" : "08.00 – 16.00 WIB" };
+  const scheduleToday =
+    !now || isWeekend
+      ? null
+      : {
+          startMin,
+          endMin,
+          label: isFriday ? "07.00 – 16.30 WIB" : "08.00 – 16.00 WIB",
+        };
+
   let jamStatus = !now ? "Memuat…" : "Libur pelayanan";
-  let dotClass = "bg-muted-foreground";
+  let lampClass = "opacity-25";
   if (now && !isWeekend && scheduleToday) {
     if (curMin < startMin) {
       jamStatus = "Belum buka";
-      dotClass = "bg-[#FFBA08]";
+      lampClass = "opacity-40";
     } else if (curMin > endMin) {
       jamStatus = "Sudah tutup";
-      dotClass = "bg-muted-foreground";
+      lampClass = "opacity-25";
     } else {
       jamStatus = "Sedang buka";
-      dotClass = "bg-success";
+      lampClass = "opacity-100";
     }
   }
 
+  const todayIndex = !now ? -1 : isWeekend ? 2 : isFriday ? 1 : 0;
+
   return (
     <>
-      <Head title="Mal Pelayanan Publik · Kabupaten Muara Enim" />
+      <Head title="Mal Pelayanan Publik · Kabupaten Muara Enim">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
 
-      <div className="flex min-h-screen flex-col bg-background text-foreground">
-        <div className="h-1 w-full bg-primary" aria-hidden="true" />
+      <div className="flex min-h-screen flex-col bg-background font-['Poppins',_sans-serif] text-foreground">
+        {/* signage strip */}
+        <div className="h-[3px] w-full" style={{ backgroundColor: BLUE }} aria-hidden="true" />
+        <div className="h-[3px] w-full" style={{ backgroundColor: YELLOW }} aria-hidden="true" />
 
         <header className="border-b border-border">
           <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-6 lg:px-8">
@@ -112,20 +152,17 @@ export default function Welcome() {
               </span>
             </Link>
 
-            <nav
-              className="flex shrink-0 items-center gap-2"
-              aria-label="Navigasi utama"
-            >
+            <nav className="flex shrink-0 items-center gap-2" aria-label="Navigasi utama">
               {auth.user ? (
-                <Button asChild>
+                <Button asChild style={{ backgroundColor: BLUE }} className="rounded-sm text-white hover:opacity-90">
                   <Link href={dashboard()}>Buka sistem</Link>
                 </Button>
               ) : (
                 <>
-                  <Button asChild variant="ghost">
+                  <Button asChild variant="ghost" className="rounded-sm">
                     <Link href={login()}>Masuk</Link>
                   </Button>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="outline" className="rounded-sm">
                     <Link href={register()}>Buat akun</Link>
                   </Button>
                 </>
@@ -135,176 +172,137 @@ export default function Welcome() {
         </header>
 
         <main className="flex-1">
-          <section className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-22">
-            <div>
-              <p className="text-sm font-medium uppercase tracking-[0.16em] text-[#0A2472] dark:text-secondary-foreground/70">
-                Mal Pelayanan Publik · Kabupaten Muara Enim
-              </p>
-              <h1 className="mt-4 text-4xl font-bold leading-[1.14] tracking-tight sm:text-5xl">
-                Satu tempat, <span className="underline decoration-primary decoration-4 underline-offset-4">satu alur</span> layanan
-                publik di Muara Enim.
+          {/* HERO */}
+          <section className="mx-auto grid w-full max-w-6xl items-stretch gap-10 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:px-8 lg:py-24">
+            <div className="flex flex-col justify-center">
+              <h1 className="max-w-lg font-['Poppins',_sans-serif] text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
+                Satu atap untuk layanan publik Muara Enim.
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
-                Mal Pelayanan Publik (MPP) menghadirkan layanan dari berbagai instansi terpadu dalam satu lokasi.
-                Cek jam layanan, lihat jadwal hari ini, dan akses sistem absensi petugas di dalam.
+              <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
+                Mal Pelayanan Publik menghadirkan layanan dari berbagai instansi dalam satu lokasi. Warga bisa
+                mengecek jam buka dan status hari ini di papan sebelah, sementara petugas mengelola kehadiran dan
+                laporan di sistem internal.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 {auth.user ? (
-                  <Button asChild size="lg">
+                  <Button asChild size="lg" style={{ backgroundColor: BLUE }} className="rounded-sm text-white hover:opacity-90">
                     <Link href={dashboard()}>Buka sistem petugas</Link>
                   </Button>
                 ) : (
                   <>
-                    <Button asChild size="lg">
+                    <Button asChild size="lg" style={{ backgroundColor: BLUE }} className="rounded-sm text-white hover:opacity-90">
                       <Link href={login()}>Masuk sistem petugas</Link>
                     </Button>
-                    <Button asChild size="lg" variant="outline">
-                      <a href="#jam-layanan">Lihat jam layanan</a>
+                    <Button asChild size="lg" variant="outline" className="rounded-sm">
+                      <a href="#jadwal">Lihat jam layanan</a>
                     </Button>
                   </>
                 )}
               </div>
-              <p
-                id="jam-layanan"
-                className="mt-8 scroll-mt-20 text-sm text-muted-foreground"
-              >
-                Sistem petugas (absensi, monitoring, laporan) tersedia di dalam dan memerlukan login.
-              </p>
             </div>
 
+            {/* digital status board */}
             <div
-              className="relative overflow-hidden rounded-lg border border-border bg-card px-6 py-7 shadow-sm sm:px-8 sm:py-8"
-              aria-label="Jam layanan hari ini"
+              className="flex flex-col justify-between p-7 sm:p-8"
+              style={{ backgroundColor: BOARD_BG, borderLeft: `4px solid ${YELLOW}` }}
+              aria-label="Papan status layanan"
             >
-              <div className="absolute inset-x-0 top-0 h-0.5 bg-primary" aria-hidden="true" />
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                Jam layanan hari ini
-              </p>
+              <div>
+                <p className="text-sm text-white/55">Papan status layanan</p>
+                <p
+                  className="mt-5 font-['Poppins',_sans-serif] text-5xl font-semibold tracking-tight tabular-nums"
+                  style={{ color: YELLOW }}
+                  suppressHydrationWarning
+                >
+                  {now?.timeLabel ?? "--:--"}
+                  <span className="text-2xl text-white/40">:{now?.secondsLabel ?? "--"}</span>
+                </p>
+                <p className="mt-2 text-sm text-white/70" suppressHydrationWarning>
+                  {now?.dateLabel ?? "Memuat tanggal…"}
+                </p>
+              </div>
 
-              <p className="mt-7 flex items-baseline gap-1 tabular-nums" suppressHydrationWarning>
-                <span className="text-5xl font-bold tracking-tight">{now?.timeLabel ?? "--:--"}</span>
-                <span className="text-2xl font-medium text-muted-foreground">:{now?.secondsLabel ?? "--"}</span>
-                <span className="ml-2 text-xs font-medium tracking-[0.12em] text-muted-foreground">
-                  WIB
-                </span>
-              </p>
-              <p className="mt-2 text-sm text-muted-foreground" suppressHydrationWarning>{now?.dateLabel ?? "Memuat tanggal…"}</p>
-
-              <div className="mt-6 border-t border-border pt-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <span className="text-sm text-muted-foreground">
-                    {isWeekend ? "Sabtu–Minggu" : isFriday ? "Jumat" : "Senin–Kamis"}
-                  </span>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold">
+              <div className="mt-8 border-t border-white/15 pt-6">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-2.5 text-sm font-semibold text-white">
                     <span
-                      className={`inline-block size-2 rounded-full ${dotClass}`}
+                      className={`inline-block size-2.5 rounded-full ${lampClass}`}
+                      style={{ backgroundColor: YELLOW }}
                       aria-hidden="true"
                       suppressHydrationWarning
                     />
                     {jamStatus}
                   </span>
+                  <span className="font-['Poppins',_sans-serif] text-sm text-white/70 tabular-nums">
+                    {scheduleToday ? scheduleToday.label.replace(" WIB", "") : "Libur"}
+                  </span>
                 </div>
-                {scheduleToday ? (
-                  <p className="mt-2 text-sm font-semibold tabular-nums">{scheduleToday.label}</p>
-                ) : (
-                  <p className="mt-2 text-sm font-semibold">Libur</p>
-                )}
-                <p className="mt-4 text-sm text-muted-foreground">
-                  Spesifikasi jadwal dan hari libur dikelola oleh Admin MPP; petugas mengecek jam kerja efektif di sistem.
+                <p className="mt-4 text-xs leading-relaxed text-white/45">
+                  Jadwal khusus dan hari libur ditetapkan oleh Admin MPP.
                 </p>
               </div>
             </div>
           </section>
 
-          <section className="border-t border-border bg-card" aria-labelledby="tentang-mpp">
+          {/* ABOUT / PILLARS */}
+          <section className="border-t border-border" aria-labelledby="tentang-mpp">
             <div className="mx-auto w-full max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
-              <h2 id="tentang-mpp" className="max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
-                Layanan lintas instansi, satu pintu hadir lebih dekat untuk warga.
+              <h2 id="tentang-mpp" className="max-w-xl font-['Poppins',_sans-serif] text-2xl font-semibold tracking-tight sm:text-3xl">
+                Layanan lintas instansi, hadir lebih dekat untuk warga.
               </h2>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-                MPP adalah wujud satu pintu: warga tidak perlu datang ke banyak lokasi untuk menyelesaikan urusan administratif. Tenan layanan
-                beroperasi pada jam yang sama sehingga alur antri dan penanganan lebih terkontrol.
-              </p>
 
-              <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-0 md:divide-x md:divide-border">
-                <div className="md:pr-8">
-                  <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    Alur yang jelas
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Informasi loket, jenis layanan, dan jam buka disatukan sehingga warga tahu harus ke mana terlebih dahulu.
-                  </p>
-                </div>
-                <div className="md:px-8">
-                  <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    Jam yang terprediksi
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Senin–Kamis dan Jumat memiliki jam berbeda; Sabtu–Minggu libur. Status hari ini tampil di atas halaman ini.
-                  </p>
-                </div>
-                <div className="md:pl-8">
-                  <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    Akuntabilitas pemda
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Kehadiran petugas tercatat di sistem internal agar kedisiplinan jam layanan benar-benar terjaga.
-                  </p>
-                </div>
+              <div className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-8">
+                {PILLARS.map((pillar) => (
+                  <div key={pillar.title} className="border-l-2 pl-5" style={{ borderColor: YELLOW }}>
+                    <h3 className="text-sm font-semibold">{pillar.title}</h3>
+                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{pillar.body}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
 
-          <section
-            id="layanan"
-            className="scroll-mt-20 border-t border-border"
-            aria-labelledby="jam-mingguan"
-          >
+          {/* WEEKLY SCHEDULE */}
+          <section id="jadwal" className="scroll-mt-20 border-t border-border bg-card" aria-labelledby="jam-mingguan">
             <div className="mx-auto w-full max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
               <div className="flex flex-wrap items-end justify-between gap-3">
-                <h2 id="jam-mingguan" className="text-xl font-semibold tracking-tight sm:text-2xl">
+                <h2 id="jam-mingguan" className="font-['Poppins',_sans-serif] text-xl font-semibold tracking-tight sm:text-2xl">
                   Jam layanan mingguan
                 </h2>
-                <p className="text-sm text-muted-foreground">Sesuaikan kedatangan dengan jam masing-masing hari</p>
+                <p className="text-sm text-muted-foreground">Sesuaikan kedatangan dengan jadwal hari ini</p>
               </div>
 
-              <div className="mt-9 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
+              <div className="mt-8 border-t border-border">
                 {SCHEDULE.map((item, index) => {
-                  const isToday = now ? index === (isWeekend ? 2 : isFriday ? 1 : 0) : false;
+                  const isToday = index === todayIndex;
                   return (
                     <div
                       key={item.days}
-                      className={`px-6 py-7 ${isToday ? "bg-popover" : "bg-card"}`}
+                      className="flex items-center justify-between gap-4 border-b border-border py-5 pl-4"
+                      style={isToday ? { borderLeft: `3px solid ${YELLOW}`, backgroundColor: "rgba(18,60,134,0.04)" } : undefined}
                     >
-                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                        {item.days}
-                      </p>
+                      <div>
+                        <p className="text-sm font-medium">{item.days}</p>
+                        {isToday && <p className="mt-0.5 text-xs" style={{ color: BLUE }}>Hari ini</p>}
+                      </div>
                       <p
-                        className={`mt-3 text-sm font-semibold tabular-nums ${item.hours === "Libur" ? "text-muted-foreground" : "text-foreground"}`}
+                        className={`font-['Poppins',_sans-serif] text-sm tabular-nums ${
+                          item.hours === "Libur" ? "text-muted-foreground" : "font-semibold text-foreground"
+                        }`}
                       >
                         {item.hours}
                       </p>
-                      {isToday && (
-                        <p className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#0A2472] dark:text-primary">
-                          <span className="inline-block size-1.5 rounded-full bg-primary" />
-                          Hari ini
-                        </p>
-                      )}
                     </div>
                   );
                 })}
               </div>
-
-              <p className="mt-6 text-sm text-muted-foreground">
-                Perubahan jadwal khusus dan hari libur (mis. nasional, cuti bersama) ditetapkan oleh Admin MPP dan berpengaruh pada ketersediaan
-                layanan.
-              </p>
             </div>
           </section>
 
-          <section className="border-t border-border bg-card" aria-labelledby="kunjungi-mpp">
+          {/* VISIT */}
+          <section className="border-t border-border" aria-labelledby="kunjungi-mpp">
             <div className="mx-auto w-full max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
-              <h2 id="kunjungi-mpp" className="text-xl font-semibold tracking-tight sm:text-2xl">
+              <h2 id="kunjungi-mpp" className="font-['Poppins',_sans-serif] text-xl font-semibold tracking-tight sm:text-2xl">
                 Kunjungi MPP
               </h2>
               <div className="mt-8 grid gap-10 md:grid-cols-2">
@@ -312,17 +310,18 @@ export default function Welcome() {
                   <h3 className="text-sm font-semibold">Mal Pelayanan Publik</h3>
                   <p className="mt-1 text-sm text-muted-foreground">Kabupaten Muara Enim</p>
                   <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-                    Silakan datang sesuai jam layanan di atas. Untuk riwayat layanan atau perbaikan data, setiap tenant memiliki loketnya sendiri di
-                    dalam gedung.
+                    Datang sesuai jam layanan di atas. Untuk riwayat layanan atau perbaikan data, setiap tenant
+                    punya loketnya sendiri di dalam gedung.
                   </p>
                 </div>
-                <div className="border-l border-border pl-8 md:pl-10">
+                <div className="border-l-2 pl-6" style={{ borderColor: YELLOW }}>
                   <h3 className="text-sm font-semibold">Butuh bantuan?</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Warga dapat bertanya kepada petugas informasi di lokasi, atau mengikuti arahan antrean digital di dalam gedung.
+                    Tanyakan kepada petugas informasi di lokasi, atau ikuti arahan antrean digital di dalam
+                    gedung.
                   </p>
                   <p className="mt-6 text-xs text-muted-foreground">
-                    Halaman ini bersifat informatif. Untuk sistem absensi dan monitoring petugas, masuk melalui tombol di atas.
+                    Halaman ini bersifat informatif. Sistem absensi dan monitoring petugas ada di menu masuk di atas.
                   </p>
                 </div>
               </div>
@@ -330,22 +329,22 @@ export default function Welcome() {
           </section>
         </main>
 
-        <footer className="mt-auto bg-[#0A2472] text-white">
+        <footer style={{ backgroundColor: BLUE_DARK }} className="mt-auto text-white">
+          <div className="h-[3px] w-full" style={{ backgroundColor: YELLOW }} aria-hidden="true" />
           <div className="mx-auto w-full max-w-6xl px-6 py-12 lg:px-8">
             <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
               <div className="flex items-center gap-3">
-                <BrandMark className="!bg-white !text-[#0A2472]" />
+                <BrandMark inverted />
                 <span className="flex flex-col leading-tight">
                   <span className="text-sm font-semibold">Mal Pelayanan Publik</span>
-                  <span className="text-xs text-white/60">Kabupaten Muara Enim</span>
+                  <span className="text-xs text-white/55">Kabupaten Muara Enim</span>
                 </span>
               </div>
-              <p className="max-w-md text-sm leading-relaxed text-white/75">
-                Mal Pelayanan Publik Kabupaten Muara Enim. Halaman depan menampilkan informasi umum; sistem internal petugas tersedia di dalam
-                melalui menu login.
+              <p className="max-w-md text-sm leading-relaxed text-white/70">
+                Halaman depan menampilkan informasi umum. Sistem internal petugas tersedia melalui menu masuk.
               </p>
             </div>
-            <div className="mt-10 flex flex-col gap-2 border-t border-white/15 pt-6 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-10 flex flex-col gap-2 border-t border-white/15 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
               <p>© 2026 Mal Pelayanan Publik Kabupaten Muara Enim.</p>
               <p>Sistem absensi petugas berada di dalam (login).</p>
             </div>

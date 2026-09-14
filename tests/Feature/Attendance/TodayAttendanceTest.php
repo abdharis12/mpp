@@ -34,7 +34,7 @@ function setupAttendanceContext(): array
     $schedule = AttendanceSchedule::factory()->create(['grace_period_minutes' => 10, 'is_active' => true]);
     AttendanceScheduleDay::factory()->create([
         'attendance_schedule_id' => $schedule->id,
-        'day_of_week' => 3,
+        'day_of_week' => 4,
         'start_time' => '08:00:00',
         'end_time' => '16:00:00',
         'is_working_day' => true,
@@ -95,7 +95,7 @@ it('returns attendance after clock-in', function () {
         ->assertOk()
         ->assertJsonPath('attendance.status', 'PRESENT')
         ->assertJsonPath('attendance.clock_in', fn (mixed $clockIn) => is_string($clockIn) && str_starts_with($clockIn, '2026-09-10T08:05:00'))
-        ->assertJsonMissing('attendance.clock_out');
+        ->assertJsonMissingPath('attendance.clock_out');
 });
 
 it('redirects guest to login page', function () {

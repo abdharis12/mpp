@@ -2,8 +2,9 @@
 
 namespace App\Services\Attendance\Exceptions;
 
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 
 class AttendanceException extends RuntimeException
 {
@@ -61,7 +62,7 @@ class AttendanceException extends RuntimeException
         return $this->statusCode;
     }
 
-    public function render(): JsonResponse
+    public function render(Request $request): Response
     {
         $payload = [
             'message' => $this->getMessage(),
@@ -70,6 +71,12 @@ class AttendanceException extends RuntimeException
 
         if ($this->details !== []) {
             $payload['details'] = $this->details;
+        }
+
+        if ($request->header('X-Inertia')) {
+            return redirect()->back()->withErrors([
+                'attendance' => $this->getMessage(),
+            ]);
         }
 
         return response()->json($payload, $this->statusCode);

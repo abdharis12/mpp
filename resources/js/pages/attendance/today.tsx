@@ -116,12 +116,11 @@ export default function AttendanceToday({
     return (
         <>
             <Head title="Absensi Hari Ini" />
+            <div className="max-w-7xl flex flex-col gap-1 my-5 mx-6">
+                <h1 className="text-2xl font-semibold">Absensi Hari Ini</h1>
+                <p className="text-sm text-muted-foreground mt-1">{formatDateID(date)}</p>
+            </div>
             <div className="space-y-6 max-w-3xl">
-                <div>
-                    <h1 className="text-2xl font-semibold">Absensi Hari Ini</h1>
-                    <p className="text-sm text-muted-foreground mt-1">{formatDateID(date)}</p>
-                </div>
-
                 {notification && (
                     <Alert
                         variant={notification.type === 'error' ? 'destructive' : 'default'}

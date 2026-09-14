@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AttendanceSchedule;
 use App\Models\AttendanceScheduleDay;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -56,6 +57,14 @@ class AttendanceScheduleController extends Controller
             ]);
         }
 
+        NotificationService::notifyUsersWithPermission(
+            ['manage_schedule', 'view_attendance'],
+            'Jadwal Baru',
+            "Jadwal \"{$data['name']}\" telah ditambahkan.",
+            'schedule',
+            route('schedules.index'),
+        );
+
         return Redirect::route('schedules.index')->with('success', 'Jadwal berhasil dibuat.');
     }
 
@@ -97,6 +106,14 @@ class AttendanceScheduleController extends Controller
                 ]
             );
         }
+
+        NotificationService::notifyUsersWithPermission(
+            ['manage_schedule', 'view_attendance'],
+            'Jadwal Diperbarui',
+            "Jadwal \"{$data['name']}\" telah diperbarui.",
+            'schedule',
+            route('schedules.index'),
+        );
 
         return Redirect::route('schedules.index')->with('success', 'Jadwal berhasil diperbarui.');
     }

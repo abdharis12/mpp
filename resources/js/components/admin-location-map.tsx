@@ -70,7 +70,7 @@ export default function AdminLocationMap({ latitude, longitude, radius, onChange
 
     return (
         <div className="overflow-hidden rounded-md border border-border">
-            <MapContainer center={center} zoom={17} scrollWheelZoom={true} className="h-64 w-full">
+            <MapContainer center={center} zoom={17} scrollWheelZoom={true} className="h-96 w-full">
                 <FixMapAutoInvalidate />
                 <FitCenter center={center} />
                 <ClickHandler onClick={handleClick} />

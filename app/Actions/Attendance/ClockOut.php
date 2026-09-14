@@ -6,6 +6,7 @@ use App\Enums\AttendanceStatus;
 use App\Models\Attendance;
 use App\Models\AttendanceLocation;
 use App\Models\Employee;
+use App\Services\Attendance\AttendanceEngine;
 use App\Services\Attendance\Exceptions\AttendanceException;
 use App\Services\Attendance\LocationService;
 use App\Services\Audit\AuditLogger;
@@ -17,6 +18,7 @@ class ClockOut
 {
     public function __construct(
         private readonly LocationService $locationService,
+        private readonly AttendanceEngine $engine,
     ) {}
 
     public function execute(
@@ -39,12 +41,12 @@ class ClockOut
         }
 
         $attendance = Attendance::where('employee_id', $employee->id)
-            ->where('attendance_date', $date->toDateString())
+            ->whereDate('attendance_date', $date->toDateString())
             ->whereNull('clock_out')
             ->first();
 
         if (! $attendance) {
-            if (Attendance::where('employee_id', $employee->id)->where('attendance_date', $date->toDateString())->exists()) {
+            if (Attendance::where('employee_id', $employee->id)->whereDate('attendance_date', $date->toDateString())->exists()) {
                 throw AttendanceException::make(
                     AttendanceException::ALREADY_CLOCKED_OUT,
                     'Anda sudah melakukan absensi pulang.',
@@ -114,6 +116,17 @@ class ClockOut
             ? $attendance->status
             : AttendanceStatus::from($attendance->status);
 
+        $plan = $this->engine->planFor($employee, $date);
+        $earlyLeaveMinutes = 0;
+
+        if ($plan->hasWorkingTime() && $plan->schedule?->day) {
+            $expectedEnd = $plan->workingPeriods->last()?->end;
+
+            if ($expectedEnd && $now->lessThan($expectedEnd)) {
+                $earlyLeaveMinutes = (int) ceil($now->diffInMinutes($expectedEnd));
+            }
+        }
+
         return DB::transaction(function () use (
             $attendance,
             $employee,
@@ -123,6 +136,7 @@ class ClockOut
             $accuracy,
             $locResult,
             $workDurationMinutes,
+            $earlyLeaveMinutes,
             $request,
         ) {
             $attendance->update([
@@ -132,6 +146,7 @@ class ClockOut
                 'clock_out_accuracy' => $accuracy,
                 'clock_out_distance' => round($locResult->distance, 2),
                 'work_duration_minutes' => $workDurationMinutes,
+                'early_leave_minutes' => max(0, $earlyLeaveMinutes),
                 'clock_out_ip' => $request?->ip(),
                 'clock_out_user_agent' => $request?->userAgent() !== null
                     ? mb_substr($request->userAgent(), 0, 1000)
@@ -146,6 +161,7 @@ class ClockOut
                 newValues: [
                     'clock_out' => $now->toIso8601String(),
                     'work_duration_minutes' => $workDurationMinutes,
+                    'early_leave_minutes' => max(0, $earlyLeaveMinutes),
                     'distance' => round($locResult->distance, 2),
                 ],
                 request: $request,

@@ -14,8 +14,8 @@ class HolidayResolver
     {
         $holidays = Holiday::query()
             ->where('is_active', true)
-            ->where('start_date', '<=', $date->toDateString())
-            ->where('end_date', '>=', $date->toDateString())
+            ->whereDate('start_date', '<=', $date->toDateString())
+            ->whereDate('end_date', '>=', $date->toDateString())
             ->get();
 
         if ($holidays->isEmpty()) {
@@ -24,7 +24,7 @@ class HolidayResolver
 
         $periods = HolidayPeriod::query()
             ->whereIn('holiday_id', $holidays->pluck('id'))
-            ->where('holiday_date', $date->toDateString())
+            ->whereDate('holiday_date', $date->toDateString())
             ->get();
 
         return new HolidayResolution($holidays, $periods);

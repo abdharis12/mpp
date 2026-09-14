@@ -3,11 +3,14 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\AttendanceLocationController;
+use App\Http\Controllers\AttendanceReportController;
 use App\Http\Controllers\AttendanceScheduleController;
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TenantController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +61,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('corrections', [AttendanceCorrectionController::class, 'store'])->name('corrections.store');
     Route::post('corrections/{correction}/approve', [AttendanceCorrectionController::class, 'approve'])->name('corrections.approve');
     Route::post('corrections/{correction}/reject', [AttendanceCorrectionController::class, 'reject'])->name('corrections.reject');
+
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+
+    Route::get('reports/attendance', [AttendanceReportController::class, 'index'])->name('reports.attendance');
+    Route::get('reports/attendance/export', [AttendanceReportController::class, 'exportExcel'])->name('reports.attendance.export');
+    Route::get('reports/attendance/pdf', [AttendanceReportController::class, 'exportPdf'])->name('reports.attendance.pdf');
+
+    Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 });
 
 require __DIR__.'/settings.php';

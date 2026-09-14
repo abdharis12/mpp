@@ -71,7 +71,7 @@ class Attendance extends Model
 
     public function scopeOnDate(Builder $query, string $date): Builder
     {
-        return $query->where('attendance_date', $date);
+        return $query->whereDate('attendance_date', $date);
     }
 
     public function scopeForDateRange(Builder $query, string $from, string $to): Builder

@@ -34,7 +34,7 @@ function createClockInContext(bool $withAttendance = true): array
     $schedule = AttendanceSchedule::factory()->create(['grace_period_minutes' => 10, 'is_active' => true]);
     AttendanceScheduleDay::factory()->create([
         'attendance_schedule_id' => $schedule->id,
-        'day_of_week' => 3,
+        'day_of_week' => 4,
         'start_time' => '08:00:00',
         'end_time' => '16:00:00',
         'is_working_day' => true,

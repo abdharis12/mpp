@@ -15,15 +15,14 @@ export default function LocationIndex({ locations }: { locations: any }) {
 
     return (
         <>
-            <Head title="Lokasi Absensi" />
-            <div className="space-y-6 max-w-3xl">
-                <div>
-                    <h1 className="text-2xl font-semibold">Lokasi Absensi</h1>
-                    <p className="text-sm text-muted-foreground mt-1">
-                        Titik koordinat, radius, dan toleransi akurasi GPS untuk validasi clock-in/out.
-                    </p>
-                </div>
-
+            <Head title="Lokasi Absensi Pegawai" />
+            <div className="max-w-7xl flex flex-col gap-1 my-5 mx-6">
+                <h1 className="text-2xl font-semibold">Lokasi Absensi Pegawai Tenant</h1>
+                <p className="text-sm text-muted-foreground mt-1">
+                    Pengaturan Titik koordinat, radius, dan toleransi akurasi GPS untuk validasi clock-in/out.
+                </p>
+            </div>
+            <div className="max-w-5xl my-5 mx-6">
                 {(flash as any)?.success && (
                     <Alert className="bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/30 dark:border-emerald-800 dark:text-emerald-300">
                         <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />

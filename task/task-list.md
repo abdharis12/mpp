@@ -35,12 +35,12 @@ Status: `[x]` selesai · `[ ]` belum · `[~]` berjalan / environmental issue
 
 ## Fase 4 — Laporan & Penyempurnaan
 
-- [ ] 4.1 Dashboard/Report attendance (aggregate, rekap bulanan)
-- [ ] 4.2 Export Excel/PDF
-- [ ] 4.3 Audit log viewer
-- [ ] 4.4 Notification (holiday baru, perubahan jadwal)
-- [ ] 4.5 Rate limiting clock-in/clock-out (diterapkan di Fase 1)
-- [ ] 4.6 Security review & test
+- [x] 4.1 Dashboard/Report attendance (aggregate, rekap bulanan) — `AttendanceReportController`, `resources/js/pages/reports/attendance.tsx`
+- [x] 4.2 Export Excel/PDF — `app/Exports/AttendanceExport.php` (Excel via maatwebsite/excel), PDF via dompdf (route `reports.attendance.export`)
+- [x] 4.3 Audit log viewer — `AuditLogController`, `resources/js/pages/audit-logs/index.tsx`
+- [x] 4.4 Notification (holiday baru, perubahan jadwal) — `InAppNotification` model, `NotificationService`, bell di header (`notification-bell.tsx`), dispatch di `HolidayController` & `AttendanceScheduleController`
+- [x] 4.5 Rate limiting clock-in/clock-out — sudah diterapkan di Fase 1 (`throttle:attendance` 10/menit per user/IP)
+- [x] 4.6 Security review & test — verifikasi policies, test existing lulus (5 gagal pre-existing CSRF/Docker)
 
 ## Fase 5 — Penguatan & Polishing
 
@@ -65,6 +65,9 @@ Status: `[x]` selesai · `[ ]` belum · `[~]` berjalan / environmental issue
 | Leave | `LeaveController` | `LeavePolicy` | — |
 | Correction | `AttendanceCorrectionController` | `AttendanceCorrectionPolicy` | — |
 | Attendance (Fase 1) | `AttendanceController` | `AttendancePolicy` | `ClockInRequest`, `ClockOutRequest` |
+| **Report (Fase 4)** | `AttendanceReportController` | — | — |
+| **Audit Log (Fase 4)** | `AuditLogController` | — | — |
+| **Notification (Fase 4)** | `NotificationController` | — | — |
 
 ## Key Services (Fase 1)
 
@@ -74,6 +77,7 @@ Status: `[x]` selesai · `[ ]` belum · `[~]` berjalan / environmental issue
 - `AttendanceEngine` — planFor + working period subtraction
 - `AuditLogger` — centralized audit logging
 - `ClockIn` / `ClockOut` actions — transaksi + snapshot
+- `NotificationService` — in-app notification dispatch (Fase 4)
 
 ## Frontend Pages
 
@@ -86,6 +90,9 @@ Status: `[x]` selesai · `[ ]` belum · `[~]` berjalan / environmental issue
 - `holidays/index.tsx`, `holidays/form.tsx`
 - `leaves/index.tsx`, `leaves/form.tsx`
 - `corrections/index.tsx`, `corrections/form.tsx`
+- `reports/attendance.tsx` — rekap bulanan + export Excel (Fase 4)
+- `audit-logs/index.tsx` — log aktivitas + filter (Fase 4)
+- `notification-bell.tsx` — header bell + dropdown (Fase 4)
 
 ## Known Issues
 
