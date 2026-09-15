@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { MapContainer, TileLayer, Marker, Circle, useMap, LayersControl } from 'react-leaflet';
+import {
+    MapContainer,
+    TileLayer,
+    Marker,
+    Circle,
+    useMap,
+    LayersControl,
+} from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -19,14 +26,20 @@ function FitCenter({ center }: { center: [number, number] }) {
     return null;
 }
 
-function ClickHandler({ onClick }: { onClick: (lat: number, lng: number) => void }) {
+function ClickHandler({
+    onClick,
+}: {
+    onClick: (lat: number, lng: number) => void;
+}) {
     const map = useMap();
     useEffect(() => {
         const handler = (e: L.LeafletMouseEvent) => {
             onClick(e.latlng.lat, e.latlng.lng);
         };
         map.on('click', handler);
-        return () => { map.off('click', handler); };
+        return () => {
+            map.off('click', handler);
+        };
     }, [map, onClick]);
     return null;
 }
@@ -45,32 +58,49 @@ type Props = {
     onChange: (lat: number, lng: number) => void;
 };
 
-export default function AdminLocationMap({ latitude, longitude, radius, onChange }: Props) {
+export default function AdminLocationMap({
+    latitude,
+    longitude,
+    radius,
+    onChange,
+}: Props) {
     const [mounted, setMounted] = useState(false);
-    const center = useMemo<[number, number]>(() => [latitude, longitude], [latitude, longitude]);
+    const center = useMemo<[number, number]>(
+        () => [latitude, longitude],
+        [latitude, longitude],
+    );
     const handleMarkerDrag = useCallback(
         (e: L.DragEndEvent) => {
             const pos = e.target.getLatLng();
             onChange(pos.lat, pos.lng);
         },
-        [onChange]
+        [onChange],
     );
     const handleClick = useCallback(
         (lat: number, lng: number) => {
             onChange(lat, lng);
         },
-        [onChange]
+        [onChange],
     );
 
-    useEffect(() => { setMounted(true); }, []);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     if (!mounted) {
-        return <div className="h-64 w-full animate-pulse rounded-md bg-muted" />;
+        return (
+            <div className="bg-muted h-64 w-full animate-pulse rounded-md" />
+        );
     }
 
     return (
-        <div className="overflow-hidden rounded-md border border-border">
-            <MapContainer center={center} zoom={17} scrollWheelZoom={true} className="h-96 w-full">
+        <div className="border-border overflow-hidden rounded-md border">
+            <MapContainer
+                center={center}
+                zoom={17}
+                scrollWheelZoom={true}
+                className="h-96 w-full"
+            >
                 <FixMapAutoInvalidate />
                 <FitCenter center={center} />
                 <ClickHandler onClick={handleClick} />
@@ -83,15 +113,29 @@ export default function AdminLocationMap({ latitude, longitude, radius, onChange
                     </LayersControl.BaseLayer>
                     <LayersControl.BaseLayer name="Satelit">
                         <TileLayer
-                            attribution='&copy; Esri, Maxar, Earthstar Geographics'
+                            attribution="&copy; Esri, Maxar, Earthstar Geographics"
                             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                         />
                     </LayersControl.BaseLayer>
                 </LayersControl>
-                <Circle center={center} radius={radius} pathOptions={{ color: '#2563EB', fillColor: '#2563EB', fillOpacity: 0.08, weight: 2 }} />
-                <Marker position={center} icon={locationIcon} draggable={true} eventHandlers={{ dragend: handleMarkerDrag }} />
+                <Circle
+                    center={center}
+                    radius={radius}
+                    pathOptions={{
+                        color: '#2563EB',
+                        fillColor: '#2563EB',
+                        fillOpacity: 0.08,
+                        weight: 2,
+                    }}
+                />
+                <Marker
+                    position={center}
+                    icon={locationIcon}
+                    draggable={true}
+                    eventHandlers={{ dragend: handleMarkerDrag }}
+                />
             </MapContainer>
-            <div className="flex items-center justify-center gap-1.5 bg-background/80 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur">
+            <div className="bg-background/80 text-muted-foreground flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs backdrop-blur">
                 Klik peta atau geser marker untuk mengatur posisi
             </div>
         </div>

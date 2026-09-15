@@ -18,57 +18,105 @@ export default function TenantForm({ tenant }: { tenant: any | null }) {
             <Head title={tenant ? 'Edit Tenant' : 'Tambah Tenant'} />
             <div className="max-w-2xl space-y-6">
                 <div>
-                    <h1 className="text-2xl font-semibold">{tenant ? 'Edit Tenant' : 'Tambah Tenant'}</h1>
-                    <p className="text-sm text-muted-foreground mt-1">Lengkapi informasi instansi tenant.</p>
+                    <h1 className="text-2xl font-semibold">
+                        {tenant ? 'Edit Tenant' : 'Tambah Tenant'}
+                    </h1>
+                    <p className="text-muted-foreground mt-1 text-sm">
+                        Lengkapi informasi instansi tenant.
+                    </p>
                 </div>
 
                 <Card>
                     <CardContent className="pt-6">
                         <Form
-                            {...((tenant ? update({ tenant: tenant.id }) : store) as any).form()}
+                            {...(
+                                (tenant
+                                    ? update({ tenant: tenant.id })
+                                    : store) as any
+                            ).form()}
                             className="space-y-4"
                         >
                             <div className="space-y-2">
                                 <Label htmlFor="code">Kode Tenant</Label>
-                                <Input id="code" name="code" defaultValue={tenant?.code} disabled={Boolean(tenant)} required placeholder="DPMPTSP" />
+                                <Input
+                                    id="code"
+                                    name="code"
+                                    defaultValue={tenant?.code}
+                                    disabled={Boolean(tenant)}
+                                    required
+                                    placeholder="DPMPTSP"
+                                />
                                 <InputError message={errors.code} />
                             </div>
 
                             <div className="space-y-2">
                                 <Label htmlFor="name">Nama Instansi</Label>
-                                <Input id="name" name="name" defaultValue={tenant?.name} required placeholder="Dinas Penanaman Modal dan PTSP" />
+                                <Input
+                                    id="name"
+                                    name="name"
+                                    defaultValue={tenant?.name}
+                                    required
+                                    placeholder="Dinas Penanaman Modal dan PTSP"
+                                />
                                 <InputError message={errors.name} />
                             </div>
 
                             <div className="space-y-2">
                                 <Label htmlFor="description">Deskripsi</Label>
-                                <Textarea id="description" name="description" defaultValue={tenant?.description} placeholder="Deskripsi singkat tenant" />
+                                <Textarea
+                                    id="description"
+                                    name="description"
+                                    defaultValue={tenant?.description}
+                                    placeholder="Deskripsi singkat tenant"
+                                />
                                 <InputError message={errors.description} />
                             </div>
 
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div className="space-y-2">
                                     <Label htmlFor="phone">Telepon</Label>
-                                    <Input id="phone" name="phone" defaultValue={tenant?.phone} placeholder="(0718) 000000" />
+                                    <Input
+                                        id="phone"
+                                        name="phone"
+                                        defaultValue={tenant?.phone}
+                                        placeholder="(0718) 000000"
+                                    />
                                     <InputError message={errors.phone} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email</Label>
-                                    <Input id="email" name="email" type="email" defaultValue={tenant?.email} placeholder="tenant@example.com" />
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        defaultValue={tenant?.email}
+                                        placeholder="tenant@example.com"
+                                    />
                                     <InputError message={errors.email} />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
                                 <Label htmlFor="address">Alamat</Label>
-                                <Textarea id="address" name="address" defaultValue={tenant?.address} placeholder="Alamat lengkap" />
+                                <Textarea
+                                    id="address"
+                                    name="address"
+                                    defaultValue={tenant?.address}
+                                    placeholder="Alamat lengkap"
+                                />
                                 <InputError message={errors.address} />
                             </div>
 
                             {tenant && (
                                 <div className="flex items-center space-x-2">
-                                    <Checkbox id="is_active" name="is_active" defaultChecked={tenant.is_active} />
-                                    <Label htmlFor="is_active">Tenant aktif</Label>
+                                    <Checkbox
+                                        id="is_active"
+                                        name="is_active"
+                                        defaultChecked={tenant.is_active}
+                                    />
+                                    <Label htmlFor="is_active">
+                                        Tenant aktif
+                                    </Label>
                                 </div>
                             )}
 

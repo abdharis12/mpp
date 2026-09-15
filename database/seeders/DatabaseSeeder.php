@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             DefaultScheduleSeeder::class,
             LeaveTypeSeeder::class,
             SampleTenantSeeder::class,
+            TenantCarouselSeeder::class,
         ]);
     }
 }

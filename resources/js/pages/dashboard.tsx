@@ -3,7 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link } from '@inertiajs/react';
 import { usePage } from '@inertiajs/react';
-import { Users, Building2, CalendarCheck, AlertCircle, Clock, Building } from 'lucide-react';
+import {
+    Users,
+    Building2,
+    CalendarCheck,
+    AlertCircle,
+    Clock,
+    Building,
+} from 'lucide-react';
 
 export default function Dashboard({
     summary,
@@ -67,13 +74,13 @@ export default function Dashboard({
                     <div className="flex gap-2">
                         <Link
                             href="/tenants/create"
-                            className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90"
+                            className="bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-white"
                         >
                             Tambah Tenant
                         </Link>
                         <Link
                             href="/employees/create"
-                            className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-secondary rounded-lg hover:bg-secondary/90"
+                            className="bg-secondary hover:bg-secondary/90 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-white"
                         >
                             Tambah Petugas
                         </Link>
@@ -86,12 +93,16 @@ export default function Dashboard({
                             <CardContent className="p-6">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm font-medium text-muted-foreground">
+                                        <p className="text-muted-foreground text-sm font-medium">
                                             {stat.label}
                                         </p>
-                                        <p className="text-3xl font-bold mt-1">{stat.value}</p>
+                                        <p className="mt-1 text-3xl font-bold">
+                                            {stat.value}
+                                        </p>
                                     </div>
-                                    <div className={`${stat.color} p-3 rounded-xl`}>
+                                    <div
+                                        className={`${stat.color} rounded-xl p-3`}
+                                    >
                                         <stat.icon className="h-6 w-6" />
                                     </div>
                                 </div>
@@ -108,37 +119,37 @@ export default function Dashboard({
                         <CardContent className="flex flex-wrap gap-3">
                             <Link
                                 href="/tenants"
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20"
+                                className="text-primary bg-primary/10 hover:bg-primary/20 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium"
                             >
                                 Kelola Tenant
                             </Link>
                             <Link
                                 href="/employees"
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-secondary bg-secondary/10 rounded-lg hover:bg-secondary/20"
+                                className="text-secondary bg-secondary/10 hover:bg-secondary/20 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium"
                             >
                                 Kelola Petugas
                             </Link>
                             <Link
                                 href="/locations"
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-600 bg-emerald-50 rounded-lg hover:bg-emerald-100"
+                                className="flex items-center gap-2 rounded-lg bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-100"
                             >
                                 Lokasi Absensi
                             </Link>
                             <Link
                                 href="/schedules"
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
+                                className="flex items-center gap-2 rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100"
                             >
                                 Jadwal Kerja
                             </Link>
                             <Link
                                 href="/holidays"
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-amber-600 bg-amber-50 rounded-lg hover:bg-amber-100"
+                                className="flex items-center gap-2 rounded-lg bg-amber-50 px-4 py-2 text-sm font-medium text-amber-600 hover:bg-amber-100"
                             >
                                 Hari Libur
                             </Link>
                             <Link
                                 href="/leaves"
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple-600 bg-purple-50 rounded-lg hover:bg-purple-100"
+                                className="flex items-center gap-2 rounded-lg bg-purple-50 px-4 py-2 text-sm font-medium text-purple-600 hover:bg-purple-100"
                             >
                                 Izin
                             </Link>
@@ -150,8 +161,9 @@ export default function Dashboard({
                             <CardTitle>Statistik Tenant</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-sm text-muted-foreground">
-                                Total tenant: <span className="font-semibold text-foreground">
+                            <p className="text-muted-foreground text-sm">
+                                Total tenant:{' '}
+                                <span className="text-foreground font-semibold">
                                     {/* This would need tenant breakdown - simplified for now */}
                                 </span>
                             </p>

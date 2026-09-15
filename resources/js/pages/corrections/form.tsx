@@ -21,24 +21,34 @@ export default function CorrectionForm({
             <Head title="Ajukan Koreksi" />
             <div className="max-w-2xl space-y-6">
                 <div>
-                    <h1 className="text-2xl font-semibold">Ajukan Koreksi Absensi</h1>
-                    <p className="text-sm text-muted-foreground mt-1">
-                        Koreksi hanya dapat dilakukan pada data kehadiran yang sudah tercatat.
+                    <h1 className="text-2xl font-semibold">
+                        Ajukan Koreksi Absensi
+                    </h1>
+                    <p className="text-muted-foreground mt-1 text-sm">
+                        Koreksi hanya dapat dilakukan pada data kehadiran yang
+                        sudah tercatat.
                     </p>
                 </div>
 
                 <Card>
                     <CardContent className="pt-6">
-                        <Form {...((store as any)()).form()} className="space-y-4">
+                        <Form
+                            {...(store as any)().form()}
+                            className="space-y-4"
+                        >
                             <div className="space-y-2">
-                                <Label htmlFor="attendance_id">Kehadiran Terkait</Label>
+                                <Label htmlFor="attendance_id">
+                                    Kehadiran Terkait
+                                </Label>
                                 <select
                                     id="attendance_id"
                                     name="attendance_id"
                                     defaultValue=""
-                                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs focus-visible:border-ring focus-visible:ring-ring/50"
+                                    className="border-input focus-visible:border-ring focus-visible:ring-ring/50 flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs"
                                 >
-                                    <option value="">-- Pilih kehadiran --</option>
+                                    <option value="">
+                                        -- Pilih kehadiran --
+                                    </option>
                                     {attendances?.map((a: any) => (
                                         <option key={a.id} value={a.id}>
                                             {a.attendance_date} — {a.status}
@@ -49,12 +59,14 @@ export default function CorrectionForm({
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="correction_type">Jenis Koreksi</Label>
+                                <Label htmlFor="correction_type">
+                                    Jenis Koreksi
+                                </Label>
                                 <select
                                     id="correction_type"
                                     name="correction_type"
                                     defaultValue=""
-                                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs focus-visible:border-ring focus-visible:ring-ring/50"
+                                    className="border-input focus-visible:border-ring focus-visible:ring-ring/50 flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs"
                                 >
                                     <option value="">-- Pilih Jenis --</option>
                                     {correction_types?.map((ct: string) => (
@@ -68,20 +80,41 @@ export default function CorrectionForm({
 
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div className="space-y-2">
-                                    <Label htmlFor="requested_clock_in">Jam Masuk yang Diminta</Label>
-                                    <Input id="requested_clock_in" name="requested_clock_in" type="datetime-local" />
-                                    <InputError message={errors.requested_clock_in} />
+                                    <Label htmlFor="requested_clock_in">
+                                        Jam Masuk yang Diminta
+                                    </Label>
+                                    <Input
+                                        id="requested_clock_in"
+                                        name="requested_clock_in"
+                                        type="datetime-local"
+                                    />
+                                    <InputError
+                                        message={errors.requested_clock_in}
+                                    />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="requested_clock_out">Jam Pulang yang Diminta</Label>
-                                    <Input id="requested_clock_out" name="requested_clock_out" type="datetime-local" />
-                                    <InputError message={errors.requested_clock_out} />
+                                    <Label htmlFor="requested_clock_out">
+                                        Jam Pulang yang Diminta
+                                    </Label>
+                                    <Input
+                                        id="requested_clock_out"
+                                        name="requested_clock_out"
+                                        type="datetime-local"
+                                    />
+                                    <InputError
+                                        message={errors.requested_clock_out}
+                                    />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
                                 <Label htmlFor="reason">Alasan Koreksi</Label>
-                                <Textarea id="reason" name="reason" required placeholder="Jelaskan alasan pengajuan koreksi" />
+                                <Textarea
+                                    id="reason"
+                                    name="reason"
+                                    required
+                                    placeholder="Jelaskan alasan pengajuan koreksi"
+                                />
                                 <InputError message={errors.reason} />
                             </div>
 

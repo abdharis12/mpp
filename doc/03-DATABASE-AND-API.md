@@ -4,7 +4,8 @@
 
 **Version:** 1.0  
 **Status:** Approved  
-**Depends On:**  
+**Depends On:**
+
 - `01-PRD.md`
 - `02-SYSTEM-SPECIFICATION.md`
 
@@ -218,17 +219,17 @@ Menyimpan akun autentikasi.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | User ID |
-| name | VARCHAR(255) | No | | Display name |
-| email | VARCHAR(255) | No | UNIQUE | Login email |
-| email_verified_at | TIMESTAMP | Yes | | Verification timestamp |
-| password | VARCHAR(255) | No | | Password hash |
-| remember_token | VARCHAR(100) | Yes | | Laravel auth |
-| is_active | BOOLEAN | No | INDEX | User active state |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column            | Type            | Null | Key    | Description            |
+| ----------------- | --------------- | ---: | ------ | ---------------------- |
+| id                | BIGINT UNSIGNED |   No | PK     | User ID                |
+| name              | VARCHAR(255)    |   No |        | Display name           |
+| email             | VARCHAR(255)    |   No | UNIQUE | Login email            |
+| email_verified_at | TIMESTAMP       |  Yes |        | Verification timestamp |
+| password          | VARCHAR(255)    |   No |        | Password hash          |
+| remember_token    | VARCHAR(100)    |  Yes |        | Laravel auth           |
+| is_active         | BOOLEAN         |   No | INDEX  | User active state      |
+| created_at        | TIMESTAMP       |  Yes |        |                        |
+| updated_at        | TIMESTAMP       |  Yes |        |                        |
 
 Role dan permission tidak disimpan sebagai hard-coded column.
 
@@ -250,19 +251,19 @@ Menyimpan instansi/organisasi tenant MPP.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | Tenant ID |
-| code | VARCHAR(50) | No | UNIQUE | Tenant code |
-| name | VARCHAR(255) | No | INDEX | Tenant name |
-| description | TEXT | Yes | | Description |
-| phone | VARCHAR(50) | Yes | | Contact |
-| email | VARCHAR(255) | Yes | | Contact email |
-| address | TEXT | Yes | | Address |
-| logo_path | VARCHAR(500) | Yes | | Logo storage path |
-| is_active | BOOLEAN | No | INDEX | Active state |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column      | Type            | Null | Key    | Description       |
+| ----------- | --------------- | ---: | ------ | ----------------- |
+| id          | BIGINT UNSIGNED |   No | PK     | Tenant ID         |
+| code        | VARCHAR(50)     |   No | UNIQUE | Tenant code       |
+| name        | VARCHAR(255)    |   No | INDEX  | Tenant name       |
+| description | TEXT            |  Yes |        | Description       |
+| phone       | VARCHAR(50)     |  Yes |        | Contact           |
+| email       | VARCHAR(255)    |  Yes |        | Contact email     |
+| address     | TEXT            |  Yes |        | Address           |
+| logo_path   | VARCHAR(500)    |  Yes |        | Logo storage path |
+| is_active   | BOOLEAN         |   No | INDEX  | Active state      |
+| created_at  | TIMESTAMP       |  Yes |        |                   |
+| updated_at  | TIMESTAMP       |  Yes |        |                   |
 
 Recommended:
 
@@ -286,19 +287,19 @@ Menyimpan data petugas yang bekerja pada tenant.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | Employee ID |
-| user_id | BIGINT UNSIGNED | No | FK, UNIQUE | Account |
-| tenant_id | BIGINT UNSIGNED | No | FK, INDEX | Tenant owner |
-| employee_code | VARCHAR(100) | No | INDEX | Internal employee code |
-| name | VARCHAR(255) | No | INDEX | Employee name |
-| position | VARCHAR(255) | Yes | | Position |
-| phone | VARCHAR(50) | Yes | | Phone |
-| email | VARCHAR(255) | Yes | INDEX | Work email |
-| is_active | BOOLEAN | No | INDEX | Active state |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column        | Type            | Null | Key        | Description            |
+| ------------- | --------------- | ---: | ---------- | ---------------------- |
+| id            | BIGINT UNSIGNED |   No | PK         | Employee ID            |
+| user_id       | BIGINT UNSIGNED |   No | FK, UNIQUE | Account                |
+| tenant_id     | BIGINT UNSIGNED |   No | FK, INDEX  | Tenant owner           |
+| employee_code | VARCHAR(100)    |   No | INDEX      | Internal employee code |
+| name          | VARCHAR(255)    |   No | INDEX      | Employee name          |
+| position      | VARCHAR(255)    |  Yes |            | Position               |
+| phone         | VARCHAR(50)     |  Yes |            | Phone                  |
+| email         | VARCHAR(255)    |  Yes | INDEX      | Work email             |
+| is_active     | BOOLEAN         |   No | INDEX      | Active state           |
+| created_at    | TIMESTAMP       |  Yes |            |                        |
+| updated_at    | TIMESTAMP       |  Yes |            |                        |
 
 Relationship:
 
@@ -347,19 +348,19 @@ Default radius:
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | Location ID |
-| name | VARCHAR(255) | No | | Location name |
-| latitude | DECIMAL(10,7) | No | | Latitude |
-| longitude | DECIMAL(10,7) | No | | Longitude |
-| radius_meter | DECIMAL(8,2) | No | | Allowed radius |
-| maximum_gps_accuracy | DECIMAL(8,2) | No | | Max allowed accuracy |
-| is_active | BOOLEAN | No | INDEX | Active state |
-| created_by | BIGINT UNSIGNED | Yes | FK | User |
-| updated_by | BIGINT UNSIGNED | Yes | FK | User |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column               | Type            | Null | Key   | Description          |
+| -------------------- | --------------- | ---: | ----- | -------------------- |
+| id                   | BIGINT UNSIGNED |   No | PK    | Location ID          |
+| name                 | VARCHAR(255)    |   No |       | Location name        |
+| latitude             | DECIMAL(10,7)   |   No |       | Latitude             |
+| longitude            | DECIMAL(10,7)   |   No |       | Longitude            |
+| radius_meter         | DECIMAL(8,2)    |   No |       | Allowed radius       |
+| maximum_gps_accuracy | DECIMAL(8,2)    |   No |       | Max allowed accuracy |
+| is_active            | BOOLEAN         |   No | INDEX | Active state         |
+| created_by           | BIGINT UNSIGNED |  Yes | FK    | User                 |
+| updated_by           | BIGINT UNSIGNED |  Yes | FK    | User                 |
+| created_at           | TIMESTAMP       |  Yes |       |                      |
+| updated_at           | TIMESTAMP       |  Yes |       |                      |
 
 ---
 
@@ -427,19 +428,19 @@ Menyimpan header konfigurasi schedule.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | Schedule ID |
-| name | VARCHAR(255) | No | | Schedule name |
-| description | TEXT | Yes | | Description |
-| tenant_id | BIGINT UNSIGNED | Yes | FK, INDEX | Optional tenant scope |
-| employee_id | BIGINT UNSIGNED | Yes | FK, INDEX | Optional employee scope |
-| grace_period_minutes | SMALLINT UNSIGNED | No | | Grace period |
-| is_active | BOOLEAN | No | INDEX | Active state |
-| created_by | BIGINT UNSIGNED | Yes | FK | Creator |
-| updated_by | BIGINT UNSIGNED | Yes | FK | Last updater |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column               | Type              | Null | Key       | Description             |
+| -------------------- | ----------------- | ---: | --------- | ----------------------- |
+| id                   | BIGINT UNSIGNED   |   No | PK        | Schedule ID             |
+| name                 | VARCHAR(255)      |   No |           | Schedule name           |
+| description          | TEXT              |  Yes |           | Description             |
+| tenant_id            | BIGINT UNSIGNED   |  Yes | FK, INDEX | Optional tenant scope   |
+| employee_id          | BIGINT UNSIGNED   |  Yes | FK, INDEX | Optional employee scope |
+| grace_period_minutes | SMALLINT UNSIGNED |   No |           | Grace period            |
+| is_active            | BOOLEAN           |   No | INDEX     | Active state            |
+| created_by           | BIGINT UNSIGNED   |  Yes | FK        | Creator                 |
+| updated_by           | BIGINT UNSIGNED   |  Yes | FK        | Last updater            |
+| created_at           | TIMESTAMP         |  Yes |           |                         |
+| updated_at           | TIMESTAMP         |  Yes |           |                         |
 
 ---
 
@@ -487,16 +488,16 @@ Menyimpan jam kerja setiap hari.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | ID |
-| attendance_schedule_id | BIGINT UNSIGNED | No | FK | Schedule |
-| day_of_week | TINYINT UNSIGNED | No | INDEX | 1–7 |
-| start_time | TIME | Yes | | Start |
-| end_time | TIME | Yes | | End |
-| is_working_day | BOOLEAN | No | | Working day |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column                 | Type             | Null | Key   | Description |
+| ---------------------- | ---------------- | ---: | ----- | ----------- |
+| id                     | BIGINT UNSIGNED  |   No | PK    | ID          |
+| attendance_schedule_id | BIGINT UNSIGNED  |   No | FK    | Schedule    |
+| day_of_week            | TINYINT UNSIGNED |   No | INDEX | 1–7         |
+| start_time             | TIME             |  Yes |       | Start       |
+| end_time               | TIME             |  Yes |       | End         |
+| is_working_day         | BOOLEAN          |   No |       | Working day |
+| created_at             | TIMESTAMP        |  Yes |       |             |
+| updated_at             | TIMESTAMP        |  Yes |       |             |
 
 Convention:
 
@@ -588,20 +589,20 @@ Menyimpan event hari libur.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | Holiday ID |
-| name | VARCHAR(255) | No | INDEX | Holiday name |
-| holiday_type | VARCHAR(50) | No | INDEX | Holiday type |
-| start_date | DATE | No | INDEX | Start date |
-| end_date | DATE | No | | End date |
-| is_full_day | BOOLEAN | No | | Full day flag |
-| description | TEXT | Yes | | Description |
-| is_active | BOOLEAN | No | INDEX | Active |
-| created_by | BIGINT UNSIGNED | Yes | FK | User |
-| updated_by | BIGINT UNSIGNED | Yes | FK | User |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column       | Type            | Null | Key   | Description   |
+| ------------ | --------------- | ---: | ----- | ------------- |
+| id           | BIGINT UNSIGNED |   No | PK    | Holiday ID    |
+| name         | VARCHAR(255)    |   No | INDEX | Holiday name  |
+| holiday_type | VARCHAR(50)     |   No | INDEX | Holiday type  |
+| start_date   | DATE            |   No | INDEX | Start date    |
+| end_date     | DATE            |   No |       | End date      |
+| is_full_day  | BOOLEAN         |   No |       | Full day flag |
+| description  | TEXT            |  Yes |       | Description   |
+| is_active    | BOOLEAN         |   No | INDEX | Active        |
+| created_by   | BIGINT UNSIGNED |  Yes | FK    | User          |
+| updated_by   | BIGINT UNSIGNED |  Yes | FK    | User          |
+| created_at   | TIMESTAMP       |  Yes |       |               |
+| updated_at   | TIMESTAMP       |  Yes |       |               |
 
 ---
 
@@ -636,16 +637,16 @@ Menyimpan periode holiday tertentu, terutama untuk partial holiday.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | Period ID |
-| holiday_id | BIGINT UNSIGNED | No | FK, INDEX | Parent holiday |
-| holiday_date | DATE | No | INDEX | Applicable date |
-| start_time | TIME | Yes | | Start |
-| end_time | TIME | Yes | | End |
-| is_full_day | BOOLEAN | No | | Full-day period |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column       | Type            | Null | Key       | Description     |
+| ------------ | --------------- | ---: | --------- | --------------- |
+| id           | BIGINT UNSIGNED |   No | PK        | Period ID       |
+| holiday_id   | BIGINT UNSIGNED |   No | FK, INDEX | Parent holiday  |
+| holiday_date | DATE            |   No | INDEX     | Applicable date |
+| start_time   | TIME            |  Yes |           | Start           |
+| end_time     | TIME            |  Yes |           | End             |
+| is_full_day  | BOOLEAN         |   No |           | Full-day period |
+| created_at   | TIMESTAMP       |  Yes |           |                 |
+| updated_at   | TIMESTAMP       |  Yes |           |                 |
 
 ---
 
@@ -706,22 +707,22 @@ Menyimpan pengajuan izin petugas.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | Leave ID |
-| tenant_id | BIGINT UNSIGNED | No | FK, INDEX | Tenant |
-| employee_id | BIGINT UNSIGNED | No | FK, INDEX | Employee |
-| leave_type_id | BIGINT UNSIGNED | No | FK | Leave type |
-| start_date | DATE | No | INDEX | Start |
-| end_date | DATE | No | INDEX | End |
-| reason | TEXT | No | | Reason |
-| attachment_path | VARCHAR(500) | Yes | | Attachment |
-| status | VARCHAR(30) | No | INDEX | Status |
-| approved_by | BIGINT UNSIGNED | Yes | FK | Approver |
-| approved_at | TIMESTAMP | Yes | | Approval timestamp |
-| rejection_reason | TEXT | Yes | | Rejection reason |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column           | Type            | Null | Key       | Description        |
+| ---------------- | --------------- | ---: | --------- | ------------------ |
+| id               | BIGINT UNSIGNED |   No | PK        | Leave ID           |
+| tenant_id        | BIGINT UNSIGNED |   No | FK, INDEX | Tenant             |
+| employee_id      | BIGINT UNSIGNED |   No | FK, INDEX | Employee           |
+| leave_type_id    | BIGINT UNSIGNED |   No | FK        | Leave type         |
+| start_date       | DATE            |   No | INDEX     | Start              |
+| end_date         | DATE            |   No | INDEX     | End                |
+| reason           | TEXT            |   No |           | Reason             |
+| attachment_path  | VARCHAR(500)    |  Yes |           | Attachment         |
+| status           | VARCHAR(30)     |   No | INDEX     | Status             |
+| approved_by      | BIGINT UNSIGNED |  Yes | FK        | Approver           |
+| approved_at      | TIMESTAMP       |  Yes |           | Approval timestamp |
+| rejection_reason | TEXT            |  Yes |           | Rejection reason   |
+| created_at       | TIMESTAMP       |  Yes |           |                    |
+| updated_at       | TIMESTAMP       |  Yes |           |                    |
 
 ---
 
@@ -735,16 +736,16 @@ leave_types
 
 ## Columns
 
-| Column | Type | Null | Key |
-|---|---|---:|---|
-| id | BIGINT UNSIGNED | No | PK |
-| code | VARCHAR(50) | No | UNIQUE |
-| name | VARCHAR(255) | No | |
-| description | TEXT | Yes | |
-| requires_attachment | BOOLEAN | No | |
-| is_active | BOOLEAN | No | INDEX |
-| created_at | TIMESTAMP | Yes | |
-| updated_at | TIMESTAMP | Yes | |
+| Column              | Type            | Null | Key    |
+| ------------------- | --------------- | ---: | ------ |
+| id                  | BIGINT UNSIGNED |   No | PK     |
+| code                | VARCHAR(50)     |   No | UNIQUE |
+| name                | VARCHAR(255)    |   No |        |
+| description         | TEXT            |  Yes |        |
+| requires_attachment | BOOLEAN         |   No |        |
+| is_active           | BOOLEAN         |   No | INDEX  |
+| created_at          | TIMESTAMP       |  Yes |        |
+| updated_at          | TIMESTAMP       |  Yes |        |
 
 Example:
 
@@ -804,34 +805,34 @@ Core attendance record.
 
 ## Columns
 
-| Column | Type | Null | Key | Description |
-|---|---|---:|---|---|
-| id | BIGINT UNSIGNED | No | PK | Attendance ID |
-| tenant_id | BIGINT UNSIGNED | No | FK, INDEX | Tenant |
-| employee_id | BIGINT UNSIGNED | No | FK, INDEX | Employee |
-| attendance_date | DATE | No | INDEX | Date |
-| attendance_location_id | BIGINT UNSIGNED | Yes | FK | Location used |
-| clock_in | DATETIME | Yes | | Server time |
-| clock_out | DATETIME | Yes | | Server time |
-| clock_in_latitude | DECIMAL(10,7) | Yes | | GPS |
-| clock_in_longitude | DECIMAL(10,7) | Yes | | GPS |
-| clock_in_accuracy | DECIMAL(8,2) | Yes | | GPS accuracy |
-| clock_in_distance | DECIMAL(8,2) | Yes | | Distance meter |
-| clock_out_latitude | DECIMAL(10,7) | Yes | | GPS |
-| clock_out_longitude | DECIMAL(10,7) | Yes | | GPS |
-| clock_out_accuracy | DECIMAL(8,2) | Yes | | GPS accuracy |
-| clock_out_distance | DECIMAL(8,2) | Yes | | Distance meter |
-| status | VARCHAR(30) | No | INDEX | Attendance status |
-| late_minutes | UNSIGNED INT | No | | Late duration |
-| early_leave_minutes | UNSIGNED INT | No | | Early leave |
-| work_duration_minutes | UNSIGNED INT | Yes | | Worked duration |
-| clock_in_ip | VARCHAR(45) | Yes | | IPv4/IPv6 |
-| clock_out_ip | VARCHAR(45) | Yes | | IPv4/IPv6 |
-| clock_in_user_agent | VARCHAR(1000) | Yes | | Browser |
-| clock_out_user_agent | VARCHAR(1000) | Yes | | Browser |
-| notes | TEXT | Yes | | Notes |
-| created_at | TIMESTAMP | Yes | | |
-| updated_at | TIMESTAMP | Yes | | |
+| Column                 | Type            | Null | Key       | Description       |
+| ---------------------- | --------------- | ---: | --------- | ----------------- |
+| id                     | BIGINT UNSIGNED |   No | PK        | Attendance ID     |
+| tenant_id              | BIGINT UNSIGNED |   No | FK, INDEX | Tenant            |
+| employee_id            | BIGINT UNSIGNED |   No | FK, INDEX | Employee          |
+| attendance_date        | DATE            |   No | INDEX     | Date              |
+| attendance_location_id | BIGINT UNSIGNED |  Yes | FK        | Location used     |
+| clock_in               | DATETIME        |  Yes |           | Server time       |
+| clock_out              | DATETIME        |  Yes |           | Server time       |
+| clock_in_latitude      | DECIMAL(10,7)   |  Yes |           | GPS               |
+| clock_in_longitude     | DECIMAL(10,7)   |  Yes |           | GPS               |
+| clock_in_accuracy      | DECIMAL(8,2)    |  Yes |           | GPS accuracy      |
+| clock_in_distance      | DECIMAL(8,2)    |  Yes |           | Distance meter    |
+| clock_out_latitude     | DECIMAL(10,7)   |  Yes |           | GPS               |
+| clock_out_longitude    | DECIMAL(10,7)   |  Yes |           | GPS               |
+| clock_out_accuracy     | DECIMAL(8,2)    |  Yes |           | GPS accuracy      |
+| clock_out_distance     | DECIMAL(8,2)    |  Yes |           | Distance meter    |
+| status                 | VARCHAR(30)     |   No | INDEX     | Attendance status |
+| late_minutes           | UNSIGNED INT    |   No |           | Late duration     |
+| early_leave_minutes    | UNSIGNED INT    |   No |           | Early leave       |
+| work_duration_minutes  | UNSIGNED INT    |  Yes |           | Worked duration   |
+| clock_in_ip            | VARCHAR(45)     |  Yes |           | IPv4/IPv6         |
+| clock_out_ip           | VARCHAR(45)     |  Yes |           | IPv4/IPv6         |
+| clock_in_user_agent    | VARCHAR(1000)   |  Yes |           | Browser           |
+| clock_out_user_agent   | VARCHAR(1000)   |  Yes |           | Browser           |
+| notes                  | TEXT            |  Yes |           | Notes             |
+| created_at             | TIMESTAMP       |  Yes |           |                   |
+| updated_at             | TIMESTAMP       |  Yes |           |                   |
 
 ---
 
@@ -922,24 +923,24 @@ Workflow untuk perubahan attendance.
 
 ## Columns
 
-| Column | Type | Null | Key |
-|---|---|---:|---|
-| id | BIGINT UNSIGNED | No | PK |
-| tenant_id | BIGINT UNSIGNED | No | FK, INDEX |
-| employee_id | BIGINT UNSIGNED | No | FK, INDEX |
-| attendance_id | BIGINT UNSIGNED | Yes | FK |
-| requested_by | BIGINT UNSIGNED | No | FK |
-| correction_type | VARCHAR(50) | No | INDEX |
-| requested_clock_in | DATETIME | Yes | |
-| requested_clock_out | DATETIME | Yes | |
-| reason | TEXT | No | |
-| attachment_path | VARCHAR(500) | Yes | |
-| status | VARCHAR(30) | No | INDEX |
-| reviewed_by | BIGINT UNSIGNED | Yes | FK |
-| reviewed_at | TIMESTAMP | Yes | |
-| rejection_reason | TEXT | Yes | |
-| created_at | TIMESTAMP | Yes | |
-| updated_at | TIMESTAMP | Yes | |
+| Column              | Type            | Null | Key       |
+| ------------------- | --------------- | ---: | --------- |
+| id                  | BIGINT UNSIGNED |   No | PK        |
+| tenant_id           | BIGINT UNSIGNED |   No | FK, INDEX |
+| employee_id         | BIGINT UNSIGNED |   No | FK, INDEX |
+| attendance_id       | BIGINT UNSIGNED |  Yes | FK        |
+| requested_by        | BIGINT UNSIGNED |   No | FK        |
+| correction_type     | VARCHAR(50)     |   No | INDEX     |
+| requested_clock_in  | DATETIME        |  Yes |           |
+| requested_clock_out | DATETIME        |  Yes |           |
+| reason              | TEXT            |   No |           |
+| attachment_path     | VARCHAR(500)    |  Yes |           |
+| status              | VARCHAR(30)     |   No | INDEX     |
+| reviewed_by         | BIGINT UNSIGNED |  Yes | FK        |
+| reviewed_at         | TIMESTAMP       |  Yes |           |
+| rejection_reason    | TEXT            |  Yes |           |
+| created_at          | TIMESTAMP       |  Yes |           |
+| updated_at          | TIMESTAMP       |  Yes |           |
 
 ---
 
@@ -999,20 +1000,20 @@ Mencatat aktivitas penting.
 
 ## Columns
 
-| Column | Type | Null | Key |
-|---|---|---:|---|
-| id | BIGINT UNSIGNED | No | PK |
-| user_id | BIGINT UNSIGNED | Yes | FK, INDEX |
-| tenant_id | BIGINT UNSIGNED | Yes | FK, INDEX |
-| event | VARCHAR(100) | No | INDEX |
-| subject_type | VARCHAR(255) | Yes | INDEX |
-| subject_id | BIGINT UNSIGNED | Yes | INDEX |
-| old_values | JSON | Yes | |
-| new_values | JSON | Yes | |
-| metadata | JSON | Yes | |
-| ip_address | VARCHAR(45) | Yes | |
-| user_agent | VARCHAR(1000) | Yes | |
-| created_at | TIMESTAMP | Yes | INDEX |
+| Column       | Type            | Null | Key       |
+| ------------ | --------------- | ---: | --------- |
+| id           | BIGINT UNSIGNED |   No | PK        |
+| user_id      | BIGINT UNSIGNED |  Yes | FK, INDEX |
+| tenant_id    | BIGINT UNSIGNED |  Yes | FK, INDEX |
+| event        | VARCHAR(100)    |   No | INDEX     |
+| subject_type | VARCHAR(255)    |  Yes | INDEX     |
+| subject_id   | BIGINT UNSIGNED |  Yes | INDEX     |
+| old_values   | JSON            |  Yes |           |
+| new_values   | JSON            |  Yes |           |
+| metadata     | JSON            |  Yes |           |
+| ip_address   | VARCHAR(45)     |  Yes |           |
+| user_agent   | VARCHAR(1000)   |  Yes |           |
+| created_at   | TIMESTAMP       |  Yes | INDEX     |
 
 Audit log secara normal tidak memiliki `updated_at`.
 
@@ -2071,9 +2072,7 @@ Untuk validation:
     "message": "Data yang diberikan tidak valid.",
     "code": "VALIDATION_ERROR",
     "errors": {
-        "accuracy": [
-            "The accuracy field is required."
-        ]
+        "accuracy": ["The accuracy field is required."]
     }
 }
 ```
@@ -2931,24 +2930,24 @@ Holiday:
 
 # 105. API Permission Matrix
 
-| Endpoint/Action | Super Admin | Admin MPP | Admin Tenant | Staff | Viewer |
-|---|---:|---:|---:|---:|---:|
-| Dashboard | ✓ | ✓ | ✓ | ✓ | ✓ |
-| View Tenants | ✓ | ✓ | Limited | - | ✓ |
-| Manage Tenants | ✓ | ✓ | - | - | - |
-| View Employees | ✓ | ✓ | Own Tenant | Self | - |
-| Manage Employees | ✓ | ✓ | Own Tenant | - | - |
-| Clock In | ✓* | ✓* | ✓* | ✓ | - |
-| Clock Out | ✓* | ✓* | ✓* | ✓ | - |
-| View Attendance | ✓ | ✓ | Own Tenant | Self | ✓ |
-| Approve Leave | ✓ | ✓ | Own Tenant | - | - |
-| Manage Correction | ✓ | ✓ | Own Tenant | Request | - |
-| Manage Location | ✓ | ✓ | - | - | - |
-| Manage Schedule | ✓ | ✓ | As permitted | - | - |
-| Manage Holiday | ✓ | ✓ | - | - | - |
-| Reports | ✓ | ✓ | Own Tenant | Own | ✓ |
-| Export | ✓ | ✓ | Own Tenant | Own | - |
-| Audit Logs | ✓ | ✓ | - | - | - |
+| Endpoint/Action   | Super Admin | Admin MPP | Admin Tenant |   Staff | Viewer |
+| ----------------- | ----------: | --------: | -----------: | ------: | -----: |
+| Dashboard         |           ✓ |         ✓ |            ✓ |       ✓ |      ✓ |
+| View Tenants      |           ✓ |         ✓ |      Limited |       - |      ✓ |
+| Manage Tenants    |           ✓ |         ✓ |            - |       - |      - |
+| View Employees    |           ✓ |         ✓ |   Own Tenant |    Self |      - |
+| Manage Employees  |           ✓ |         ✓ |   Own Tenant |       - |      - |
+| Clock In          |          ✓* |        ✓* |           ✓* |       ✓ |      - |
+| Clock Out         |          ✓* |        ✓* |           ✓* |       ✓ |      - |
+| View Attendance   |           ✓ |         ✓ |   Own Tenant |    Self |      ✓ |
+| Approve Leave     |           ✓ |         ✓ |   Own Tenant |       - |      - |
+| Manage Correction |           ✓ |         ✓ |   Own Tenant | Request |      - |
+| Manage Location   |           ✓ |         ✓ |            - |       - |      - |
+| Manage Schedule   |           ✓ |         ✓ | As permitted |       - |      - |
+| Manage Holiday    |           ✓ |         ✓ |            - |       - |      - |
+| Reports           |           ✓ |         ✓ |   Own Tenant |     Own |      ✓ |
+| Export            |           ✓ |         ✓ |   Own Tenant |     Own |      - |
+| Audit Logs        |           ✓ |         ✓ |            - |       - |      - |
 
 `*` hanya jika business policy memberikan permission tersebut.
 

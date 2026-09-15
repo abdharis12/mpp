@@ -104,11 +104,11 @@ export function NotificationBell() {
                 <DropdownMenuSeparator />
                 <div className="max-h-80 overflow-y-auto">
                     {loading && items.length === 0 ? (
-                        <p className="px-4 py-8 text-center text-sm text-muted-foreground">
+                        <p className="text-muted-foreground px-4 py-8 text-center text-sm">
                             Memuat…
                         </p>
                     ) : items.length === 0 ? (
-                        <p className="px-4 py-8 text-center text-sm text-muted-foreground">
+                        <p className="text-muted-foreground px-4 py-8 text-center text-sm">
                             Tidak ada notifikasi.
                         </p>
                     ) : (
@@ -116,45 +116,69 @@ export function NotificationBell() {
                             <button
                                 key={item.id}
                                 onClick={() => {
-                                    router.post(`/notifications/${item.id}/read`, {}, {
-                                        preserveScroll: true,
-                                        onSuccess: () => {
-                                            setUnreadCount((c) => Math.max(0, c - 1));
-                                            setItems((prev) =>
-                                                prev.map((n) =>
-                                                    n.id === item.id ? { ...n, is_read: true } : n,
-                                                ),
-                                            );
-                                            if (item.url) {
-                                                router.visit(item.url);
-                                            }
+                                    router.post(
+                                        `/notifications/${item.id}/read`,
+                                        {},
+                                        {
+                                            preserveScroll: true,
+                                            onSuccess: () => {
+                                                setUnreadCount((c) =>
+                                                    Math.max(0, c - 1),
+                                                );
+                                                setItems((prev) =>
+                                                    prev.map((n) =>
+                                                        n.id === item.id
+                                                            ? {
+                                                                  ...n,
+                                                                  is_read: true,
+                                                              }
+                                                            : n,
+                                                    ),
+                                                );
+                                                if (item.url) {
+                                                    router.visit(item.url);
+                                                }
+                                            },
                                         },
-                                    });
+                                    );
                                 }}
                                 className={cn(
-                                    'block w-full border-b border-border px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-muted/50',
+                                    'border-border hover:bg-muted/50 block w-full border-b px-4 py-3 text-left transition-colors last:border-b-0',
                                     !item.is_read && 'bg-blue-50/50',
                                 )}
                             >
                                 <div className="flex items-center gap-2">
-                                    <span className={cn('size-2 shrink-0 rounded-full', TYPE_DOTS[item.type] ?? 'bg-gray-400')} aria-hidden="true" />
-                                    <span className="text-sm font-medium truncate">
+                                    <span
+                                        className={cn(
+                                            'size-2 shrink-0 rounded-full',
+                                            TYPE_DOTS[item.type] ??
+                                                'bg-gray-400',
+                                        )}
+                                        aria-hidden="true"
+                                    />
+                                    <span className="truncate text-sm font-medium">
                                         {item.title}
                                     </span>
                                     {!item.is_read && (
-                                        <span className="ml-auto size-2 shrink-0 rounded-full bg-blue-500" aria-hidden="true" />
+                                        <span
+                                            className="ml-auto size-2 shrink-0 rounded-full bg-blue-500"
+                                            aria-hidden="true"
+                                        />
                                     )}
                                 </div>
-                                <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 line-clamp-2 text-xs leading-relaxed">
                                     {item.message}
                                 </p>
-                                <p className="mt-1 text-[10px] text-muted-foreground/70">
-                                    {new Date(item.created_at).toLocaleString('id-ID', {
-                                        day: '2-digit',
-                                        month: 'short',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    })}
+                                <p className="text-muted-foreground/70 mt-1 text-[10px]">
+                                    {new Date(item.created_at).toLocaleString(
+                                        'id-ID',
+                                        {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                        },
+                                    )}
                                 </p>
                             </button>
                         ))

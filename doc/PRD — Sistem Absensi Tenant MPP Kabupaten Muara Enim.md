@@ -118,15 +118,15 @@ Read-only:
 
 Jadwal awal:
 
-| Hari | Mulai | Selesai |
-|---|---:|---:|
-| Senin | 08:00 | 16:00 |
-| Selasa | 08:00 | 16:00 |
-| Rabu | 08:00 | 16:00 |
-| Kamis | 08:00 | 16:00 |
+| Hari      |     Mulai |   Selesai |
+| --------- | --------: | --------: |
+| Senin     |     08:00 |     16:00 |
+| Selasa    |     08:00 |     16:00 |
+| Rabu      |     08:00 |     16:00 |
+| Kamis     |     08:00 |     16:00 |
 | **Jumat** | **07:00** | **16:30** |
-| Sabtu | OFF | OFF |
-| Minggu | OFF | OFF |
+| Sabtu     |       OFF |       OFF |
+| Minggu    |       OFF |       OFF |
 
 Jadwal harus configurable melalui database.
 
@@ -906,10 +906,10 @@ Filter:
 
 Table:
 
-| Tanggal | Keterangan | Jenis | Durasi | Status |
-|---|---|---|---|---|
-| 17-08-2026 | Hari Kemerdekaan | Nasional | Full Day | Aktif |
-| 11-09-2026 | Kegiatan MPP | Khusus | 12:00–13:30 | Aktif |
+| Tanggal    | Keterangan       | Jenis    | Durasi      | Status |
+| ---------- | ---------------- | -------- | ----------- | ------ |
+| 17-08-2026 | Hari Kemerdekaan | Nasional | Full Day    | Aktif  |
+| 11-09-2026 | Kegiatan MPP     | Khusus   | 12:00–13:30 | Aktif  |
 
 ---
 

@@ -1,6 +1,6 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -9,8 +9,8 @@
 
 @theme {
     --font-sans:
-        "Poppins", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -171,4 +171,63 @@
 .leaflet-left,
 .leaflet-right {
     z-index: unset;
+}
+
+/* Marquee rows for the Tenant & Layanan section */
+/* LTR = items slide left-to-right (track shifts rightward: -50% → 0) */
+@keyframes marquee-ltr {
+    from {
+        transform: translateX(-50%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* RTL = items slide right-to-left (track shifts leftward: 0 → -50%) */
+@keyframes marquee-rtl {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee-ltr {
+    animation: marquee-ltr 40s linear infinite;
+}
+
+.animate-marquee-rtl {
+    animation: marquee-rtl 55s linear infinite;
+}
+
+.marquee-paused:hover .animate-marquee-ltr,
+.marquee-paused:hover .animate-marquee-rtl {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-marquee-ltr,
+    .animate-marquee-rtl {
+        animation: none;
+    }
+}
+
+/* Fade mask on marquee edges — transparan di kiri & kanan */
+.marquee-fade {
+    mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        black 5rem,
+        black calc(100% - 5rem),
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        black 5rem,
+        black calc(100% - 5rem),
+        transparent 100%
+    );
 }

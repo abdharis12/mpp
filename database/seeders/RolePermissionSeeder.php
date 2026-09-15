@@ -48,40 +48,6 @@ class RolePermissionSeeder extends Seeder
         }
 
         $roles = [
-            'admin_mpp' => [
-                'view_dashboard',
-                'view_tenants',
-                'create_tenants',
-                'update_tenants',
-                'delete_tenants',
-                'view_employees',
-                'create_employees',
-                'update_employees',
-                'delete_employees',
-                'view_attendance',
-                'manage_attendance',
-                'approve_leave',
-                'approve_correction',
-                'view_reports',
-                'export_reports',
-                'manage_location',
-                'manage_schedule',
-                'manage_holiday',
-                'view_audit_logs',
-                'manage_settings',
-            ],
-            'admin_tenant' => [
-                'view_dashboard',
-                'view_tenants',
-                'view_employees',
-                'create_employees',
-                'update_employees',
-                'view_attendance',
-                'approve_leave',
-                'approve_correction',
-                'view_reports',
-                'export_reports',
-            ],
             'tenant_staff' => [
                 'view_dashboard',
                 'clock_in',
@@ -89,13 +55,6 @@ class RolePermissionSeeder extends Seeder
                 'view_attendance',
                 'request_leave',
                 'request_correction',
-            ],
-            'viewer' => [
-                'view_dashboard',
-                'view_tenants',
-                'view_employees',
-                'view_attendance',
-                'view_reports',
             ],
         ];
 
@@ -106,5 +65,12 @@ class RolePermissionSeeder extends Seeder
 
         $superAdmin = Role::firstOrCreate(['name' => 'super_admin']);
         $superAdmin->syncPermissions(Permission::all());
+
+        // Remove deprecated roles if they exist.
+        $deprecated = Role::whereIn('name', ['admin_mpp', 'admin_tenant', 'viewer'])->get();
+        foreach ($deprecated as $role) {
+            $role->permissions()->detach();
+            $role->delete();
+        }
     }
 }

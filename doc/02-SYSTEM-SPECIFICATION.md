@@ -448,15 +448,15 @@ sebagai pengganti validasi server.
 
 Default schedule:
 
-| Day | Start | End | Status |
-|---|---:|---:|---|
-| Monday | 08:00 | 16:00 | WORK |
-| Tuesday | 08:00 | 16:00 | WORK |
-| Wednesday | 08:00 | 16:00 | WORK |
-| Thursday | 08:00 | 16:00 | WORK |
-| Friday | **07:00** | **16:30** | WORK |
-| Saturday | - | - | OFF |
-| Sunday | - | - | OFF |
+| Day       |     Start |       End | Status |
+| --------- | --------: | --------: | ------ |
+| Monday    |     08:00 |     16:00 | WORK   |
+| Tuesday   |     08:00 |     16:00 | WORK   |
+| Wednesday |     08:00 |     16:00 | WORK   |
+| Thursday  |     08:00 |     16:00 | WORK   |
+| Friday    | **07:00** | **16:30** | WORK   |
+| Saturday  |         - |         - | OFF    |
+| Sunday    |         - |         - | OFF    |
 
 Schedule harus disimpan dalam database.
 
@@ -2417,36 +2417,36 @@ Audit
 timezone: Asia/Jakarta
 
 attendance:
-  radius_meter: 20
-  maximum_gps_accuracy: 50
-  grace_period_minutes: 10
+    radius_meter: 20
+    maximum_gps_accuracy: 50
+    grace_period_minutes: 10
 
 schedule:
-  monday:
-    start: "08:00"
-    end: "16:00"
+    monday:
+        start: '08:00'
+        end: '16:00'
 
-  tuesday:
-    start: "08:00"
-    end: "16:00"
+    tuesday:
+        start: '08:00'
+        end: '16:00'
 
-  wednesday:
-    start: "08:00"
-    end: "16:00"
+    wednesday:
+        start: '08:00'
+        end: '16:00'
 
-  thursday:
-    start: "08:00"
-    end: "16:00"
+    thursday:
+        start: '08:00'
+        end: '16:00'
 
-  friday:
-    start: "07:00"
-    end: "16:30"
+    friday:
+        start: '07:00'
+        end: '16:30'
 
-  saturday:
-    status: OFF
+    saturday:
+        status: OFF
 
-  sunday:
-    status: OFF
+    sunday:
+        status: OFF
 ```
 
 Nilai di atas adalah **default configuration**, bukan business logic yang boleh di-hard-code pada application layer.

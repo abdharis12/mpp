@@ -54,20 +54,20 @@ Status: `[x]` selesai · `[ ]` belum · `[~]` berjalan / environmental issue
 
 ## File Kunci (backend)
 
-| Domain | Controller | Policy | Request |
-|---|---|---|---|
-| Dashboard | `DashboardController` | — | — |
-| Tenant | `TenantController` | `TenantPolicy` | `StoreTenantRequest`, `UpdateTenantRequest` |
-| Employee | `EmployeeController` | `EmployeePolicy` | `StoreEmployeeRequest`, `UpdateEmployeeRequest` |
-| AttendanceLocation | `AttendanceLocationController` | `LocationPolicy` | — |
-| Schedule | `AttendanceScheduleController` | `AttendanceSchedulePolicy` | — |
-| Holiday | `HolidayController` | `HolidayPolicy` | — |
-| Leave | `LeaveController` | `LeavePolicy` | — |
-| Correction | `AttendanceCorrectionController` | `AttendanceCorrectionPolicy` | — |
-| Attendance (Fase 1) | `AttendanceController` | `AttendancePolicy` | `ClockInRequest`, `ClockOutRequest` |
-| **Report (Fase 4)** | `AttendanceReportController` | — | — |
-| **Audit Log (Fase 4)** | `AuditLogController` | — | — |
-| **Notification (Fase 4)** | `NotificationController` | — | — |
+| Domain                    | Controller                       | Policy                       | Request                                         |
+| ------------------------- | -------------------------------- | ---------------------------- | ----------------------------------------------- |
+| Dashboard                 | `DashboardController`            | —                            | —                                               |
+| Tenant                    | `TenantController`               | `TenantPolicy`               | `StoreTenantRequest`, `UpdateTenantRequest`     |
+| Employee                  | `EmployeeController`             | `EmployeePolicy`             | `StoreEmployeeRequest`, `UpdateEmployeeRequest` |
+| AttendanceLocation        | `AttendanceLocationController`   | `LocationPolicy`             | —                                               |
+| Schedule                  | `AttendanceScheduleController`   | `AttendanceSchedulePolicy`   | —                                               |
+| Holiday                   | `HolidayController`              | `HolidayPolicy`              | —                                               |
+| Leave                     | `LeaveController`                | `LeavePolicy`                | —                                               |
+| Correction                | `AttendanceCorrectionController` | `AttendanceCorrectionPolicy` | —                                               |
+| Attendance (Fase 1)       | `AttendanceController`           | `AttendancePolicy`           | `ClockInRequest`, `ClockOutRequest`             |
+| **Report (Fase 4)**       | `AttendanceReportController`     | —                            | —                                               |
+| **Audit Log (Fase 4)**    | `AuditLogController`             | —                            | —                                               |
+| **Notification (Fase 4)** | `NotificationController`         | —                            | —                                               |
 
 ## Key Services (Fase 1)
 

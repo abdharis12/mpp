@@ -16,23 +16,30 @@ export default function LeaveForm({ leave_types }: { leave_types: any }) {
             <div className="max-w-2xl space-y-6">
                 <div>
                     <h1 className="text-2xl font-semibold">Ajukan Izin</h1>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-muted-foreground mt-1 text-sm">
                         Pengajuan izin akan membutuhkan persetujuan admin.
                     </p>
                 </div>
 
                 <Card>
                     <CardContent className="pt-6">
-                        <Form {...((store as any)()).form()} className="space-y-4">
+                        <Form
+                            {...(store as any)().form()}
+                            className="space-y-4"
+                        >
                             <div className="space-y-2">
-                                <Label htmlFor="leave_type_id">Jenis Izin</Label>
+                                <Label htmlFor="leave_type_id">
+                                    Jenis Izin
+                                </Label>
                                 <select
                                     id="leave_type_id"
                                     name="leave_type_id"
                                     defaultValue=""
-                                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs focus-visible:border-ring focus-visible:ring-ring/50"
+                                    className="border-input focus-visible:border-ring focus-visible:ring-ring/50 flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs"
                                 >
-                                    <option value="">-- Pilih Jenis Izin --</option>
+                                    <option value="">
+                                        -- Pilih Jenis Izin --
+                                    </option>
                                     {leave_types?.map((lt: any) => (
                                         <option key={lt.id} value={lt.id}>
                                             {lt.name}
@@ -44,18 +51,37 @@ export default function LeaveForm({ leave_types }: { leave_types: any }) {
 
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div className="space-y-2">
-                                    <Label htmlFor="start_date">Tanggal Mulai</Label>
-                                    <Input id="start_date" name="start_date" type="date" required />
+                                    <Label htmlFor="start_date">
+                                        Tanggal Mulai
+                                    </Label>
+                                    <Input
+                                        id="start_date"
+                                        name="start_date"
+                                        type="date"
+                                        required
+                                    />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="end_date">Tanggal Selesai</Label>
-                                    <Input id="end_date" name="end_date" type="date" required />
+                                    <Label htmlFor="end_date">
+                                        Tanggal Selesai
+                                    </Label>
+                                    <Input
+                                        id="end_date"
+                                        name="end_date"
+                                        type="date"
+                                        required
+                                    />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
                                 <Label htmlFor="reason">Alasan</Label>
-                                <Textarea id="reason" name="reason" required placeholder="Jelaskan alasan pengajuan izin" />
+                                <Textarea
+                                    id="reason"
+                                    name="reason"
+                                    required
+                                    placeholder="Jelaskan alasan pengajuan izin"
+                                />
                                 <InputError message={errors.reason} />
                             </div>
 

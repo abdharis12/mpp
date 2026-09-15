@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\AttendanceLocation;
 use App\Models\Employee;
 use App\Models\Tenant;
+use App\Models\TenantService;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -60,5 +61,19 @@ class SampleTenantSeeder extends Seeder
                 'is_active' => true,
             ]
         );
+
+        // Sample tenant services — clearly sample data, to be replaced by real services via admin CRUD
+        $sampleServices = [
+            ['name' => 'Perizinan Berusaha',  'description' => 'Pelayanan perizinan berusaha melalui sistem Online Single Submission (OSS).', 'sort_order' => 1, 'is_active' => true],
+            ['name' => 'Penanaman Modal',      'description' => 'Pelayanan penanaman modal dalam dan luar negeri.', 'sort_order' => 2, 'is_active' => true],
+            ['name' => 'Informasi & Pengaduan', 'description' => 'Pusat informasi layanan dan penerimaan pengaduan masyarakat.', 'sort_order' => 3, 'is_active' => true],
+        ];
+
+        foreach ($sampleServices as $service) {
+            TenantService::firstOrCreate(
+                ['tenant_id' => $tenant->id, 'name' => $service['name']],
+                $service
+            );
+        }
     }
 }

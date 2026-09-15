@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Circle, useMap, LayersControl } from 'react-leaflet';
+import {
+    MapContainer,
+    TileLayer,
+    Marker,
+    Circle,
+    useMap,
+    LayersControl,
+} from 'react-leaflet';
 import L from 'leaflet';
 
 function FixMapAutoInvalidate() {
@@ -10,13 +17,20 @@ function FixMapAutoInvalidate() {
     return null;
 }
 
-function FitBounds({ center, radius }: { center: [number, number]; radius: number }) {
+function FitBounds({
+    center,
+    radius,
+}: {
+    center: [number, number];
+    radius: number;
+}) {
     const map = useMap();
     useEffect(() => {
         const distMeters = radius + 50;
         const latRad = (center[0] * Math.PI) / 180;
         const degLat = (distMeters / 111320) * (180 / Math.PI);
-        const degLng = (distMeters / (111320 * Math.cos(latRad))) * (180 / Math.PI);
+        const degLng =
+            (distMeters / (111320 * Math.cos(latRad))) * (180 / Math.PI);
         map.fitBounds(
             [
                 [center[0] - degLat, center[1] - degLng],
@@ -58,20 +72,33 @@ export default function AttendanceMap({
     gpsLongitude,
 }: Props) {
     const [mounted, setMounted] = useState(false);
-    const center = useMemo<[number, number]>(() => [locationLatitude, locationLongitude], [locationLatitude, locationLongitude]);
-    const gpsPos = gpsLatitude != null && gpsLongitude != null ? ([gpsLatitude, gpsLongitude] as [number, number]) : null;
+    const center = useMemo<[number, number]>(
+        () => [locationLatitude, locationLongitude],
+        [locationLatitude, locationLongitude],
+    );
+    const gpsPos =
+        gpsLatitude != null && gpsLongitude != null
+            ? ([gpsLatitude, gpsLongitude] as [number, number])
+            : null;
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
     if (!mounted) {
-        return <div className="h-56 w-full animate-pulse rounded-md bg-muted" />;
+        return (
+            <div className="bg-muted h-56 w-full animate-pulse rounded-md" />
+        );
     }
 
     return (
-        <div className="overflow-hidden rounded-md border border-border">
-            <MapContainer center={center} zoom={17} scrollWheelZoom={true} className="h-56 w-full">
+        <div className="border-border overflow-hidden rounded-md border">
+            <MapContainer
+                center={center}
+                zoom={17}
+                scrollWheelZoom={true}
+                className="h-56 w-full"
+            >
                 <FixMapAutoInvalidate />
                 <FitBounds center={center} radius={radiusMeter} />
                 <LayersControl position="topright">
@@ -83,12 +110,21 @@ export default function AttendanceMap({
                     </LayersControl.BaseLayer>
                     <LayersControl.BaseLayer name="Satelit">
                         <TileLayer
-                            attribution='&copy; Esri, Maxar, Earthstar Geographics'
+                            attribution="&copy; Esri, Maxar, Earthstar Geographics"
                             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                         />
                     </LayersControl.BaseLayer>
                 </LayersControl>
-                <Circle center={center} radius={radiusMeter} pathOptions={{ color: '#2563EB', fillColor: '#2563EB', fillOpacity: 0.08, weight: 2 }} />
+                <Circle
+                    center={center}
+                    radius={radiusMeter}
+                    pathOptions={{
+                        color: '#2563EB',
+                        fillColor: '#2563EB',
+                        fillOpacity: 0.08,
+                        weight: 2,
+                    }}
+                />
                 <Marker position={center} icon={locationIcon} />
                 {gpsPos && <Marker position={gpsPos} icon={gpsIcon} />}
             </MapContainer>

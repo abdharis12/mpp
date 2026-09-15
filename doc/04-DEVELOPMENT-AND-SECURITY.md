@@ -403,7 +403,7 @@ atau abstraction waktu aplikasi yang ekuivalen.
 Jangan menggunakan:
 
 ```javascript id="eq82jj"
-new Date()
+new Date();
 ```
 
 sebagai timestamp resmi attendance.

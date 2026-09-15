@@ -1,136 +1,133 @@
-version: 1
+version: 3
 
 project:
-  name: "Website MPP dan Absensi Tenant Kabupaten Muara Enim"
-  description: "Government document and data storage platform"
-  domain: "government-web-app"
-  audience: "government staff"
-  language: "id"
+    name: 'Website MPP dan Absensi Tenant Kabupaten Muara Enim'
+    description: 'Government document and data storage platform'
+    domain: 'government-web-app'
+    audience: 'government staff'
+    language: 'id'
 
-visual:
-  style: "minimalist"
-  secondary_style: "sleek"
+design_intent:
+    style:
+        primary: 'claymorphism'
+        secondary: 'none'
 
-  personality:
-    - professional
-    - modern
-    - tactile
-    - trustworthy
-    - distinctive
+    brand:
+        primary: '#123C86'
+        secondary: '#FEC62C'
+        accent: '#FAF9F6'
 
-  creativity:
-    level: "bold"
-    allow_asymmetry: true
-    allow_visual_risk: false
-    signature_element: true
+    personality:
+        - professional
+        - modern
+        - distinctive
 
-theme:
-  mode: "light"
+    creativity:
+        level: 'moderate'
+        allow_asymmetry: true
+        allow_visual_risk: true
+        signature_element: true
 
-colors:
-  primary: "#FFBA08"
-  primary_foreground: "#0A2472"   # kontras ~8.1:1 di atas primary, sekaligus reinforce brand navy
+    density:
+        desktop: 'comfortable'
+        tablet: 'comfortable'
+        mobile: 'compact'
 
-  secondary: "#0A2472"
-  secondary_foreground: "#F8F9FC" # nyaris putih, kontras ~13:1 di atas navy
+    theme:
+        mode: 'light'
 
-  background: "#FAF9F6"           # warm off-white, menghangatkan area kosong
-  foreground: "#0F172A"           # dark slate-navy, netral tapi selaras dgn secondary
+    accessibility:
+        target: 'AA'
+        reduced_motion: true
 
-  surface: "#FFFFFF"
-  surface_elevated: "#FFFDF8"     # sedikit lebih hangat, untuk card/modal yg "naik"
+    motion:
+        preference: 'subtle'
 
-  muted: "#E8EAF2"                # abu kebiruan lembut, turunan dari secondary
-  muted_foreground: "#5B6472"
+    content:
+        tone: 'professional'
+        factual_claims_only: true
 
-  border: "#E2E4EA"
-  input: "#D8DCE5"
-  ring: "#FFBA08"                 # fokus ring pakai primary biar konsisten
+design_system:
+    status: 'unresolved'
+    resolver_version: '3'
+    source: 'design_intent'
 
-  success: "#16A34A"
-  warning: "#F97316"              # sengaja dibuat oranye, bukan amber, biar tidak “tabrakan” makna dgn primary
-  destructive: "#DC2626"
-  info: "#0EA5E9"
+    typography: {}
+    spacing: {}
+    radius: {}
+    elevation: {}
+    surfaces: {}
+    borders: {}
+    motion: {}
+    semantic_colors: {}
 
-  typography:
-    font_family: "Poppins, sans-serif"
-    display_family: "Poppins, sans-serif"
-    body_family: "Poppins, sans-serif"
+    component_adaptation:
+        status: 'pending'
 
-  spacing:
-    density: "comfortable"
+        foundation:
+            - 'shadcn'
+            - 'radix'
 
-  radius:
-    scale: "medium"
+        strategy: 'modify-existing-first'
 
-  elevation:
-    intensity: "low"
-
-  clay:
-    enabled: false
-    intensity: "strong"
-    matte: true
-    diffuse_lighting: true
-    highlights: true
-    soft_shadows: true
-    inset_depth: true
-    pressed_state: true
-
-  glass:
-    enabled: false
-    intensity: "subtle"
-    blur: "medium"
-    opacity: 0.65
-    reflections: "subtle"
+        components: {}
 
 components:
-  foundation:
-    - "shadcn"
-    - "radix"
+    strategy: 'reuse-existing'
 
-  reuse_existing: true
+    reuse_existing: true
+    preserve_api: true
+    preserve_behavior: true
 
-ux:
-  responsive: true
-  mobile_first: true
-  accessibility: "strict"
-  reduced_motion: true
+    foundation:
+        source:
+            - 'shadcn'
+            - 'radix'
 
-  interaction:
-    tactile: true
-    feedback: true
-    hover_feedback: true
-    focus_visible: true
+        adaptation:
+            enabled: true
+            strategy: 'modify-existing-first'
 
-references:
-  landing: ""
-  dashboard: ""
-  crud: ""
-  form: ""
-  detail: ""
-  search: ""
-  settings: ""
-  file_manager: ""
-
-assets:
-  logo: "/assets/img/logo.png"
-  brand_mark: "/assets/img/logo.png"
-  organization_logo: "/assets/img/logo.png"
-
-content:
-  tone: "professional"
-  factual_claims_only: true
+    rules:
+        create_duplicate_for_visual_style: false
+        create_style_named_components: false
+        preserve_accessibility: true
+        preserve_component_api: true
 
 governance:
-  reference_first: true
-  reuse_components: true
-  audit_after_ui_task: true
-  no_unapproved_design_system: true
-  no_random_colors: true
-  no_random_radius: true
-  no_random_shadows: true
-  no_random_typography: true
-  no_random_spacing: true
-  no_page_specific_design_system: true
-  accessibility_over_visual_effects: true
-  limit_task_scope: true
+    resolve_design_system_before_major_ui: true
+
+    adapt_existing_components_first: true
+    preserve_foundation_behavior: true
+    preserve_component_api: true
+
+    no_duplicate_foundation_components: true
+
+    no_page_local_design_system: true
+
+    brand_colors_are_authoritative: true
+
+    style_controls_treatment: true
+    brand_controls_identity: true
+
+    run_ui_auditor_after_ui_changes: true
+
+resolver:
+    engine: 'deterministic-ai-v3'
+    policy: 'fixed-resolution-order'
+
+    last_resolved_at: null
+    needs_review_reason: null
+
+component_registry:
+    strategy: 'adapt-existing-first'
+
+    foundation:
+        - 'shadcn'
+        - 'radix'
+
+    ledger: {}
+
+validation:
+    schema: 'templates/ui-system.schema.json'
+    validator: 'scripts/validate-ui-system.py'

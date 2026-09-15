@@ -48,6 +48,11 @@ class Tenant extends Model
         return $this->hasMany(AttendanceSchedule::class);
     }
 
+    public function services(): HasMany
+    {
+        return $this->hasMany(TenantService::class)->orderBy('sort_order');
+    }
+
     public function auditLogs(): HasMany
     {
         return $this->hasMany(AuditLog::class);

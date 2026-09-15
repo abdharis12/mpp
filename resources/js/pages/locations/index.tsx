@@ -16,18 +16,23 @@ export default function LocationIndex({ locations }: { locations: any }) {
     return (
         <>
             <Head title="Lokasi Absensi Pegawai" />
-            <div className="max-w-7xl flex flex-col gap-1 my-5 mx-6">
-                <h1 className="text-2xl font-semibold">Lokasi Absensi Pegawai Tenant</h1>
-                <p className="text-sm text-muted-foreground mt-1">
-                    Pengaturan Titik koordinat, radius, dan toleransi akurasi GPS untuk validasi clock-in/out.
+            <div className="mx-6 my-5 flex max-w-7xl flex-col gap-1">
+                <h1 className="text-2xl font-semibold">
+                    Lokasi Absensi Pegawai Tenant
+                </h1>
+                <p className="text-muted-foreground mt-1 text-sm">
+                    Pengaturan Titik koordinat, radius, dan toleransi akurasi
+                    GPS untuk validasi clock-in/out.
                 </p>
             </div>
-            <div className="max-w-5xl my-5 mx-6">
+            <div className="mx-6 my-5 max-w-5xl">
                 {(flash as any)?.success && (
-                    <Alert className="bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/30 dark:border-emerald-800 dark:text-emerald-300">
+                    <Alert className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300">
                         <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         <AlertTitle>Berhasil</AlertTitle>
-                        <AlertDescription className="text-emerald-700 dark:text-emerald-300">{(flash as any).success}</AlertDescription>
+                        <AlertDescription className="text-emerald-700 dark:text-emerald-300">
+                            {(flash as any).success}
+                        </AlertDescription>
                     </Alert>
                 )}
 
@@ -37,7 +42,7 @@ export default function LocationIndex({ locations }: { locations: any }) {
 
                 {(!locations || locations.length === 0) && (
                     <Card>
-                        <CardContent className="py-10 text-center text-muted-foreground">
+                        <CardContent className="text-muted-foreground py-10 text-center">
                             Belum ada lokasi absensi.
                         </CardContent>
                     </Card>
@@ -56,47 +61,88 @@ function LocationCard({ loc }: { loc: any }) {
         is_active: !!loc.is_active,
     });
 
-    const [localAlert, setLocalAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+    const [localAlert, setLocalAlert] = useState<{
+        type: 'success' | 'error';
+        message: string;
+    } | null>(null);
     const [fetching, setFetching] = useState(false);
-    const [radiusPreview, setRadiusPreview] = useState(Number(loc.radius_meter));
+    const [radiusPreview, setRadiusPreview] = useState(
+        Number(loc.radius_meter),
+    );
 
-    const handleMapChange = useCallback((newLat: number, newLng: number) => {
-        setData((prev) => ({ ...prev, latitude: String(newLat), longitude: String(newLng) } as any));
-    }, [setData]);
+    const handleMapChange = useCallback(
+        (newLat: number, newLng: number) => {
+            setData(
+                (prev) =>
+                    ({
+                        ...prev,
+                        latitude: String(newLat),
+                        longitude: String(newLng),
+                    }) as any,
+            );
+        },
+        [setData],
+    );
 
-    useEffect(() => { setRadiusPreview(Number(data.radius_meter)); }, [data.radius_meter]);
+    useEffect(() => {
+        setRadiusPreview(Number(data.radius_meter));
+    }, [data.radius_meter]);
 
     const useCurrentLocation = () => {
         if (!navigator.geolocation) return;
         setFetching(true);
         navigator.geolocation.getCurrentPosition(
             (pos) => {
-                setData((prev) => ({ ...prev, latitude: String(pos.coords.latitude), longitude: String(pos.coords.longitude) } as any));
+                setData(
+                    (prev) =>
+                        ({
+                            ...prev,
+                            latitude: String(pos.coords.latitude),
+                            longitude: String(pos.coords.longitude),
+                        }) as any,
+                );
                 setFetching(false);
             },
-            () => { setFetching(false); }
+            () => {
+                setFetching(false);
+            },
         );
     };
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         patch(update.url({ location: loc.id }), {
-            onSuccess: () => setLocalAlert({ type: 'success', message: 'Lokasi berhasil diperbarui.' }),
-            onError: () => setLocalAlert({ type: 'error', message: 'Gagal menyimpan lokasi. Periksa input.' }),
+            onSuccess: () =>
+                setLocalAlert({
+                    type: 'success',
+                    message: 'Lokasi berhasil diperbarui.',
+                }),
+            onError: () =>
+                setLocalAlert({
+                    type: 'error',
+                    message: 'Gagal menyimpan lokasi. Periksa input.',
+                }),
         } as any);
     };
 
-    useEffect(() => { if (localAlert) { const t = setTimeout(() => setLocalAlert(null), 4000); return () => clearTimeout(t); } }, [localAlert]);
+    useEffect(() => {
+        if (localAlert) {
+            const t = setTimeout(() => setLocalAlert(null), 4000);
+            return () => clearTimeout(t);
+        }
+    }, [localAlert]);
 
     return (
         <Card>
             <CardHeader className="flex flex-row items-center gap-3">
-                <div className="bg-blue-100 text-blue-700 p-2 rounded-full">
+                <div className="rounded-full bg-blue-100 p-2 text-blue-700">
                     <MapPin className="h-5 w-5" />
                 </div>
                 <div>
                     <CardTitle className="text-lg">{loc.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground">Lokasi aktif untuk seluruh tenant</p>
+                    <p className="text-muted-foreground text-sm">
+                        Lokasi aktif untuk seluruh tenant
+                    </p>
                 </div>
             </CardHeader>
             <CardContent>
@@ -104,16 +150,47 @@ function LocationCard({ loc }: { loc: any }) {
                     <AdminLocationMap
                         latitude={Number(data.latitude)}
                         longitude={Number(data.longitude)}
-                        radius={Number.isFinite(radiusPreview) ? radiusPreview : Number(loc.radius_meter)}
+                        radius={
+                            Number.isFinite(radiusPreview)
+                                ? radiusPreview
+                                : Number(loc.radius_meter)
+                        }
                         onChange={handleMapChange}
                     />
                 </div>
 
                 {localAlert && (
-                    <Alert variant={localAlert.type === 'error' ? 'destructive' : 'default'} className={localAlert.type === 'success' ? 'mb-4 bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/30 dark:border-emerald-800 dark:text-emerald-300' : 'mb-4'}>
-                        {localAlert.type === 'success' ? <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /> : <XCircle className="h-4 w-4" />}
-                        <AlertTitle>{localAlert.type === 'success' ? 'Berhasil' : 'Gagal'}</AlertTitle>
-                        <AlertDescription className={localAlert.type === 'success' ? 'text-emerald-700 dark:text-emerald-300' : ''}>{localAlert.message}</AlertDescription>
+                    <Alert
+                        variant={
+                            localAlert.type === 'error'
+                                ? 'destructive'
+                                : 'default'
+                        }
+                        className={
+                            localAlert.type === 'success'
+                                ? 'mb-4 border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300'
+                                : 'mb-4'
+                        }
+                    >
+                        {localAlert.type === 'success' ? (
+                            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                        ) : (
+                            <XCircle className="h-4 w-4" />
+                        )}
+                        <AlertTitle>
+                            {localAlert.type === 'success'
+                                ? 'Berhasil'
+                                : 'Gagal'}
+                        </AlertTitle>
+                        <AlertDescription
+                            className={
+                                localAlert.type === 'success'
+                                    ? 'text-emerald-700 dark:text-emerald-300'
+                                    : ''
+                            }
+                        >
+                            {localAlert.message}
+                        </AlertDescription>
                     </Alert>
                 )}
 
@@ -126,10 +203,16 @@ function LocationCard({ loc }: { loc: any }) {
                                 type="number"
                                 step="0.0000001"
                                 value={data.latitude}
-                                onChange={(e) => setData('latitude', e.target.value)}
+                                onChange={(e) =>
+                                    setData('latitude', e.target.value)
+                                }
                                 required
                             />
-                            {errors.latitude && <p className="text-sm text-destructive">{errors.latitude}</p>}
+                            {errors.latitude && (
+                                <p className="text-destructive text-sm">
+                                    {errors.latitude}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor={`lon-${loc.id}`}>Longitude</Label>
@@ -138,39 +221,64 @@ function LocationCard({ loc }: { loc: any }) {
                                 type="number"
                                 step="0.0000001"
                                 value={data.longitude}
-                                onChange={(e) => setData('longitude', e.target.value)}
+                                onChange={(e) =>
+                                    setData('longitude', e.target.value)
+                                }
                                 required
                             />
-                            {errors.longitude && <p className="text-sm text-destructive">{errors.longitude}</p>}
+                            {errors.longitude && (
+                                <p className="text-destructive text-sm">
+                                    {errors.longitude}
+                                </p>
+                            )}
                         </div>
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-2">
-                            <Label htmlFor={`radius-${loc.id}`}>Radius (meter)</Label>
+                            <Label htmlFor={`radius-${loc.id}`}>
+                                Radius (meter)
+                            </Label>
                             <Input
                                 id={`radius-${loc.id}`}
                                 type="number"
                                 step="0.01"
                                 min="1"
                                 value={data.radius_meter}
-                                onChange={(e) => setData('radius_meter', e.target.value)}
+                                onChange={(e) =>
+                                    setData('radius_meter', e.target.value)
+                                }
                                 required
                             />
-                            {errors.radius_meter && <p className="text-sm text-destructive">{errors.radius_meter}</p>}
+                            {errors.radius_meter && (
+                                <p className="text-destructive text-sm">
+                                    {errors.radius_meter}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor={`acc-${loc.id}`}>Maks. Akurasi GPS (meter)</Label>
+                            <Label htmlFor={`acc-${loc.id}`}>
+                                Maks. Akurasi GPS (meter)
+                            </Label>
                             <Input
                                 id={`acc-${loc.id}`}
                                 type="number"
                                 step="0.01"
                                 min="1"
                                 value={data.maximum_gps_accuracy}
-                                onChange={(e) => setData('maximum_gps_accuracy', e.target.value)}
+                                onChange={(e) =>
+                                    setData(
+                                        'maximum_gps_accuracy',
+                                        e.target.value,
+                                    )
+                                }
                                 required
                             />
-                            {errors.maximum_gps_accuracy && <p className="text-sm text-destructive">{errors.maximum_gps_accuracy}</p>}
+                            {errors.maximum_gps_accuracy && (
+                                <p className="text-destructive text-sm">
+                                    {errors.maximum_gps_accuracy}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -178,17 +286,27 @@ function LocationCard({ loc }: { loc: any }) {
                         <Checkbox
                             id={`active-${loc.id}`}
                             checked={data.is_active}
-                            onCheckedChange={(v) => setData('is_active', v === true)}
+                            onCheckedChange={(v) =>
+                                setData('is_active', v === true)
+                            }
                         />
                         <Label htmlFor={`active-${loc.id}`}>Aktif</Label>
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <Button type="button" variant="outline" size="sm" onClick={useCurrentLocation} disabled={fetching}>
-                            <Navigation className="h-4 w-4 mr-1.5" />
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={useCurrentLocation}
+                            disabled={fetching}
+                        >
+                            <Navigation className="mr-1.5 h-4 w-4" />
                             {fetching ? 'Mencari...' : 'Lokasi saat ini'}
                         </Button>
-                        <Button type="submit" disabled={processing}>{processing ? 'Menyimpan...' : 'Simpan Lokasi'}</Button>
+                        <Button type="submit" disabled={processing}>
+                            {processing ? 'Menyimpan...' : 'Simpan Lokasi'}
+                        </Button>
                     </div>
                 </form>
             </CardContent>

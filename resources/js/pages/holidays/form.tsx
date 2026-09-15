@@ -9,7 +9,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/textarea';
 import { store, update } from '@/routes/holidays';
 
-type Period = { holiday_date: string; start_time: string; end_time: string; is_full_day: boolean };
+type Period = {
+    holiday_date: string;
+    start_time: string;
+    end_time: string;
+    is_full_day: boolean;
+};
 
 export default function HolidayForm({
     holiday,
@@ -19,7 +24,9 @@ export default function HolidayForm({
     holiday_types: string[];
 }) {
     const { errors, flash } = usePage().props;
-    const [fullDay, setFullDay] = useState(holiday ? Boolean(holiday.is_full_day) : true);
+    const [fullDay, setFullDay] = useState(
+        holiday ? Boolean(holiday.is_full_day) : true,
+    );
     const [startDate, setStartDate] = useState(holiday?.start_date ?? '');
     const [endDate, setEndDate] = useState(holiday?.end_date ?? '');
 
@@ -31,16 +38,34 @@ export default function HolidayForm({
                   end_time: p.end_time ?? '',
                   is_full_day: Boolean(p.is_full_day),
               }))
-            : [{ holiday_date: '', start_time: '08:00', end_time: '16:00', is_full_day: true }],
+            : [
+                  {
+                      holiday_date: '',
+                      start_time: '08:00',
+                      end_time: '16:00',
+                      is_full_day: true,
+                  },
+              ],
     );
 
     const setPeriod = (i: number, patch: Partial<Period>) =>
-        setPeriods((prev) => prev.map((p, idx) => (idx === i ? { ...p, ...patch } : p)));
+        setPeriods((prev) =>
+            prev.map((p, idx) => (idx === i ? { ...p, ...patch } : p)),
+        );
 
     const addPeriod = () =>
-        setPeriods([...periods, { holiday_date: '', start_time: '08:00', end_time: '16:00', is_full_day: true }]);
+        setPeriods([
+            ...periods,
+            {
+                holiday_date: '',
+                start_time: '08:00',
+                end_time: '16:00',
+                is_full_day: true,
+            },
+        ]);
 
-    const removePeriod = (i: number) => setPeriods(periods.filter((_, idx) => idx !== i));
+    const removePeriod = (i: number) =>
+        setPeriods(periods.filter((_, idx) => idx !== i));
 
     // Build form data by injecting controlled fields via ref-free approach: use hidden inputs
     return (
@@ -51,7 +76,7 @@ export default function HolidayForm({
                     <h1 className="text-2xl font-semibold">
                         {holiday ? 'Edit Hari Libur' : 'Tambah Hari Libur'}
                     </h1>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-muted-foreground mt-1 text-sm">
                         Dukungan full-day, parsial, dan multi-hari.
                     </p>
                 </div>
@@ -59,19 +84,46 @@ export default function HolidayForm({
                 <Card>
                     <CardContent className="pt-6">
                         <Form
-                            {...((holiday ? update({ holiday: holiday.id }) : store) as any).form()}
+                            {...(
+                                (holiday
+                                    ? update({ holiday: holiday.id })
+                                    : store) as any
+                            ).form()}
                             className="space-y-4"
                         >
-                            <input type="hidden" name="is_full_day" value={fullDay ? '1' : '0'} />
-                            <input type="hidden" name="start_date" value={startDate} />
-                            <input type="hidden" name="end_date" value={endDate} />
+                            <input
+                                type="hidden"
+                                name="is_full_day"
+                                value={fullDay ? '1' : '0'}
+                            />
+                            <input
+                                type="hidden"
+                                name="start_date"
+                                value={startDate}
+                            />
+                            <input
+                                type="hidden"
+                                name="end_date"
+                                value={endDate}
+                            />
                             {periods.map((p, i) => (
-                                <input key={i} type="hidden" name={`periods[${i}]`} value={JSON.stringify(p)} />
+                                <input
+                                    key={i}
+                                    type="hidden"
+                                    name={`periods[${i}]`}
+                                    value={JSON.stringify(p)}
+                                />
                             ))}
 
                             <div className="space-y-2">
                                 <Label htmlFor="name">Nama Hari Libur</Label>
-                                <Input id="name" name="name" defaultValue={holiday?.name} required placeholder="Hari Kemerdekaan RI" />
+                                <Input
+                                    id="name"
+                                    name="name"
+                                    defaultValue={holiday?.name}
+                                    required
+                                    placeholder="Hari Kemerdekaan RI"
+                                />
                                 <InputError message={(errors as any)?.name} />
                             </div>
 
@@ -80,8 +132,11 @@ export default function HolidayForm({
                                 <select
                                     id="holiday_type"
                                     name="holiday_type"
-                                    defaultValue={holiday?.holiday_type ?? 'NATIONAL_HOLIDAY'}
-                                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
+                                    defaultValue={
+                                        holiday?.holiday_type ??
+                                        'NATIONAL_HOLIDAY'
+                                    }
+                                    className="border-input flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs"
                                 >
                                     {holiday_types?.map((t: string) => (
                                         <option key={t} value={t}>
@@ -89,63 +144,127 @@ export default function HolidayForm({
                                         </option>
                                     ))}
                                 </select>
-                                <InputError message={(errors as any)?.holiday_type} />
+                                <InputError
+                                    message={(errors as any)?.holiday_type}
+                                />
                             </div>
 
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div className="space-y-2">
-                                    <Label htmlFor="start_date">Tanggal Mulai</Label>
-                                    <Input id="start_date" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
+                                    <Label htmlFor="start_date">
+                                        Tanggal Mulai
+                                    </Label>
+                                    <Input
+                                        id="start_date"
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) =>
+                                            setStartDate(e.target.value)
+                                        }
+                                        required
+                                    />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="end_date">Tanggal Selesai</Label>
-                                    <Input id="end_date" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+                                    <Label htmlFor="end_date">
+                                        Tanggal Selesai
+                                    </Label>
+                                    <Input
+                                        id="end_date"
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) =>
+                                            setEndDate(e.target.value)
+                                        }
+                                        required
+                                    />
                                 </div>
                             </div>
 
                             <div className="flex items-center space-x-2">
-                                <Checkbox id="full_day" checked={fullDay} onCheckedChange={(c) => setFullDay(Boolean(c))} />
-                                <Label htmlFor="full_day">Libur seharian (full day)</Label>
+                                <Checkbox
+                                    id="full_day"
+                                    checked={fullDay}
+                                    onCheckedChange={(c) =>
+                                        setFullDay(Boolean(c))
+                                    }
+                                />
+                                <Label htmlFor="full_day">
+                                    Libur seharian (full day)
+                                </Label>
                             </div>
 
                             {!fullDay && (
-                                <div className="space-y-3 rounded-lg bg-muted/40 p-4">
-                                    <p className="text-sm font-medium">Periode Libur Sebagian</p>
+                                <div className="bg-muted/40 space-y-3 rounded-lg p-4">
+                                    <p className="text-sm font-medium">
+                                        Periode Libur Sebagian
+                                    </p>
                                     {periods.map((p, i) => (
-                                        <div key={i} className="flex flex-wrap items-end gap-2">
+                                        <div
+                                            key={i}
+                                            className="flex flex-wrap items-end gap-2"
+                                        >
                                             <div className="space-y-1">
-                                                <Label className="text-xs">Tanggal</Label>
+                                                <Label className="text-xs">
+                                                    Tanggal
+                                                </Label>
                                                 <Input
                                                     type="date"
                                                     className="w-40"
                                                     value={p.holiday_date}
-                                                    onChange={(e) => setPeriod(i, { holiday_date: e.target.value })}
+                                                    onChange={(e) =>
+                                                        setPeriod(i, {
+                                                            holiday_date:
+                                                                e.target.value,
+                                                        })
+                                                    }
                                                 />
                                             </div>
                                             <div className="space-y-1">
-                                                <Label className="text-xs">Mulai</Label>
+                                                <Label className="text-xs">
+                                                    Mulai
+                                                </Label>
                                                 <Input
                                                     type="time"
                                                     className="w-32"
                                                     value={p.start_time}
-                                                    onChange={(e) => setPeriod(i, { start_time: e.target.value })}
+                                                    onChange={(e) =>
+                                                        setPeriod(i, {
+                                                            start_time:
+                                                                e.target.value,
+                                                        })
+                                                    }
                                                 />
                                             </div>
                                             <div className="space-y-1">
-                                                <Label className="text-xs">Selesai</Label>
+                                                <Label className="text-xs">
+                                                    Selesai
+                                                </Label>
                                                 <Input
                                                     type="time"
                                                     className="w-32"
                                                     value={p.end_time}
-                                                    onChange={(e) => setPeriod(i, { end_time: e.target.value })}
+                                                    onChange={(e) =>
+                                                        setPeriod(i, {
+                                                            end_time:
+                                                                e.target.value,
+                                                        })
+                                                    }
                                                 />
                                             </div>
-                                            <button type="button" onClick={() => removePeriod(i)} className="text-xs text-red-600">
+                                            <button
+                                                type="button"
+                                                onClick={() => removePeriod(i)}
+                                                className="text-xs text-red-600"
+                                            >
                                                 Hapus
                                             </button>
                                         </div>
                                     ))}
-                                    <button type="button" onClick={addPeriod} className="text-xs text-blue-600 underline">
+                                    <button
+                                        type="button"
+                                        onClick={addPeriod}
+                                        className="text-xs text-blue-600 underline"
+                                    >
                                         + Tambah periode
                                     </button>
                                 </div>
@@ -153,8 +272,15 @@ export default function HolidayForm({
 
                             <div className="space-y-2">
                                 <Label htmlFor="description">Keterangan</Label>
-                                <Textarea id="description" name="description" defaultValue={holiday?.description} placeholder="Alasan / keterangan libur" />
-                                <InputError message={(errors as any)?.description} />
+                                <Textarea
+                                    id="description"
+                                    name="description"
+                                    defaultValue={holiday?.description}
+                                    placeholder="Alasan / keterangan libur"
+                                />
+                                <InputError
+                                    message={(errors as any)?.description}
+                                />
                             </div>
 
                             <Button type="submit">Simpan</Button>

@@ -4,20 +4,12 @@
         "laravel-boost": {
             "type": "local",
             "enabled": true,
-            "command": [
-                "php",
-                "artisan",
-                "boost:mcp"
-            ]
+            "command": ["php", "artisan", "boost:mcp"]
         },
         "codegraph": {
-          "type": "local",
-          "command": [
-            "codegraph",
-            "serve",
-            "--mcp"
-          ],
-          "enabled": true
+            "type": "local",
+            "command": ["codegraph", "serve", "--mcp"],
+            "enabled": true
         }
     }
 }

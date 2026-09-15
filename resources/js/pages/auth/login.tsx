@@ -12,7 +12,7 @@ import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 import PasskeyVerify from '@/components/passkey-verify';
 
-const BLUE = "#123C86";
+const BLUE = '#123C86';
 
 type Props = {
     status?: string;
@@ -35,7 +35,10 @@ export default function Login({ status, canResetPassword }: Props) {
                     <>
                         <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="email" className="text-sm font-medium">
+                                <Label
+                                    htmlFor="email"
+                                    className="text-sm font-medium"
+                                >
                                     Alamat email
                                 </Label>
                                 <Input
@@ -54,7 +57,10 @@ export default function Login({ status, canResetPassword }: Props) {
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password" className="text-sm font-medium">
+                                    <Label
+                                        htmlFor="password"
+                                        className="text-sm font-medium"
+                                    >
                                         Kata sandi
                                     </Label>
                                     {canResetPassword && (

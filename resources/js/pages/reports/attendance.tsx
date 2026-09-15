@@ -113,36 +113,40 @@ export default function AttendanceReport({
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-semibold">Laporan Absensi Bulanan</h1>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <h1 className="text-2xl font-semibold">
+                            Laporan Absensi Bulanan
+                        </h1>
+                        <p className="text-muted-foreground mt-1 text-sm">
                             Rekap kehadiran petugas per bulan berdasarkan tenant
                         </p>
                     </div>
                     <div className="flex gap-2">
-                    <Button
-                        onClick={handleExport}
-                        variant="outline"
-                        className="gap-2"
-                    >
-                        <Download className="h-4 w-4" />
-                        Export Excel
-                    </Button>
-                    <Button
-                        onClick={handleExportPdf}
-                        variant="outline"
-                        className="gap-2"
-                    >
-                        <FileText className="h-4 w-4" />
-                        Export PDF
-                    </Button>
-                </div>
+                        <Button
+                            onClick={handleExport}
+                            variant="outline"
+                            className="gap-2"
+                        >
+                            <Download className="h-4 w-4" />
+                            Export Excel
+                        </Button>
+                        <Button
+                            onClick={handleExportPdf}
+                            variant="outline"
+                            className="gap-2"
+                        >
+                            <FileText className="h-4 w-4" />
+                            Export PDF
+                        </Button>
+                    </div>
                 </div>
 
                 <Card>
                     <CardContent className="p-4">
                         <div className="flex flex-wrap items-end gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="month" className="text-xs">Bulan</Label>
+                                <Label htmlFor="month" className="text-xs">
+                                    Bulan
+                                </Label>
                                 <Input
                                     id="month"
                                     type="month"
@@ -161,9 +165,14 @@ export default function AttendanceReport({
                                         <SelectValue placeholder="Semua tenant" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">Semua tenant</SelectItem>
+                                        <SelectItem value="all">
+                                            Semua tenant
+                                        </SelectItem>
                                         {tenants.map((t) => (
-                                            <SelectItem key={t.id} value={String(t.id)}>
+                                            <SelectItem
+                                                key={t.id}
+                                                value={String(t.id)}
+                                            >
                                                 {t.name}
                                             </SelectItem>
                                         ))}
@@ -183,10 +192,14 @@ export default function AttendanceReport({
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Total Petugas</p>
-                                    <p className="text-2xl font-bold mt-1">{summaryStats.total_employees}</p>
+                                    <p className="text-muted-foreground text-xs">
+                                        Total Petugas
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold">
+                                        {summaryStats.total_employees}
+                                    </p>
                                 </div>
-                                <div className="p-2 rounded-lg bg-blue-100 text-blue-700">
+                                <div className="rounded-lg bg-blue-100 p-2 text-blue-700">
                                     <Users className="h-5 w-5" />
                                 </div>
                             </div>
@@ -196,10 +209,14 @@ export default function AttendanceReport({
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Hadir</p>
-                                    <p className="text-2xl font-bold mt-1 text-emerald-700">{summaryStats.total_present}</p>
+                                    <p className="text-muted-foreground text-xs">
+                                        Hadir
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold text-emerald-700">
+                                        {summaryStats.total_present}
+                                    </p>
                                 </div>
-                                <div className="p-2 rounded-lg bg-emerald-100 text-emerald-700">
+                                <div className="rounded-lg bg-emerald-100 p-2 text-emerald-700">
                                     <CalendarCheck className="h-5 w-5" />
                                 </div>
                             </div>
@@ -209,10 +226,14 @@ export default function AttendanceReport({
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Terlambat</p>
-                                    <p className="text-2xl font-bold mt-1 text-amber-700">{summaryStats.total_late}</p>
+                                    <p className="text-muted-foreground text-xs">
+                                        Terlambat
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold text-amber-700">
+                                        {summaryStats.total_late}
+                                    </p>
                                 </div>
-                                <div className="p-2 rounded-lg bg-amber-100 text-amber-700">
+                                <div className="rounded-lg bg-amber-100 p-2 text-amber-700">
                                     <Clock className="h-5 w-5" />
                                 </div>
                             </div>
@@ -222,10 +243,14 @@ export default function AttendanceReport({
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Pulang Cepat</p>
-                                    <p className="text-2xl font-bold mt-1 text-orange-700">{summaryStats.total_early_leave}</p>
+                                    <p className="text-muted-foreground text-xs">
+                                        Pulang Cepat
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold text-orange-700">
+                                        {summaryStats.total_early_leave}
+                                    </p>
                                 </div>
-                                <div className="p-2 rounded-lg bg-orange-100 text-orange-700">
+                                <div className="rounded-lg bg-orange-100 p-2 text-orange-700">
                                     <Clock className="h-5 w-5" />
                                 </div>
                             </div>
@@ -235,10 +260,14 @@ export default function AttendanceReport({
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Izin</p>
-                                    <p className="text-2xl font-bold mt-1 text-purple-700">{summaryStats.total_leave}</p>
+                                    <p className="text-muted-foreground text-xs">
+                                        Izin
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold text-purple-700">
+                                        {summaryStats.total_leave}
+                                    </p>
                                 </div>
-                                <div className="p-2 rounded-lg bg-purple-100 text-purple-700">
+                                <div className="rounded-lg bg-purple-100 p-2 text-purple-700">
                                     <Users className="h-5 w-5" />
                                 </div>
                             </div>
@@ -248,10 +277,14 @@ export default function AttendanceReport({
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Tidak Hadir</p>
-                                    <p className="text-2xl font-bold mt-1 text-red-700">{summaryStats.total_absent}</p>
+                                    <p className="text-muted-foreground text-xs">
+                                        Tidak Hadir
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold text-red-700">
+                                        {summaryStats.total_absent}
+                                    </p>
                                 </div>
-                                <div className="p-2 rounded-lg bg-red-100 text-red-700">
+                                <div className="rounded-lg bg-red-100 p-2 text-red-700">
                                     <AlertCircle className="h-5 w-5" />
                                 </div>
                             </div>
@@ -261,64 +294,114 @@ export default function AttendanceReport({
 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-base">Rekap Per Petugas</CardTitle>
+                        <CardTitle className="text-base">
+                            Rekap Per Petugas
+                        </CardTitle>
                     </CardHeader>
-                    <CardContent className="p-0 overflow-hidden">
+                    <CardContent className="overflow-hidden p-0">
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead className="bg-muted/50">
-                                    <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground">
-                                        <th className="px-4 py-3 font-medium">Petugas</th>
-                                        <th className="px-4 py-3 font-medium">Kode</th>
-                                        <th className="px-4 py-3 font-medium">Tenant</th>
-                                        <th className="px-4 py-3 font-medium text-center">Hadir</th>
-                                        <th className="px-4 py-3 font-medium text-center">Terlambat</th>
-                                        <th className="px-4 py-3 font-medium text-center">Pulang Cepat</th>
-                                        <th className="px-4 py-3 font-medium text-center">Izin</th>
-                                        <th className="px-4 py-3 font-medium text-center">Libur</th>
-                                        <th className="px-4 py-3 font-medium text-center">Tidak Hadir</th>
-                                        <th className="px-4 py-3 font-medium text-center">Total Jam</th>
-                                        <th className="px-4 py-3 font-medium text-center">Rata-rata</th>
+                                    <tr className="text-muted-foreground text-left text-xs tracking-wider uppercase">
+                                        <th className="px-4 py-3 font-medium">
+                                            Petugas
+                                        </th>
+                                        <th className="px-4 py-3 font-medium">
+                                            Kode
+                                        </th>
+                                        <th className="px-4 py-3 font-medium">
+                                            Tenant
+                                        </th>
+                                        <th className="px-4 py-3 text-center font-medium">
+                                            Hadir
+                                        </th>
+                                        <th className="px-4 py-3 text-center font-medium">
+                                            Terlambat
+                                        </th>
+                                        <th className="px-4 py-3 text-center font-medium">
+                                            Pulang Cepat
+                                        </th>
+                                        <th className="px-4 py-3 text-center font-medium">
+                                            Izin
+                                        </th>
+                                        <th className="px-4 py-3 text-center font-medium">
+                                            Libur
+                                        </th>
+                                        <th className="px-4 py-3 text-center font-medium">
+                                            Tidak Hadir
+                                        </th>
+                                        <th className="px-4 py-3 text-center font-medium">
+                                            Total Jam
+                                        </th>
+                                        <th className="px-4 py-3 text-center font-medium">
+                                            Rata-rata
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-border">
+                                <tbody className="divide-border divide-y">
                                     {summaries.map((s) => (
-                                        <tr key={s.employee_id} className="hover:bg-muted/30">
-                                            <td className="px-4 py-3 font-medium">{s.employee_name}</td>
-                                            <td className="px-4 py-3 font-mono text-xs">{s.employee_code}</td>
-                                            <td className="px-4 py-3 text-muted-foreground">{s.tenant_name}</td>
-                                            <td className="px-4 py-3 text-center">
-                                                <Badge className="bg-emerald-100 text-emerald-700 border-0">{s.present_count}</Badge>
+                                        <tr
+                                            key={s.employee_id}
+                                            className="hover:bg-muted/30"
+                                        >
+                                            <td className="px-4 py-3 font-medium">
+                                                {s.employee_name}
+                                            </td>
+                                            <td className="px-4 py-3 font-mono text-xs">
+                                                {s.employee_code}
+                                            </td>
+                                            <td className="text-muted-foreground px-4 py-3">
+                                                {s.tenant_name}
                                             </td>
                                             <td className="px-4 py-3 text-center">
-                                                <Badge className="bg-amber-100 text-amber-700 border-0">{s.late_count}</Badge>
+                                                <Badge className="border-0 bg-emerald-100 text-emerald-700">
+                                                    {s.present_count}
+                                                </Badge>
                                             </td>
                                             <td className="px-4 py-3 text-center">
-                                                <Badge className="bg-orange-100 text-orange-700 border-0">
+                                                <Badge className="border-0 bg-amber-100 text-amber-700">
+                                                    {s.late_count}
+                                                </Badge>
+                                            </td>
+                                            <td className="px-4 py-3 text-center">
+                                                <Badge className="border-0 bg-orange-100 text-orange-700">
                                                     {s.early_leave_count}
                                                 </Badge>
                                             </td>
                                             <td className="px-4 py-3 text-center">
-                                                <Badge className="bg-purple-100 text-purple-700 border-0">{s.leave_count}</Badge>
+                                                <Badge className="border-0 bg-purple-100 text-purple-700">
+                                                    {s.leave_count}
+                                                </Badge>
                                             </td>
                                             <td className="px-4 py-3 text-center">
-                                                <Badge className="bg-sky-100 text-sky-700 border-0">{s.holiday_count}</Badge>
+                                                <Badge className="border-0 bg-sky-100 text-sky-700">
+                                                    {s.holiday_count}
+                                                </Badge>
                                             </td>
                                             <td className="px-4 py-3 text-center">
-                                                <Badge className="bg-red-100 text-red-700 border-0">{s.absent_count}</Badge>
+                                                <Badge className="border-0 bg-red-100 text-red-700">
+                                                    {s.absent_count}
+                                                </Badge>
                                             </td>
                                             <td className="px-4 py-3 text-center text-xs">
-                                                {formatDuration(s.total_work_duration_minutes)}
+                                                {formatDuration(
+                                                    s.total_work_duration_minutes,
+                                                )}
                                             </td>
                                             <td className="px-4 py-3 text-center text-xs">
-                                                {formatDuration(s.avg_work_duration_minutes)}
+                                                {formatDuration(
+                                                    s.avg_work_duration_minutes,
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
                                     {summaries.length === 0 && (
                                         <tr>
-                                            <td colSpan={11} className="px-4 py-12 text-center text-muted-foreground">
-                                                <CalendarCheck className="h-8 w-8 mx-auto mb-2 opacity-40" />
+                                            <td
+                                                colSpan={11}
+                                                className="text-muted-foreground px-4 py-12 text-center"
+                                            >
+                                                <CalendarCheck className="mx-auto mb-2 h-8 w-8 opacity-40" />
                                                 Tidak ada data untuk bulan ini.
                                             </td>
                                         </tr>

@@ -11,13 +11,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    Shield,
-    Filter,
-    ChevronLeft,
-    ChevronRight,
-    Eye,
-} from 'lucide-react';
+import { Shield, Filter, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { useState } from 'react';
 
 const EVENT_LABELS: Record<string, string> = {
@@ -115,7 +109,7 @@ export default function AuditLogIndex({
             <div className="space-y-6">
                 <div>
                     <h1 className="text-2xl font-semibold">Log Aktivitas</h1>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-muted-foreground mt-1 text-sm">
                         Jejak aktivitas sistem untuk audit dan keamanan
                     </p>
                 </div>
@@ -128,7 +122,12 @@ export default function AuditLogIndex({
                                 <Input
                                     placeholder="Cari event..."
                                     value={filterValues.event ?? ''}
-                                    onChange={(e) => setFilterValues({ ...filterValues, event: e.target.value })}
+                                    onChange={(e) =>
+                                        setFilterValues({
+                                            ...filterValues,
+                                            event: e.target.value,
+                                        })
+                                    }
                                     className="w-[180px]"
                                 />
                             </div>
@@ -137,16 +136,28 @@ export default function AuditLogIndex({
                                 <Input
                                     type="date"
                                     value={filterValues.date_from ?? ''}
-                                    onChange={(e) => setFilterValues({ ...filterValues, date_from: e.target.value })}
+                                    onChange={(e) =>
+                                        setFilterValues({
+                                            ...filterValues,
+                                            date_from: e.target.value,
+                                        })
+                                    }
                                     className="w-[160px]"
                                 />
                             </div>
                             <div className="grid gap-2">
-                                <Label className="text-xs">Tanggal Sampai</Label>
+                                <Label className="text-xs">
+                                    Tanggal Sampai
+                                </Label>
                                 <Input
                                     type="date"
                                     value={filterValues.date_to ?? ''}
-                                    onChange={(e) => setFilterValues({ ...filterValues, date_to: e.target.value })}
+                                    onChange={(e) =>
+                                        setFilterValues({
+                                            ...filterValues,
+                                            date_to: e.target.value,
+                                        })
+                                    }
                                     className="w-[160px]"
                                 />
                             </div>
@@ -162,24 +173,41 @@ export default function AuditLogIndex({
                 </Card>
 
                 <Card>
-                    <CardContent className="p-0 overflow-hidden">
+                    <CardContent className="overflow-hidden p-0">
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead className="bg-muted/50">
-                                    <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground">
-                                        <th className="px-4 py-3 font-medium">Waktu</th>
-                                        <th className="px-4 py-3 font-medium">Event</th>
-                                        <th className="px-4 py-3 font-medium">Pengguna</th>
-                                        <th className="px-4 py-3 font-medium">Tenant</th>
-                                        <th className="px-4 py-3 font-medium">IP Address</th>
-                                        <th className="px-4 py-3 font-medium text-right">Detail</th>
+                                    <tr className="text-muted-foreground text-left text-xs tracking-wider uppercase">
+                                        <th className="px-4 py-3 font-medium">
+                                            Waktu
+                                        </th>
+                                        <th className="px-4 py-3 font-medium">
+                                            Event
+                                        </th>
+                                        <th className="px-4 py-3 font-medium">
+                                            Pengguna
+                                        </th>
+                                        <th className="px-4 py-3 font-medium">
+                                            Tenant
+                                        </th>
+                                        <th className="px-4 py-3 font-medium">
+                                            IP Address
+                                        </th>
+                                        <th className="px-4 py-3 text-right font-medium">
+                                            Detail
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-border">
+                                <tbody className="divide-border divide-y">
                                     {logs.data.map((log) => (
-                                        <tr key={log.id} className="hover:bg-muted/30">
-                                            <td className="px-4 py-3 whitespace-nowrap text-xs text-muted-foreground">
-                                                {new Date(log.created_at).toLocaleString('id-ID', {
+                                        <tr
+                                            key={log.id}
+                                            className="hover:bg-muted/30"
+                                        >
+                                            <td className="text-muted-foreground px-4 py-3 text-xs whitespace-nowrap">
+                                                {new Date(
+                                                    log.created_at,
+                                                ).toLocaleString('id-ID', {
                                                     day: '2-digit',
                                                     month: 'short',
                                                     year: 'numeric',
@@ -191,32 +219,52 @@ export default function AuditLogIndex({
                                             <td className="px-4 py-3">
                                                 <Badge
                                                     variant="outline"
-                                                    className={EVENT_COLORS[log.event] ?? 'bg-gray-50 text-gray-700'}
+                                                    className={
+                                                        EVENT_COLORS[
+                                                            log.event
+                                                        ] ??
+                                                        'bg-gray-50 text-gray-700'
+                                                    }
                                                 >
-                                                    {EVENT_LABELS[log.event] ?? log.event}
+                                                    {EVENT_LABELS[log.event] ??
+                                                        log.event}
                                                 </Badge>
                                             </td>
                                             <td className="px-4 py-3">
                                                 {log.user ? (
                                                     <div>
-                                                        <p className="font-medium">{log.user.name}</p>
-                                                        <p className="text-xs text-muted-foreground">{log.user.email}</p>
+                                                        <p className="font-medium">
+                                                            {log.user.name}
+                                                        </p>
+                                                        <p className="text-muted-foreground text-xs">
+                                                            {log.user.email}
+                                                        </p>
                                                     </div>
                                                 ) : (
-                                                    <span className="text-muted-foreground">-</span>
+                                                    <span className="text-muted-foreground">
+                                                        -
+                                                    </span>
                                                 )}
                                             </td>
-                                            <td className="px-4 py-3 text-muted-foreground">
+                                            <td className="text-muted-foreground px-4 py-3">
                                                 {log.tenant?.name ?? '-'}
                                             </td>
-                                            <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+                                            <td className="text-muted-foreground px-4 py-3 font-mono text-xs">
                                                 {log.ip_address ?? '-'}
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 {log.metadata && (
-                                                    <Badge variant="secondary" className="text-xs">
-                                                        <Eye className="h-3 w-3 mr-1" />
-                                                        {Object.keys(log.metadata).length} field
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className="text-xs"
+                                                    >
+                                                        <Eye className="mr-1 h-3 w-3" />
+                                                        {
+                                                            Object.keys(
+                                                                log.metadata,
+                                                            ).length
+                                                        }{' '}
+                                                        field
                                                     </Badge>
                                                 )}
                                             </td>
@@ -224,8 +272,11 @@ export default function AuditLogIndex({
                                     ))}
                                     {logs.data.length === 0 && (
                                         <tr>
-                                            <td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">
-                                                <Shield className="h-8 w-8 mx-auto mb-2 opacity-40" />
+                                            <td
+                                                colSpan={6}
+                                                className="text-muted-foreground px-4 py-12 text-center"
+                                            >
+                                                <Shield className="mx-auto mb-2 h-8 w-8 opacity-40" />
                                                 Belum ada log aktivitas.
                                             </td>
                                         </tr>
@@ -238,7 +289,7 @@ export default function AuditLogIndex({
 
                 {logs.last_page > 1 && (
                     <div className="flex items-center justify-between">
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-muted-foreground text-sm">
                             Menampilkan {logs.data.length} dari {logs.total} log
                         </p>
                         <div className="flex items-center gap-2">
@@ -246,19 +297,31 @@ export default function AuditLogIndex({
                                 variant="outline"
                                 size="sm"
                                 disabled={logs.current_page <= 1}
-                                onClick={() => router.get(`/audit-logs?page=${logs.current_page - 1}`, {}, { preserveState: true, replace: true })}
+                                onClick={() =>
+                                    router.get(
+                                        `/audit-logs?page=${logs.current_page - 1}`,
+                                        {},
+                                        { preserveState: true, replace: true },
+                                    )
+                                }
                             >
                                 <ChevronLeft className="h-4 w-4" />
                                 Sebelumnya
                             </Button>
-                            <span className="text-sm text-muted-foreground">
+                            <span className="text-muted-foreground text-sm">
                                 {logs.current_page} / {logs.last_page}
                             </span>
                             <Button
                                 variant="outline"
                                 size="sm"
                                 disabled={logs.current_page >= logs.last_page}
-                                onClick={() => router.get(`/audit-logs?page=${logs.current_page + 1}`, {}, { preserveState: true, replace: true })}
+                                onClick={() =>
+                                    router.get(
+                                        `/audit-logs?page=${logs.current_page + 1}`,
+                                        {},
+                                        { preserveState: true, replace: true },
+                                    )
+                                }
                             >
                                 Berikutnya
                                 <ChevronRight className="h-4 w-4" />
