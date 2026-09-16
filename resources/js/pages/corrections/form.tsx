@@ -19,8 +19,8 @@ export default function CorrectionForm({
     return (
         <>
             <Head title="Ajukan Koreksi" />
-            <div className="max-w-2xl space-y-6">
-                <div>
+            <div className="max-w-2xl space-y-6 p-10">
+                <div className="border-border border-b pb-4">
                     <h1 className="text-2xl font-semibold">
                         Ajukan Koreksi Absensi
                     </h1>

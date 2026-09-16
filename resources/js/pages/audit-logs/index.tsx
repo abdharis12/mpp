@@ -11,7 +11,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Shield, Filter, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
+import { Shield, Filter, Eye } from 'lucide-react';
+import { Pagination } from '@/components/pagination';
 import { useState } from 'react';
 
 const EVENT_LABELS: Record<string, string> = {
@@ -58,7 +59,7 @@ type AuditLog = {
     tenant?: { name: string } | null;
 };
 
-type Pagination = {
+type PaginationMeta = {
     data: AuditLog[];
     current_page: number;
     last_page: number;
@@ -79,7 +80,7 @@ export default function AuditLogIndex({
     logs,
     filters,
 }: {
-    logs: Pagination;
+    logs: PaginationMeta;
     filters: Filters;
 }) {
     const [filterValues, setFilterValues] = useState<Filters>(filters);
@@ -106,8 +107,8 @@ export default function AuditLogIndex({
     return (
         <>
             <Head title="Log Aktivitas" />
-            <div className="space-y-6">
-                <div>
+            <div className="space-y-6 p-10">
+                <div className="border-border border-b pb-4">
                     <h1 className="text-2xl font-semibold">Log Aktivitas</h1>
                     <p className="text-muted-foreground mt-1 text-sm">
                         Jejak aktivitas sistem untuk audit dan keamanan
@@ -287,48 +288,7 @@ export default function AuditLogIndex({
                     </CardContent>
                 </Card>
 
-                {logs.last_page > 1 && (
-                    <div className="flex items-center justify-between">
-                        <p className="text-muted-foreground text-sm">
-                            Menampilkan {logs.data.length} dari {logs.total} log
-                        </p>
-                        <div className="flex items-center gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                disabled={logs.current_page <= 1}
-                                onClick={() =>
-                                    router.get(
-                                        `/audit-logs?page=${logs.current_page - 1}`,
-                                        {},
-                                        { preserveState: true, replace: true },
-                                    )
-                                }
-                            >
-                                <ChevronLeft className="h-4 w-4" />
-                                Sebelumnya
-                            </Button>
-                            <span className="text-muted-foreground text-sm">
-                                {logs.current_page} / {logs.last_page}
-                            </span>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                disabled={logs.current_page >= logs.last_page}
-                                onClick={() =>
-                                    router.get(
-                                        `/audit-logs?page=${logs.current_page + 1}`,
-                                        {},
-                                        { preserveState: true, replace: true },
-                                    )
-                                }
-                            >
-                                Berikutnya
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                <Pagination meta={logs} />
             </div>
         </>
     );

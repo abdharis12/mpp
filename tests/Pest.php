@@ -53,13 +53,13 @@ function something()
 
 function makeTenantStaffRole(): Role
 {
-    foreach (['clock_in', 'clock_out', 'view_attendance', 'view_dashboard'] as $name) {
+    foreach (['clock_in', 'clock_out', 'view_attendance'] as $name) {
         Permission::firstOrCreate(['name' => $name]);
     }
 
     $role = Role::firstOrCreate(['name' => 'tenant_staff']);
 
-    $role->givePermissionTo(['clock_in', 'clock_out', 'view_attendance', 'view_dashboard']);
+    $role->givePermissionTo(['clock_in', 'clock_out', 'view_attendance']);
 
     return $role;
 }

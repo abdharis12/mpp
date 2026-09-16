@@ -88,8 +88,8 @@ export default function ScheduleForm({ schedule }: { schedule: any | null }) {
     return (
         <>
             <Head title={schedule ? 'Edit Jadwal' : 'Tambah Jadwal'} />
-            <div className="max-w-3xl space-y-6">
-                <div>
+            <div className="max-w-3xl space-y-6 p-10">
+                <div className="border-border space-y-2 border-b pb-4">
                     <h1 className="text-2xl font-semibold">
                         {schedule ? 'Edit Jadwal' : 'Tambah Jadwal'}
                     </h1>

@@ -110,8 +110,8 @@ export default function AttendanceReport({
     return (
         <>
             <Head title="Laporan Absensi" />
-            <div className="space-y-6">
-                <div className="flex items-center justify-between">
+            <div className="space-y-6 p-10">
+                <div className="border-border flex items-center justify-between border-b pb-4">
                     <div>
                         <h1 className="text-2xl font-semibold">
                             Laporan Absensi Bulanan
@@ -124,7 +124,7 @@ export default function AttendanceReport({
                         <Button
                             onClick={handleExport}
                             variant="outline"
-                            className="gap-2"
+                            className="cursor-pointer gap-2 bg-emerald-500 text-white hover:bg-emerald-600 hover:text-white"
                         >
                             <Download className="h-4 w-4" />
                             Export Excel
@@ -132,7 +132,7 @@ export default function AttendanceReport({
                         <Button
                             onClick={handleExportPdf}
                             variant="outline"
-                            className="gap-2"
+                            className="cursor-pointer gap-2 bg-red-500 text-white hover:bg-red-600 hover:text-white"
                         >
                             <FileText className="h-4 w-4" />
                             Export PDF

@@ -19,8 +19,8 @@ export default function EmployeeForm({
     return (
         <>
             <Head title={employee ? 'Edit Petugas' : 'Tambah Petugas'} />
-            <div className="max-w-2xl space-y-6">
-                <div>
+            <div className="max-w-2xl space-y-6 p-10">
+                <div className="border-border border-b pb-4">
                     <h1 className="text-2xl font-semibold">
                         {employee ? 'Edit Petugas' : 'Tambah Petugas'}
                     </h1>

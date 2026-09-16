@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\WelcomeController;
@@ -17,8 +18,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
+Route::get('media/{path}', [MediaController::class, 'show'])
+    ->where('path', '.*')
+    ->name('media.show');
+
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard')
+        ->middleware('can:view_dashboard');
 
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('today', [AttendanceController::class, 'today'])->name('today');

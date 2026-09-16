@@ -75,3 +75,17 @@ test('users are rate limited', function () {
 
     $response->assertTooManyRequests();
 });
+
+test('tenant staff is redirected to today attendance after login', function () {
+    makeTenantStaffRole();
+
+    $user = User::factory()->create();
+    $user->assignRole('tenant_staff');
+
+    $response = $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $response->assertRedirect(route('attendance.today'));
+});

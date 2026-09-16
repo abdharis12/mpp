@@ -1,7 +1,8 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, FileText, Check, X } from 'lucide-react';
+import { Plus, FileText, Check, X, XCircle } from 'lucide-react';
+import { Pagination } from '@/components/pagination';
 
 const STATUS_CLASS: Record<string, string> = {
     PENDING: 'bg-amber-50 text-amber-700',
@@ -20,8 +21,8 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
     return (
         <>
             <Head title="Izin" />
-            <div className="space-y-6">
-                <div className="flex items-center justify-between">
+            <div className="space-y-6 p-10">
+                <div className="border-border flex items-center justify-between border-b pb-4">
                     <div>
                         <h1 className="text-2xl font-semibold">
                             Pengajuan Izin
@@ -33,7 +34,7 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
                     {isStaff && (
                         <Link
                             href="/leaves/create"
-                            className="bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white"
+                            className="bg-secondary hover:bg-secondary/90 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white"
                         >
                             <Plus className="h-4 w-4" />
                             Ajukan Izin
@@ -121,10 +122,9 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
                                                                             `/leaves/${leave.id}/approve`,
                                                                         )
                                                                     }
-                                                                    className="inline-flex items-center gap-1 px-2 py-1 text-xs text-emerald-600 hover:text-emerald-800"
+                                                                    className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-emerald-50 px-2 py-1 text-xs text-emerald-600 hover:text-emerald-800"
                                                                 >
                                                                     <Check className="h-3.5 w-3.5" />{' '}
-                                                                    Setujui
                                                                 </button>
                                                                 <button
                                                                     onClick={() => {
@@ -143,10 +143,9 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
                                                                             );
                                                                         }
                                                                     }}
-                                                                    className="inline-flex items-center gap-1 px-2 py-1 text-xs text-red-600 hover:text-red-800"
+                                                                    className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-xs text-red-600 hover:text-red-800"
                                                                 >
-                                                                    <X className="h-3.5 w-3.5" />{' '}
-                                                                    Tolak
+                                                                    <XCircle className="h-3.5 w-3.5" />{' '}
                                                                 </button>
                                                             </>
                                                         )}
@@ -191,6 +190,8 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
                         </div>
                     </CardContent>
                 </Card>
+
+                <Pagination meta={leaves} />
             </div>
         </>
     );

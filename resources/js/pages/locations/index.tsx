@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { CheckCircle2, MapPin, Navigation, XCircle } from 'lucide-react';
 import { update } from '@/routes/locations';
 import AdminLocationMap from '@/components/admin-location-map';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 
 export default function LocationIndex({ locations }: { locations: any }) {
     const { flash } = usePage().props;
@@ -16,7 +16,7 @@ export default function LocationIndex({ locations }: { locations: any }) {
     return (
         <>
             <Head title="Lokasi Absensi Pegawai" />
-            <div className="mx-6 my-5 flex max-w-7xl flex-col gap-1">
+            <div className="border-border mx-6 my-5 flex max-w-7xl flex-col gap-1 border-b pb-4">
                 <h1 className="text-2xl font-semibold">
                     Lokasi Absensi Pegawai Tenant
                 </h1>
@@ -27,7 +27,7 @@ export default function LocationIndex({ locations }: { locations: any }) {
             </div>
             <div className="mx-6 my-5 max-w-5xl">
                 {(flash as any)?.success && (
-                    <Alert className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300">
+                    <Alert className="mb-5 border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300">
                         <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         <AlertTitle>Berhasil</AlertTitle>
                         <AlertDescription className="text-emerald-700 dark:text-emerald-300">
@@ -69,6 +69,10 @@ function LocationCard({ loc }: { loc: any }) {
     const [radiusPreview, setRadiusPreview] = useState(
         Number(loc.radius_meter),
     );
+    const [accuracy, setAccuracy] = useState<number | null>(null);
+    const [watching, setWatching] = useState(false);
+    const watchIdRef = useRef<number | null>(null);
+    const watchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleMapChange = useCallback(
         (newLat: number, newLng: number) => {
@@ -88,11 +92,41 @@ function LocationCard({ loc }: { loc: any }) {
         setRadiusPreview(Number(data.radius_meter));
     }, [data.radius_meter]);
 
+    useEffect(() => {
+        return () => {
+            if (watchIdRef.current !== null) {
+                navigator.geolocation.clearWatch(watchIdRef.current);
+            }
+            if (watchTimeoutRef.current) {
+                clearTimeout(watchTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    const stopWatching = () => {
+        if (watchIdRef.current !== null) {
+            navigator.geolocation.clearWatch(watchIdRef.current);
+            watchIdRef.current = null;
+        }
+        if (watchTimeoutRef.current) {
+            clearTimeout(watchTimeoutRef.current);
+            watchTimeoutRef.current = null;
+        }
+        setWatching(false);
+        setFetching(false);
+    };
+
     const useCurrentLocation = () => {
-        if (!navigator.geolocation) return;
+        if (!navigator.geolocation || watchIdRef.current !== null) return;
+
         setFetching(true);
-        navigator.geolocation.getCurrentPosition(
+        setWatching(true);
+        setAccuracy(null);
+
+        watchIdRef.current = navigator.geolocation.watchPosition(
             (pos) => {
+                const acc = pos.coords.accuracy;
+                setAccuracy(acc);
                 setData(
                     (prev) =>
                         ({
@@ -101,12 +135,18 @@ function LocationCard({ loc }: { loc: any }) {
                             longitude: String(pos.coords.longitude),
                         }) as any,
                 );
-                setFetching(false);
+
+                if (acc <= 10) {
+                    stopWatching();
+                }
             },
             () => {
-                setFetching(false);
+                stopWatching();
             },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
         );
+
+        watchTimeoutRef.current = setTimeout(stopWatching, 8000);
     };
 
     const submit = (e: React.FormEvent) => {
@@ -302,12 +342,34 @@ function LocationCard({ loc }: { loc: any }) {
                             disabled={fetching}
                         >
                             <Navigation className="mr-1.5 h-4 w-4" />
-                            {fetching ? 'Mencari...' : 'Lokasi saat ini'}
+                            {fetching ? 'Mencari sinyal...' : 'Lokasi saat ini'}
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Menyimpan...' : 'Simpan Lokasi'}
                         </Button>
                     </div>
+
+                    {accuracy !== null && (
+                        <p
+                            className={`text-sm ${
+                                accuracy > Number(data.maximum_gps_accuracy)
+                                    ? 'text-destructive'
+                                    : 'text-muted-foreground'
+                            }`}
+                        >
+                            Akurasi posisi saat ini: ±{Math.round(accuracy)} m
+                            {watching && ' · memperbarui…'}
+                        </p>
+                    )}
+                    {accuracy !== null &&
+                        accuracy > Number(data.maximum_gps_accuracy) && (
+                            <p className="text-destructive text-sm">
+                                Akurasi melebihi batas (
+                                {Number(data.maximum_gps_accuracy)} m). Tunggu
+                                sinyal membaik atau coba di area terbuka sebelum
+                                menyimpan.
+                            </p>
+                        )}
                 </form>
             </CardContent>
         </Card>

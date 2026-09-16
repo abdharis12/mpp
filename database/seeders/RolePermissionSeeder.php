@@ -49,7 +49,6 @@ class RolePermissionSeeder extends Seeder
 
         $roles = [
             'tenant_staff' => [
-                'view_dashboard',
                 'clock_in',
                 'clock_out',
                 'view_attendance',

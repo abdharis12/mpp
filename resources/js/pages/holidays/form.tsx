@@ -71,8 +71,8 @@ export default function HolidayForm({
     return (
         <>
             <Head title={holiday ? 'Edit Hari Libur' : 'Tambah Hari Libur'} />
-            <div className="max-w-3xl space-y-6">
-                <div>
+            <div className="max-w-3xl space-y-6 p-10">
+                <div className="border-border space-y-2 border-b pb-4">
                     <h1 className="text-2xl font-semibold">
                         {holiday ? 'Edit Hari Libur' : 'Tambah Hari Libur'}
                     </h1>

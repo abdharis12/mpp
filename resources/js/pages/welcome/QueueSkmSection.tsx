@@ -64,7 +64,10 @@ export default function QueueSkmSection() {
                     </CardContent>
                 </Card>
 
-                <Card className="relative overflow-hidden p-0">
+                <Card
+                    className="relative overflow-hidden p-0"
+                    style={{ borderLeft: `4px solid ${GOLD}` }}
+                >
                     {/* dekorasi bulatan transparan */}
                     <span
                         className="pointer-events-none absolute -right-14 -bottom-12 size-40 rounded-full bg-blue-500/10"

@@ -1,6 +1,13 @@
 import { ExternalLink, Mail, MapPin, Megaphone, Phone } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { BLUE, PENGADUAN_CHANNELS } from './content';
+import {
+    BLUE,
+    GOLD,
+    PENGADUAN_CHANNELS,
+    MPP_ADDRESS,
+    MPP_MAPS_EMBED_URL,
+    MPP_MAPS_DIRECTIONS_URL,
+} from './content';
 import { SectionHeading } from './helpers';
 
 export default function ComplaintSection() {
@@ -16,7 +23,10 @@ export default function ComplaintSection() {
                 description="Layanan pengaduan menerima keluhan terkait layanan atau petugas di lingkungan MPP."
             />
             <div className="grid gap-6 lg:grid-cols-2">
-                <Card className="p-0">
+                <Card
+                    className="p-0"
+                    style={{ borderLeft: `4px solid ${GOLD}` }}
+                >
                     <CardContent className="py-7">
                         <span
                             className="bg-primary/10 grid size-12 place-content-center rounded-2xl"
@@ -94,7 +104,10 @@ export default function ComplaintSection() {
                     </CardContent>
                 </Card>
 
-                <Card className="p-0">
+                <Card
+                    className="p-0"
+                    style={{ borderLeft: `4px solid ${GOLD}` }}
+                >
                     <CardContent className="py-7">
                         <span
                             className="bg-primary/10 grid size-12 place-content-center rounded-2xl"
@@ -110,11 +123,43 @@ export default function ComplaintSection() {
                             layanan atau perbaikan data, setiap tenant punya
                             loketnya sendiri di dalam gedung.
                         </p>
-                        <p className="text-muted-foreground mt-4 text-sm">
-                            Butuh bantuan? Tanyakan kepada petugas informasi di
-                            lokasi atau ikuti arahan antrean digital di dalam
-                            gedung.
-                        </p>
+
+                        <div className="mt-5 flex flex-col gap-3">
+                            <p className="text-muted-foreground flex items-start gap-2 text-sm leading-relaxed">
+                                <MapPin
+                                    className="mt-0.5 size-4 shrink-0"
+                                    style={{ color: BLUE }}
+                                    aria-hidden="true"
+                                />
+                                {MPP_ADDRESS}
+                            </p>
+
+                            <a
+                                href={MPP_MAPS_DIRECTIONS_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 text-sm font-medium underline-offset-2 hover:underline"
+                                style={{ color: BLUE }}
+                            >
+                                <ExternalLink
+                                    className="size-3.5"
+                                    aria-hidden="true"
+                                />
+                                Buka di Google Maps
+                            </a>
+
+                            <div className="overflow-hidden rounded-xl border">
+                                <iframe
+                                    title="Lokasi MPP Kabupaten Muara Enim di Google Maps"
+                                    aria-label="Peta lokasi Mal Pelayanan Publik Kabupaten Muara Enim"
+                                    src={MPP_MAPS_EMBED_URL}
+                                    className="h-72 w-full"
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    allowFullScreen
+                                />
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
             </div>

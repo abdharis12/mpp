@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { type Review } from './content';
 import { SectionHeading, Stars, tenantInitials } from './helpers';
 
-const VIDEO_SRC = '/video/testimoni.mp4';
+const VIDEO_SRC = '/media/testimoni.mp4';
 const VIDEO_POSTER = '/img/logo-mpp.png';
 
 type Props = { reviews: Review[] };

@@ -31,12 +31,12 @@ export default function Footer() {
                     </div>
                     <div className="flex flex-col gap-2 text-sm leading-relaxed text-white/70">
                         <span className="flex items-center gap-2">
-                            <Phone className="size-4" aria-hidden="true" />{' '}
-                            (0734) 423982
+                            <Phone className="size-4" aria-hidden="true" /> +62
+                            821 8148 7928
                         </span>
                         <span className="flex items-center gap-2">
                             <Mail className="size-4" aria-hidden="true" />{' '}
-                            dpmptsp@muaraenimkab.go.id
+                            pengaduan@dpmptsp.muaraenimkab.go.id
                         </span>
                         <span className="flex items-center gap-2">
                             <MapPin className="size-4" aria-hidden="true" /> MPP

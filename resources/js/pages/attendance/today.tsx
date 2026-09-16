@@ -10,7 +10,7 @@ import {
     XCircle,
     AlertTriangle,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { clockIn, clockOut } from '@/routes/attendance';
 import AttendanceMap from '@/components/attendance-map';
 
@@ -21,6 +21,9 @@ type GeoState = {
     accuracy?: number;
     message?: string;
 };
+
+const GOOD_ACCURACY_METERS = 10;
+const WATCH_DURATION_MS = 8000;
 
 export default function AttendanceToday({
     date,
@@ -40,10 +43,30 @@ export default function AttendanceToday({
     const { flash, errors } = usePage().props as any;
     const [geo, setGeo] = useState<GeoState>({ status: 'idle' });
     const [distance, setDistance] = useState<number | null>(null);
+    const [watching, setWatching] = useState(false);
     const [notification, setNotification] = useState<{
         type: 'success' | 'error';
         message: string;
     } | null>(null);
+    const watchIdRef = useRef<number | null>(null);
+    const watchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const bestAccuracyRef = useRef<number | undefined>(undefined);
+
+    const stopWatching = useCallback(() => {
+        if (watchIdRef.current !== null) {
+            navigator.geolocation.clearWatch(watchIdRef.current);
+            watchIdRef.current = null;
+        }
+        if (watchTimeoutRef.current) {
+            clearTimeout(watchTimeoutRef.current);
+            watchTimeoutRef.current = null;
+        }
+        setWatching(false);
+    }, []);
+
+    useEffect(() => {
+        return () => stopWatching();
+    }, [stopWatching]);
 
     const acquireLocation = () => {
         if (!('geolocation' in navigator)) {
@@ -54,11 +77,26 @@ export default function AttendanceToday({
             return;
         }
 
-        setGeo({ status: 'loading' });
+        if (watchIdRef.current !== null) {
+            return;
+        }
 
-        navigator.geolocation.getCurrentPosition(
+        setGeo({ status: 'loading' });
+        setWatching(true);
+        bestAccuracyRef.current = undefined;
+
+        watchIdRef.current = navigator.geolocation.watchPosition(
             (pos) => {
                 const { latitude, longitude, accuracy } = pos.coords;
+
+                if (
+                    bestAccuracyRef.current !== undefined &&
+                    bestAccuracyRef.current <= accuracy
+                ) {
+                    return;
+                }
+
+                bestAccuracyRef.current = accuracy;
                 setGeo({ status: 'ready', latitude, longitude, accuracy });
 
                 if (location) {
@@ -70,8 +108,13 @@ export default function AttendanceToday({
                     );
                     setDistance(d);
                 }
+
+                if (accuracy <= GOOD_ACCURACY_METERS) {
+                    stopWatching();
+                }
             },
             (err) => {
+                stopWatching();
                 setGeo({
                     status:
                         err.code === err.PERMISSION_DENIED ? 'denied' : 'error',
@@ -83,6 +126,8 @@ export default function AttendanceToday({
             },
             { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
         );
+
+        watchTimeoutRef.current = setTimeout(stopWatching, WATCH_DURATION_MS);
     };
 
     useEffect(() => {
@@ -270,6 +315,12 @@ export default function AttendanceToday({
 
                         {geoReady && (
                             <div className="grid gap-2 text-sm">
+                                {watching && geo.accuracy !== undefined && (
+                                    <p className="text-muted-foreground text-xs">
+                                        Menyempurnakan akurasi… saat ini ±
+                                        {Math.round(geo.accuracy)} m
+                                    </p>
+                                )}
                                 <div className="flex items-center justify-between">
                                     <span className="text-muted-foreground">
                                         Koordinat

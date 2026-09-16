@@ -16,8 +16,8 @@ export default function TenantForm({ tenant }: { tenant: any | null }) {
     return (
         <>
             <Head title={tenant ? 'Edit Tenant' : 'Tambah Tenant'} />
-            <div className="max-w-2xl space-y-6">
-                <div>
+            <div className="max-w-2xl space-y-6 p-10">
+                <div className="border-border border-b pb-4">
                     <h1 className="text-2xl font-semibold">
                         {tenant ? 'Edit Tenant' : 'Tambah Tenant'}
                     </h1>

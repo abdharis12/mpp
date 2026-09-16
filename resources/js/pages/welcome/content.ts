@@ -88,6 +88,14 @@ export const FLOW_STEPS = [
 export const ANTRIAN_URL = 'https://siantri-dpmptsp.muaraenimkab.go.id/pemohon';
 export const SKM_URL = 'https://skm-dpmptsp.muaraenimkab.go.id/survey';
 export const VIDEO_URL_PLACEHOLDER = ''; // ganti dengan URL YouTube profil MPP
+export const HERO_VIDEO_SRC = '/media/hero.mp4';
+export const HERO_VIDEO_POSTER = '/img/logo-mpp.png';
+
+export const MPP_ADDRESS =
+    'Jl. Jenderal Sudirman, Jl. Lintas Prabumulih - Muara Enim, Kec. Muara Enim, Kabupaten Muara Enim, Sumatera Selatan 31311';
+export const MPP_MAPS_EMBED_URL = `https://maps.google.com/maps?q=${encodeURIComponent('Mall Pelayanan Publik Kabupaten Muara Enim')}&ll=-3.6460303,103.7738702&z=17&output=embed`;
+export const MPP_MAPS_DIRECTIONS_URL =
+    'https://maps.app.goo.gl/zkJXih1LCPD2ER787';
 
 export const PENGADUAN_CHANNELS = [
     {
@@ -108,60 +116,85 @@ export const PENGADUAN_CHANNELS = [
 ];
 
 // --- Fasilitas MPP — konten hard-coded (bisa disesuaikan langsung di sini) ---
-export type Facility = { name: string; description: string; icon: LucideIcon };
+export type Facility = {
+    name: string;
+    description: string;
+    icon: LucideIcon;
+    image: string;
+};
 
 export const FACILITIES: Facility[] = [
     {
         name: 'Mushola',
         description: 'Ruang ibadah bagi pengunjung.',
         icon: MoonStar,
+        image: '/fasilities/mushola.jpg',
     },
     {
         name: 'Toilet',
         description: 'Fasilitas sanitasi bersih.',
         icon: Droplets,
+        image: '/fasilities/toilet.jpg',
     },
-    { name: 'Area Parkir', description: 'Area parkir kendaraan.', icon: Car },
+    {
+        name: 'Area Parkir',
+        description: 'Area parkir kendaraan.',
+        icon: Car,
+        image: '/fasilities/parkir.jpg',
+    },
     {
         name: 'Ruang Bermain Anak',
         description: 'Tempat bermain aman saat menunggu.',
         icon: Baby,
+        image: '/fasilities/ruang-bermain-anak.jpg',
     },
     {
         name: 'Ruang Laktasi',
         description: 'Ruang menyusui yang nyaman.',
         icon: Milk,
+        image: '/fasilities/laktasi.jpg',
     },
-    { name: 'ATM', description: 'Mesin ATM di area gedung.', icon: HandCoins },
+    {
+        name: 'ATM',
+        description: 'Mesin ATM di area gedung.',
+        icon: HandCoins,
+        image: '/fasilities/atm.jpg',
+    },
     {
         name: 'Loket Prioritas',
         description: 'Loket khusus lansia, ibu hamil, dan disabilitas.',
         icon: Ticket,
+        image: '/fasilities/disable.jpg',
     },
     {
         name: 'Pusat Informasi',
         description: 'Petugas membantu pengunjung menentukan layanan.',
         icon: Info,
+        image: '/fasilities/informasi.jpg',
     },
     {
         name: 'Area Merokok',
         description: 'Area khusus merokok di luar ruang layanan.',
         icon: Cigarette,
+        image: '/fasilities/smoking-area.jpg',
     },
     {
         name: 'Kafetaria',
         description: 'Tempat makan dan minum bagi pengunjung.',
         icon: Coffee,
+        image: '/fasilities/cafetaria.jpg',
     },
     {
         name: 'Pojok Baca',
         description: 'Area untuk membaca buku dan majalah.',
         icon: BookOpen,
+        image: '/fasilities/pojok-baca.jpg',
     },
     {
         name: 'Ruang Rapat',
         description: 'Ruang untuk rapat dan pertemuan.',
         icon: LayoutGrid,
+        image: '/fasilities/ruang-rapat.jpg',
     },
 ];
 

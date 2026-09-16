@@ -1,7 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
-    BookOpen,
-    FolderGit2,
     LayoutGrid,
     Users,
     MapPin,
@@ -15,7 +13,7 @@ import {
     Shield,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
-import { NavMain } from '@/components/nav-main';
+import { NavMain, type NavGroup } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
@@ -35,23 +33,31 @@ export function AppSidebar() {
     const permissions: string[] =
         user?.all_permissions?.map((p: any) => p.name) ?? [];
 
-    const mainNavItems: NavItem[] = [
-        { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
-    ];
+    const mainItems: NavItem[] = [];
+
+    if (permissions.includes('view_dashboard')) {
+        mainItems.push({
+            title: 'Dashboard',
+            href: dashboard(),
+            icon: LayoutGrid,
+        });
+    }
 
     if (user?.employee) {
-        mainNavItems.push({
+        mainItems.push({
             title: 'Absensi Hari Ini',
             href: '/attendance/today',
             icon: Clock,
         });
     }
 
+    const managementItems: NavItem[] = [];
+
     if (
         permissions.includes('view_tenants') ||
         permissions.includes('manage_settings')
     ) {
-        mainNavItems.push({
+        managementItems.push({
             title: 'Tenant',
             href: '/tenants',
             icon: Building2,
@@ -59,7 +65,7 @@ export function AppSidebar() {
     }
 
     if (permissions.includes('view_employees')) {
-        mainNavItems.push({
+        managementItems.push({
             title: 'Petugas',
             href: '/employees',
             icon: Users,
@@ -67,7 +73,7 @@ export function AppSidebar() {
     }
 
     if (permissions.includes('manage_location')) {
-        mainNavItems.push({
+        managementItems.push({
             title: 'Lokasi Absensi',
             href: '/locations',
             icon: MapPin,
@@ -75,7 +81,7 @@ export function AppSidebar() {
     }
 
     if (permissions.includes('manage_schedule')) {
-        mainNavItems.push({
+        managementItems.push({
             title: 'Jadwal Kerja',
             href: '/schedules',
             icon: CalendarDays,
@@ -83,33 +89,41 @@ export function AppSidebar() {
     }
 
     if (permissions.includes('manage_holiday')) {
-        mainNavItems.push({
+        managementItems.push({
             title: 'Hari Libur',
             href: '/holidays',
             icon: CalendarOff,
         });
     }
 
+    const attendanceItems: NavItem[] = [];
+
     if (
         permissions.includes('request_leave') ||
         permissions.includes('view_attendance')
     ) {
-        mainNavItems.push({ title: 'Izin', href: '/leaves', icon: FileText });
+        attendanceItems.push({
+            title: 'Izin',
+            href: '/leaves',
+            icon: FileText,
+        });
     }
 
     if (
         permissions.includes('request_correction') ||
         permissions.includes('view_attendance')
     ) {
-        mainNavItems.push({
+        attendanceItems.push({
             title: 'Koreksi',
             href: '/corrections',
             icon: AlertCircle,
         });
     }
 
+    const reportItems: NavItem[] = [];
+
     if (permissions.includes('view_reports')) {
-        mainNavItems.push({
+        reportItems.push({
             title: 'Laporan Absensi',
             href: '/reports/attendance',
             icon: BarChart3,
@@ -117,11 +131,29 @@ export function AppSidebar() {
     }
 
     if (permissions.includes('view_audit_logs')) {
-        mainNavItems.push({
+        reportItems.push({
             title: 'Log Aktivitas',
             href: '/audit-logs',
             icon: Shield,
         });
+    }
+
+    const navGroups: NavGroup[] = [];
+
+    if (mainItems.length > 0) {
+        navGroups.push({ label: 'Utama', items: mainItems });
+    }
+
+    if (managementItems.length > 0) {
+        navGroups.push({ label: 'Pengelolaan', items: managementItems });
+    }
+
+    if (attendanceItems.length > 0) {
+        navGroups.push({ label: 'Kehadiran & Izin', items: attendanceItems });
+    }
+
+    if (reportItems.length > 0) {
+        navGroups.push({ label: 'Laporan & Sistem', items: reportItems });
     }
 
     return (
@@ -139,7 +171,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain groups={navGroups} />
             </SidebarContent>
 
             <SidebarFooter>

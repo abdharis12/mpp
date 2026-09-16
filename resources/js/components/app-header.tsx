@@ -40,7 +40,7 @@ type Props = {
     breadcrumbs?: BreadcrumbItem[];
 };
 
-const mainNavItems: NavItem[] = [
+const desktopNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
@@ -67,6 +67,15 @@ const activeItemStyles =
 export function AppHeader({ breadcrumbs = [] }: Props) {
     const page = usePage();
     const { auth } = page.props;
+    const permissions: string[] =
+        (auth as any)?.user?.all_permissions?.map((p: any) => p.name) ?? [];
+
+    const mainNavItems = desktopNavItems.filter(
+        (item) =>
+            item.title !== 'Dashboard' ||
+            permissions.includes('view_dashboard'),
+    );
+
     const getInitials = useInitials();
     const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
 

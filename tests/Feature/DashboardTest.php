@@ -11,23 +11,34 @@ test('guests are redirected to the login page', function () {
 
 test('authenticated users can visit the dashboard', function () {
     $user = User::factory()->create();
+    Permission::firstOrCreate(['name' => 'view_dashboard']);
+    $user->givePermissionTo('view_dashboard');
     $this->actingAs($user);
 
     $response = $this->get(route('dashboard'));
     $response->assertOk();
 });
 
-test('shared auth context exposes combined role and direct permissions as all_permissions', function () {
+test('tenant staff is forbidden from visiting the dashboard', function () {
     makeTenantStaffRole();
-
-    Permission::firstOrCreate(['name' => 'request_leave']);
 
     $user = User::factory()->create();
     $user->assignRole('tenant_staff');
 
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertForbidden();
+});
+
+test('shared auth context exposes combined role and direct permissions as all_permissions', function () {
+    makeTenantStaffRole();
+
+    Permission::firstOrCreate(['name' => 'view_dashboard']);
     Permission::firstOrCreate(['name' => 'direct_permission']);
 
-    $user->givePermissionTo('direct_permission');
+    $user = User::factory()->create();
+    $user->assignRole('tenant_staff');
+    $user->givePermissionTo(['view_dashboard', 'direct_permission']);
 
     $this->actingAs($user)
         ->get(route('dashboard'))

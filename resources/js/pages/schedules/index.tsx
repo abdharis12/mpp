@@ -1,7 +1,8 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Pencil, Clock } from 'lucide-react';
+import { Plus, Pencil, Clock, Trash, Trash2 } from 'lucide-react';
+import { Pagination } from '@/components/pagination';
 
 const DAY_NAMES = [
     '',
@@ -20,8 +21,8 @@ export default function ScheduleIndex({ schedules }: { schedules: any }) {
     return (
         <>
             <Head title="Jadwal Kerja" />
-            <div className="space-y-6">
-                <div className="flex items-center justify-between">
+            <div className="space-y-6 p-10">
+                <div className="border-border flex items-center justify-between border-b pb-4">
                     <div>
                         <h1 className="text-2xl font-semibold">Jadwal Kerja</h1>
                         <p className="text-muted-foreground mt-1 text-sm">
@@ -30,7 +31,7 @@ export default function ScheduleIndex({ schedules }: { schedules: any }) {
                     </div>
                     <Link
                         href="/schedules/create"
-                        className="bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white"
+                        className="bg-secondary hover:bg-secondary/90 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white"
                     >
                         <Plus className="h-4 w-4" />
                         Tambah Jadwal
@@ -124,10 +125,9 @@ export default function ScheduleIndex({ schedules }: { schedules: any }) {
                                     <div className="flex gap-2">
                                         <Link
                                             href={`/schedules/${schedule.id}/edit`}
-                                            className="inline-flex items-center gap-1 px-2 py-1 text-xs text-blue-600 hover:text-blue-800"
+                                            className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:text-blue-800"
                                         >
                                             <Pencil className="h-3.5 w-3.5" />{' '}
-                                            Edit
                                         </Link>
                                         <button
                                             onClick={() => {
@@ -139,9 +139,9 @@ export default function ScheduleIndex({ schedules }: { schedules: any }) {
                                                     );
                                                 }
                                             }}
-                                            className="text-xs text-red-600 hover:text-red-800"
+                                            className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-xs text-red-600 hover:text-red-800"
                                         >
-                                            Hapus
+                                            <Trash2 className="h-3.5 w-3.5" />
                                         </button>
                                     </div>
                                 </div>
@@ -156,6 +156,8 @@ export default function ScheduleIndex({ schedules }: { schedules: any }) {
                         </Card>
                     )}
                 </div>
+
+                <Pagination meta={schedules} />
             </div>
         </>
     );
