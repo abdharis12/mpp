@@ -5,9 +5,12 @@ import { Building2, Plus, Pencil, Trash2 } from 'lucide-react';
 import { router } from '@inertiajs/react';
 import { usePage } from '@inertiajs/react';
 import { Pagination } from '@/components/pagination';
+import ConfirmDialog from '@/components/confirm-dialog';
+import { useState } from 'react';
 
 export default function TenantIndex({ tenants }: { tenants: any }) {
     const { flash } = usePage().props;
+    const [deleteTenant, setDeleteTenant] = useState<any>(null);
 
     return (
         <>
@@ -109,17 +112,11 @@ export default function TenantIndex({ tenants }: { tenants: any }) {
                                                         <Pencil className="h-3.5 w-3.5" />{' '}
                                                     </Link>
                                                     <button
-                                                        onClick={() => {
-                                                            if (
-                                                                confirm(
-                                                                    'Hapus tenant ini?',
-                                                                )
-                                                            ) {
-                                                                router.delete(
-                                                                    `/tenants/${tenant.id}`,
-                                                                );
-                                                            }
-                                                        }}
+                                                        onClick={() =>
+                                                            setDeleteTenant(
+                                                                tenant,
+                                                            )
+                                                        }
                                                         className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-xs text-red-600 hover:text-red-800"
                                                     >
                                                         <Trash2 className="h-3.5 w-3.5" />{' '}
@@ -148,6 +145,21 @@ export default function TenantIndex({ tenants }: { tenants: any }) {
 
                 <Pagination meta={tenants} />
             </div>
+
+            <ConfirmDialog
+                open={deleteTenant !== null}
+                onOpenChange={() => setDeleteTenant(null)}
+                title="Hapus tenant?"
+                description={`Tenant "${deleteTenant?.name ?? ''}" beserta semua data terkait akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.`}
+                confirmLabel="Hapus"
+                cancelLabel="Batal"
+                onConfirm={() => {
+                    if (deleteTenant) {
+                        router.delete(`/tenants/${deleteTenant.id}`);
+                        setDeleteTenant(null);
+                    }
+                }}
+            />
         </>
     );
 }

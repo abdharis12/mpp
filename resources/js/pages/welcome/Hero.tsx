@@ -124,51 +124,53 @@ export default function Hero({ today }: Props) {
                     </div>
 
                     {/* status board — glass transparan */}
-                    <div
-                        className="relative flex flex-col justify-between overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/40 p-5 shadow-[0_2px_10px_rgba(11,38,87,0.16),0_20px_40px_rgba(11,38,87,0.24)] backdrop-blur-md sm:p-6"
-                        style={{ borderLeft: `4px solid ${GOLD}` }}
-                        aria-label="Papan status layanan"
-                    >
-                        <div className="relative">
-                            <p className="text-sm font-medium text-white/85">
-                                Papan status layanan
-                            </p>
-                            <p
-                                className="mt-4 text-4xl font-semibold tracking-tight text-white tabular-nums"
-                                suppressHydrationWarning
-                            >
-                                {now?.timeLabel ?? '--:--'}
-                                <span className="text-xl text-white/80">
-                                    :{now?.secondsLabel ?? '--'}
-                                </span>
-                            </p>
-                            <p
-                                className="mt-2 text-sm text-white/85"
-                                suppressHydrationWarning
-                            >
-                                {now?.dateLabel ?? 'Memuat tanggal…'}
-                            </p>
-                        </div>
-
-                        <div className="relative mt-6 border-t border-white/25 pt-5">
-                            <div className="flex items-center justify-between gap-3">
-                                <span className="flex items-center gap-2.5 text-sm font-semibold text-white">
-                                    <span
-                                        className={`inline-block size-2.5 rounded-full ${lampClass}`}
-                                        style={{ backgroundColor: GOLD }}
-                                        aria-hidden="true"
-                                        suppressHydrationWarning
-                                    />
-                                    {jamStatus}
-                                </span>
-                                <span className="text-sm text-white/85 tabular-nums">
-                                    {todayHoursLabel}
-                                </span>
+                    <div>
+                        <div
+                            className="relative flex flex-col justify-between overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/40 p-5 shadow-[0_2px_10px_rgba(11,38,87,0.16),0_20px_40px_rgba(11,38,87,0.24)] backdrop-blur-md sm:p-6"
+                            style={{ borderLeft: `4px solid ${GOLD}` }}
+                            aria-label="Papan status layanan"
+                        >
+                            <div className="relative">
+                                <p className="text-sm font-medium text-white/85">
+                                    Papan status layanan
+                                </p>
+                                <p
+                                    className="mt-4 text-4xl font-semibold tracking-tight text-white tabular-nums"
+                                    suppressHydrationWarning
+                                >
+                                    {now?.timeLabel ?? '--:--'}
+                                    <span className="text-xl text-white/80">
+                                        :{now?.secondsLabel ?? '--'}
+                                    </span>
+                                </p>
+                                <p
+                                    className="mt-2 text-sm text-white/85"
+                                    suppressHydrationWarning
+                                >
+                                    {now?.dateLabel ?? 'Memuat tanggal…'}
+                                </p>
                             </div>
-                            <p className="mt-4 text-xs leading-relaxed text-white/70">
-                                Jadwal khusus dan hari libur ditetapkan oleh
-                                Admin MPP.
-                            </p>
+
+                            <div className="relative mt-6 border-t border-white/25 pt-5">
+                                <div className="flex items-center justify-between gap-3">
+                                    <span className="flex items-center gap-2.5 text-sm font-semibold text-white">
+                                        <span
+                                            className={`inline-block size-2.5 rounded-full ${lampClass}`}
+                                            style={{ backgroundColor: GOLD }}
+                                            aria-hidden="true"
+                                            suppressHydrationWarning
+                                        />
+                                        {jamStatus}
+                                    </span>
+                                    <span className="text-sm text-white/85 tabular-nums">
+                                        {todayHoursLabel}
+                                    </span>
+                                </div>
+                                <p className="mt-4 text-xs leading-relaxed text-white/70">
+                                    Jadwal khusus dan hari libur ditetapkan oleh
+                                    Admin MPP.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

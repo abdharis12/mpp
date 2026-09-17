@@ -3,6 +3,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Plus, FileText, Check, X, XCircle } from 'lucide-react';
 import { Pagination } from '@/components/pagination';
+import ConfirmDialog from '@/components/confirm-dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 
 const STATUS_CLASS: Record<string, string> = {
     PENDING: 'bg-amber-50 text-amber-700',
@@ -17,6 +21,11 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
         (p: any) => p.name === 'approve_leave',
     );
     const isStaff = Boolean((auth as any)?.user?.employee) && !canApprove;
+
+    const [approveLeave, setApproveLeave] = useState<any>(null);
+    const [cancelLeave, setCancelLeave] = useState<any>(null);
+    const [rejectLeave, setRejectLeave] = useState<any>(null);
+    const [rejectReason, setRejectReason] = useState('');
 
     return (
         <>
@@ -118,8 +127,8 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
                                                             <>
                                                                 <button
                                                                     onClick={() =>
-                                                                        router.post(
-                                                                            `/leaves/${leave.id}/approve`,
+                                                                        setApproveLeave(
+                                                                            leave,
                                                                         )
                                                                     }
                                                                     className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-emerald-50 px-2 py-1 text-xs text-emerald-600 hover:text-emerald-800"
@@ -128,20 +137,12 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
                                                                 </button>
                                                                 <button
                                                                     onClick={() => {
-                                                                        const reason =
-                                                                            prompt(
-                                                                                'Alasan penolakan:',
-                                                                            );
-                                                                        if (
-                                                                            reason
-                                                                        ) {
-                                                                            router.post(
-                                                                                `/leaves/${leave.id}/reject`,
-                                                                                {
-                                                                                    reason,
-                                                                                },
-                                                                            );
-                                                                        }
+                                                                        setRejectLeave(
+                                                                            leave,
+                                                                        );
+                                                                        setRejectReason(
+                                                                            '',
+                                                                        );
                                                                     }}
                                                                     className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-xs text-red-600 hover:text-red-800"
                                                                 >
@@ -153,17 +154,11 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
                                                         leave.status ===
                                                             'PENDING' && (
                                                             <button
-                                                                onClick={() => {
-                                                                    if (
-                                                                        confirm(
-                                                                            'Batalkan pengajuan izin?',
-                                                                        )
-                                                                    ) {
-                                                                        router.post(
-                                                                            `/leaves/${leave.id}/cancel`,
-                                                                        );
-                                                                    }
-                                                                }}
+                                                                onClick={() =>
+                                                                    setCancelLeave(
+                                                                        leave,
+                                                                    )
+                                                                }
                                                                 className="text-muted-foreground hover:text-foreground text-xs"
                                                             >
                                                                 Batalkan
@@ -193,6 +188,74 @@ export default function LeaveIndex({ leaves }: { leaves: any }) {
 
                 <Pagination meta={leaves} />
             </div>
+
+            <ConfirmDialog
+                open={approveLeave !== null}
+                onOpenChange={() => setApproveLeave(null)}
+                title="Setujui pengajuan izin?"
+                description={`Pengajuan izin ${approveLeave?.leave_type?.name ?? 'ini'} — ${approveLeave?.start_date ?? ''} hingga ${approveLeave?.end_date ?? ''} (${approveLeave?.employee?.name ?? ''}) — akan disetujui dan status akan berubah menjadi Disetujui.`}
+                confirmLabel="Setujui"
+                cancelLabel="Batal"
+                variant="warning"
+                onConfirm={() => {
+                    if (approveLeave) {
+                        router.post(`/leaves/${approveLeave.id}/approve`);
+                        setApproveLeave(null);
+                    }
+                }}
+            />
+
+            <ConfirmDialog
+                open={cancelLeave !== null}
+                onOpenChange={() => setCancelLeave(null)}
+                title="Batalkan pengajuan izin?"
+                description={`Pengajuan izin ${cancelLeave?.leave_type?.name ?? 'ini'} — ${cancelLeave?.start_date ?? ''} hingga ${cancelLeave?.end_date ?? ''} — akan dibatalkan dan status akan berubah menjadi Dibatalkan.`}
+                confirmLabel="Ya, batalkan"
+                cancelLabel="Kembali"
+                onConfirm={() => {
+                    if (cancelLeave) {
+                        router.post(`/leaves/${cancelLeave.id}/cancel`);
+                        setCancelLeave(null);
+                    }
+                }}
+            />
+
+            <ConfirmDialog
+                open={rejectLeave !== null}
+                onOpenChange={() => {
+                    setRejectLeave(null);
+                    setRejectReason('');
+                }}
+                title="Tolak pengajuan izin?"
+                description="Berikan alasan penolakan. Alasan ini akan dikembalikan kepada pemohon."
+                confirmLabel="Tolak"
+                cancelLabel="Batal"
+                onConfirm={() => {
+                    if (rejectLeave) {
+                        router.post(`/leaves/${rejectLeave.id}/reject`, {
+                            reason: rejectReason,
+                        });
+                        setRejectLeave(null);
+                        setRejectReason('');
+                    }
+                }}
+            >
+                <div className="space-y-2">
+                    <Label
+                        htmlFor="reject-reason"
+                        className="text-foreground text-sm"
+                    >
+                        Alasan penolakan
+                    </Label>
+                    <Input
+                        id="reject-reason"
+                        value={rejectReason}
+                        onChange={(e) => setRejectReason(e.target.value)}
+                        placeholder="Tulis alasan penolakan…"
+                        autoComplete="off"
+                    />
+                </div>
+            </ConfirmDialog>
         </>
     );
 }

@@ -203,6 +203,7 @@ export const NAV_LINKS = [
     { href: '#tenant', label: 'Tenant' },
     { href: '#fasilitas', label: 'Fasilitas' },
     { href: '#layanan-digital', label: 'Layanan Digital' },
+    { href: '#instagram', label: 'Instagram' },
     { href: '#kontak', label: 'Kontak' },
 ];
 
@@ -269,4 +270,5 @@ export type WelcomeProps = {
     schedule: ScheduleRow[];
     today: TodayInfo;
     reviews: Review[];
+    embedsocialRef: string;
 };

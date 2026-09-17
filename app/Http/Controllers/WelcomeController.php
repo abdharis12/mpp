@@ -90,6 +90,7 @@ class WelcomeController extends Controller
                 'holiday' => $todayHoliday,
             ],
             'reviews' => $reviews,
+            'embedsocialRef' => config('instagram.embedsocial_ref'),
         ]);
     }
 

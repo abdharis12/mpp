@@ -46,6 +46,42 @@ export function SectionHeading({
     );
 }
 
+export function SectionHeadingCenter({
+    eyebrow,
+    title,
+    description,
+}: {
+    eyebrow?: string;
+    title: string;
+    description?: string;
+}) {
+    return (
+        <div className="mb-10 mx-auto flex max-w-2xl flex-col items-center text-center">
+            {eyebrow && (
+                <p
+                    className="mb-3 text-sm font-semibold tracking-widest uppercase"
+                    style={{ color: BLUE }}
+                >
+                    {eyebrow}
+                </p>
+            )}
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                {title}
+            </h2>
+            {description && (
+                <p className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
+                    {description}
+                </p>
+            )}
+            <span
+                className="mt-4 block h-1 w-10 rounded-full"
+                style={{ backgroundColor: GOLD }}
+                aria-hidden="true"
+            />
+        </div>
+    );
+}
+
 export function tenantInitials(name: string): string {
     return name
         .replace(/^(Dinas|Kantor|Badan|UPT|Pemerintah|Kabupaten)\s+/i, '')

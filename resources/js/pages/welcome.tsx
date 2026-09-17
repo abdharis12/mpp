@@ -13,6 +13,8 @@ import ScheduleSection from './welcome/ScheduleSection';
 import ReviewSection from './welcome/ReviewSection';
 import ComplaintSection from './welcome/ComplaintSection';
 import Footer from './welcome/Footer';
+import InstagramSection from './welcome/InstagramSection';
+import Reveal from './welcome/Reveal';
 import type { WelcomeProps } from './welcome/content';
 
 export type { WelcomeProps };
@@ -24,6 +26,7 @@ export default function Welcome({
     schedule,
     today,
     reviews,
+    embedsocialRef,
 }: WelcomeProps) {
     return (
         <>
@@ -38,15 +41,30 @@ export default function Welcome({
                         stats={stats}
                         activeTenantsToday={activeTenantsToday}
                     />
-                    <MotoSection />
+                    <Reveal>
+                        <MotoSection />
+                    </Reveal>
                     <ServiceSection />
-                    <TenantMarquee tenants={tenants} />
+                    <Reveal>
+                        <TenantMarquee tenants={tenants} />
+                    </Reveal>
                     <FacilitySection />
-                    <QueueSkmSection />
-                    <FlowSection />
-                    <ScheduleSection schedule={schedule} />
-                    <ReviewSection reviews={reviews} />
-                    <ComplaintSection />
+                    <Reveal>
+                        <QueueSkmSection />
+                    </Reveal>
+                    <Reveal>
+                        <FlowSection />
+                    </Reveal>
+                    <Reveal>
+                        <ScheduleSection schedule={schedule} />
+                    </Reveal>
+                    <InstagramSection embedsocialRef={embedsocialRef} />
+                    <Reveal>
+                        <ReviewSection reviews={reviews} />
+                    </Reveal>
+                    <Reveal>
+                        <ComplaintSection />
+                    </Reveal>
                 </main>
                 <Footer />
             </div>

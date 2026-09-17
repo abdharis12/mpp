@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { BLUE, BLUE_DARK, type Tenant } from './content';
-import { SectionHeading, tenantInitials } from './helpers';
+import { SectionHeadingCenter, tenantInitials } from './helpers';
 
 type Props = { tenants: Tenant[] };
 
@@ -12,7 +12,7 @@ export default function TenantMarquee({ tenants }: Props) {
             className="border-border/70 mx-auto w-full max-w-6xl scroll-mt-20 border-t px-6 py-16 lg:px-8 lg:py-20"
             aria-labelledby="tenant-title"
         >
-            <SectionHeading
+            <SectionHeadingCenter
                 eyebrow="Tenant & Layanan"
                 title="Instansi yang bergabung dengan MPP"
                 description="Setiap tenant memiliki layanan masing-masing yang dapat diakses di loketnya dalam gedung."

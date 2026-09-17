@@ -3,6 +3,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Plus, AlertCircle, Check, X } from 'lucide-react';
 import { Pagination } from '@/components/pagination';
+import ConfirmDialog from '@/components/confirm-dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 
 const STATUS_CLASS: Record<string, string> = {
     PENDING: 'bg-amber-50 text-amber-700',
@@ -17,6 +21,10 @@ export default function CorrectionIndex({ corrections }: { corrections: any }) {
         (p: any) => p.name === 'approve_correction',
     );
     const isStaff = Boolean((auth as any)?.user?.employee) && !canApprove;
+
+    const [approveCorrection, setApproveCorrection] = useState<any>(null);
+    const [rejectCorrection, setRejectCorrection] = useState<any>(null);
+    const [rejectReason, setRejectReason] = useState('');
 
     return (
         <>
@@ -121,8 +129,8 @@ export default function CorrectionIndex({ corrections }: { corrections: any }) {
                                                             <>
                                                                 <button
                                                                     onClick={() =>
-                                                                        router.post(
-                                                                            `/corrections/${c.id}/approve`,
+                                                                        setApproveCorrection(
+                                                                            c,
                                                                         )
                                                                     }
                                                                     className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-emerald-50 px-2 py-1 text-xs text-emerald-600 hover:text-emerald-800"
@@ -131,20 +139,12 @@ export default function CorrectionIndex({ corrections }: { corrections: any }) {
                                                                 </button>
                                                                 <button
                                                                     onClick={() => {
-                                                                        const reason =
-                                                                            prompt(
-                                                                                'Alasan penolakan:',
-                                                                            );
-                                                                        if (
-                                                                            reason
-                                                                        ) {
-                                                                            router.post(
-                                                                                `/corrections/${c.id}/reject`,
-                                                                                {
-                                                                                    reason,
-                                                                                },
-                                                                            );
-                                                                        }
+                                                                        setRejectCorrection(
+                                                                            c,
+                                                                        );
+                                                                        setRejectReason(
+                                                                            '',
+                                                                        );
                                                                     }}
                                                                     className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-xs text-red-600 hover:text-red-800"
                                                                 >
@@ -176,6 +176,59 @@ export default function CorrectionIndex({ corrections }: { corrections: any }) {
 
                 <Pagination meta={corrections} />
             </div>
+
+            <ConfirmDialog
+                open={approveCorrection !== null}
+                onOpenChange={() => setApproveCorrection(null)}
+                title="Setujui koreksi kehadiran?"
+                description={`Koreksi ${approveCorrection?.employee?.name ?? ''} pada tanggal ${approveCorrection?.attendance_date ?? ''} akan disetujui dan data kehadiran akan diperbarui.`}
+                confirmLabel="Setujui"
+                cancelLabel="Batal"
+                variant="warning"
+                onConfirm={() => {
+                    if (approveCorrection) {
+                        router.post(`/corrections/${approveCorrection.id}/approve`);
+                        setApproveCorrection(null);
+                    }
+                }}
+            />
+
+            <ConfirmDialog
+                open={rejectCorrection !== null}
+                onOpenChange={() => {
+                    setRejectCorrection(null);
+                    setRejectReason('');
+                }}
+                title="Tolak koreksi kehadiran?"
+                description="Berikan alasan penolakan. Alasan ini akan dikembalikan kepada pemohon."
+                confirmLabel="Tolak"
+                cancelLabel="Batal"
+                onConfirm={() => {
+                    if (rejectCorrection) {
+                        router.post(`/corrections/${rejectCorrection.id}/reject`, {
+                            reason: rejectReason,
+                        });
+                        setRejectCorrection(null);
+                        setRejectReason('');
+                    }
+                }}
+            >
+                <div className="space-y-2">
+                    <Label
+                        htmlFor="reject-reason"
+                        className="text-foreground text-sm"
+                    >
+                        Alasan penolakan
+                    </Label>
+                    <Input
+                        id="reject-reason"
+                        value={rejectReason}
+                        onChange={(e) => setRejectReason(e.target.value)}
+                        placeholder="Tulis alasan penolakan…"
+                        autoComplete="off"
+                    />
+                </div>
+            </ConfirmDialog>
         </>
     );
 }

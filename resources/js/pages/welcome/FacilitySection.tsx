@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import {
     Dialog,
     DialogContent,
@@ -9,8 +10,25 @@ import {
 import { BLUE, FACILITIES, type Facility } from './content';
 import { SectionHeading } from './helpers';
 
+const containerVariants = {
+    hidden: {},
+    visible: {
+        transition: { staggerChildren: 0.06, delayChildren: 0.15 },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    },
+};
+
 export default function FacilitySection() {
     const [selected, setSelected] = useState<Facility | null>(null);
+    const shouldReduceMotion = useReducedMotion();
 
     return (
         <section
@@ -23,35 +41,42 @@ export default function FacilitySection() {
                 title="Fasilitas dalam gedung MPP"
                 description="Berbagai fasilitas pendukung tersedia untuk kenyamanan pengunjung."
             />
-            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-                {FACILITIES.map((facility) => (
-                    <li key={facility.name}>
-                        <button
-                            type="button"
-                            onClick={() => setSelected(facility)}
-                            className="border-border/70 hover:shadow-accent/5 flex w-full cursor-pointer flex-col items-center gap-0 rounded-lg border px-5 py-6 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_2px_8px_rgba(18,60,134,0.05),0_12px_28px_rgba(18,60,134,0.08)] transition-shadow duration-200"
-                            style={{ borderLeft: `4px solid ${BLUE}` }}
-                            aria-label={`Lihat foto ${facility.name}`}
-                        >
-                            <span
-                                className="bg-primary/10 mx-auto grid size-11 place-content-center rounded-2xl"
-                                style={{ color: BLUE }}
+            <motion.div
+                initial={shouldReduceMotion ? false : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1, margin: '0px 0px -40px 0px' }}
+                variants={containerVariants}
+            >
+                <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                    {FACILITIES.map((facility) => (
+                        <motion.li key={facility.name} variants={itemVariants}>
+                            <button
+                                type="button"
+                                onClick={() => setSelected(facility)}
+                                className="border-border/70 hover:shadow-accent/5 flex w-full cursor-pointer flex-col items-center gap-0 rounded-lg border px-5 py-6 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_2px_8px_rgba(18,60,134,0.05),0_12px_28px_rgba(18,60,134,0.08)] transition-shadow duration-200"
+                                style={{ borderLeft: `4px solid ${BLUE}` }}
+                                aria-label={`Lihat foto ${facility.name}`}
                             >
-                                <facility.icon
-                                    className="size-5"
-                                    aria-hidden="true"
-                                />
-                            </span>
-                            <h3 className="mt-4 text-sm font-semibold">
-                                {facility.name}
-                            </h3>
-                            <p className="text-muted-foreground mt-1.5 text-xs leading-relaxed">
-                                {facility.description}
-                            </p>
-                        </button>
-                    </li>
-                ))}
-            </ul>
+                                <span
+                                    className="bg-primary/10 mx-auto grid size-11 place-content-center rounded-2xl"
+                                    style={{ color: BLUE }}
+                                >
+                                    <facility.icon
+                                        className="size-5"
+                                        aria-hidden="true"
+                                    />
+                                </span>
+                                <h3 className="mt-4 text-sm font-semibold">
+                                    {facility.name}
+                                </h3>
+                                <p className="text-muted-foreground mt-1.5 text-xs leading-relaxed">
+                                    {facility.description}
+                                </p>
+                            </button>
+                        </motion.li>
+                    ))}
+                </ul>
+            </motion.div>
 
             <Dialog
                 open={!!selected}

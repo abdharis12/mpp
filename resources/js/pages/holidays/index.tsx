@@ -3,6 +3,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Pencil, CalendarOff, Power, Trash2 } from 'lucide-react';
 import { Pagination } from '@/components/pagination';
+import ConfirmDialog from '@/components/confirm-dialog';
+import { useState } from 'react';
 
 const TYPE_LABELS: Record<string, string> = {
     NATIONAL_HOLIDAY: 'Libur Nasional',
@@ -15,6 +17,8 @@ const TYPE_LABELS: Record<string, string> = {
 
 export default function HolidayIndex({ holidays }: { holidays: any }) {
     const { flash } = usePage().props;
+    const [deleteHoliday, setDeleteHoliday] = useState<any>(null);
+    const [toggleHoliday, setToggleHoliday] = useState<any>(null);
 
     return (
         <>
@@ -128,8 +132,8 @@ export default function HolidayIndex({ holidays }: { holidays: any }) {
                                                     {h.is_active ? (
                                                         <button
                                                             onClick={() =>
-                                                                router.post(
-                                                                    `/holidays/${h.id}/deactivate`,
+                                                                setToggleHoliday(
+                                                                    h,
                                                                 )
                                                             }
                                                             className="inline-flex items-center gap-1 px-2 py-1 text-xs text-amber-600 hover:text-amber-800"
@@ -140,8 +144,8 @@ export default function HolidayIndex({ holidays }: { holidays: any }) {
                                                     ) : (
                                                         <button
                                                             onClick={() =>
-                                                                router.post(
-                                                                    `/holidays/${h.id}/activate`,
+                                                                setToggleHoliday(
+                                                                    h,
                                                                 )
                                                             }
                                                             className="inline-flex items-center gap-1 px-2 py-1 text-xs text-emerald-600 hover:text-emerald-800"
@@ -157,17 +161,9 @@ export default function HolidayIndex({ holidays }: { holidays: any }) {
                                                         <Pencil className="h-3.5 w-3.5" />{' '}
                                                     </Link>
                                                     <button
-                                                        onClick={() => {
-                                                            if (
-                                                                confirm(
-                                                                    `Hapus hari libur "${h.name}"?`,
-                                                                )
-                                                            ) {
-                                                                router.delete(
-                                                                    `/holidays/${h.id}`,
-                                                                );
-                                                            }
-                                                        }}
+                                                        onClick={() =>
+                                                            setDeleteHoliday(h)
+                                                        }
                                                         className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-xs text-red-600 hover:text-red-800"
                                                     >
                                                         <Trash2 className="h-3.5 w-3.5" />{' '}
@@ -196,6 +192,51 @@ export default function HolidayIndex({ holidays }: { holidays: any }) {
 
                 <Pagination meta={holidays} />
             </div>
+
+            <ConfirmDialog
+                open={toggleHoliday !== null}
+                onOpenChange={() => setToggleHoliday(null)}
+                title={
+                    toggleHoliday?.is_active
+                        ? 'Nonaktifkan hari libur?'
+                        : 'Aktifkan hari libur?'
+                }
+                description={
+                    toggleHoliday?.is_active
+                        ? `"${toggleHoliday?.name ?? ''}" akan dinonaktifkan sehingga tidak lagi memengaruhi status layanan.`
+                        : `"${toggleHoliday?.name ?? ''}" akan diaktifkan kembali sehingga memengaruhi status layanan.`
+                }
+                confirmLabel={
+                    toggleHoliday?.is_active ? 'Nonaktifkan' : 'Aktifkan'
+                }
+                cancelLabel="Batal"
+                variant="warning"
+                onConfirm={() => {
+                    if (toggleHoliday) {
+                        router.post(
+                            toggleHoliday.is_active
+                                ? `/holidays/${toggleHoliday.id}/deactivate`
+                                : `/holidays/${toggleHoliday.id}/activate`,
+                        );
+                        setToggleHoliday(null);
+                    }
+                }}
+            />
+
+            <ConfirmDialog
+                open={deleteHoliday !== null}
+                onOpenChange={() => setDeleteHoliday(null)}
+                title="Hapus hari libur?"
+                description={`Hari libur "${deleteHoliday?.name ?? ''}" beserta seluruh periode waktunya akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.`}
+                confirmLabel="Hapus"
+                cancelLabel="Batal"
+                onConfirm={() => {
+                    if (deleteHoliday) {
+                        router.delete(`/holidays/${deleteHoliday.id}`);
+                        setDeleteHoliday(null);
+                    }
+                }}
+            />
         </>
     );
 }
