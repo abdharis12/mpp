@@ -33,10 +33,10 @@ export default function EmployeeForm({
                     <CardContent className="pt-6">
                         <Form
                             {...(
-                                (employee
-                                    ? update({ employee: employee.id })
-                                    : store) as any
-                            ).form()}
+                                employee
+                                    ? { action: update.url({ employee: employee.id }), method: 'put' }
+                                    : store.form()
+                            ) as any}
                             className="space-y-4"
                         >
                             <div className="grid gap-4 sm:grid-cols-2">
@@ -146,9 +146,11 @@ export default function EmployeeForm({
 
                             {employee && (
                                 <div className="flex items-center space-x-2">
+                                    <input type="hidden" name="is_active" value="0" />
                                     <Checkbox
                                         id="is_active"
                                         name="is_active"
+                                        value="1"
                                         defaultChecked={employee.is_active}
                                     />
                                     <Label htmlFor="is_active">

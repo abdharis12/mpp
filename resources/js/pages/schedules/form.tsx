@@ -103,10 +103,10 @@ export default function ScheduleForm({ schedule }: { schedule: any | null }) {
                     <CardContent className="pt-6">
                         <Form
                             {...(
-                                (schedule
-                                    ? update({ schedule: schedule.id })
-                                    : store) as any
-                            ).form()}
+                                schedule
+                                    ? { action: update.url({ schedule: schedule.id }), method: 'put' }
+                                    : store.form()
+                            ) as any}
                             className="space-y-5"
                         >
                             {days.map((day, i) => (
@@ -155,9 +155,11 @@ export default function ScheduleForm({ schedule }: { schedule: any | null }) {
                                 {schedule && (
                                     <div className="flex items-end pb-1">
                                         <div className="flex items-center space-x-2">
+                                            <input type="hidden" name="is_active" value="0" />
                                             <Checkbox
                                                 id="is_active"
                                                 name="is_active"
+                                                value="1"
                                                 defaultChecked={
                                                     schedule.is_active
                                                 }

@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Attendance;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -17,7 +18,7 @@ class AttendanceExport implements FromQuery, ShouldAutoSize, WithHeadings, WithM
         private readonly ?User $user = null,
     ) {}
 
-    public function query()
+    public function query(): Builder
     {
         $startDate = $this->month.'-01';
         $endDate = now()->parse($startDate)->endOfMonth()->format('Y-m-d');

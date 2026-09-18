@@ -11,8 +11,6 @@ import { store, update } from '@/routes/tenants';
 export default function TenantForm({ tenant }: { tenant: any | null }) {
     const { errors } = usePage().props;
 
-    const action = tenant ? update({ tenant: tenant.id }) : store();
-
     return (
         <>
             <Head title={tenant ? 'Edit Tenant' : 'Tambah Tenant'} />
@@ -30,10 +28,10 @@ export default function TenantForm({ tenant }: { tenant: any | null }) {
                     <CardContent className="pt-6">
                         <Form
                             {...(
-                                (tenant
-                                    ? update({ tenant: tenant.id })
-                                    : store) as any
-                            ).form()}
+                                tenant
+                                    ? { action: update.url({ tenant: tenant.id }), method: 'put' }
+                                    : store.form()
+                            ) as any}
                             className="space-y-4"
                         >
                             <div className="space-y-2">
@@ -109,9 +107,11 @@ export default function TenantForm({ tenant }: { tenant: any | null }) {
 
                             {tenant && (
                                 <div className="flex items-center space-x-2">
+                                    <input type="hidden" name="is_active" value="0" />
                                     <Checkbox
                                         id="is_active"
                                         name="is_active"
+                                        value="1"
                                         defaultChecked={tenant.is_active}
                                     />
                                     <Label htmlFor="is_active">

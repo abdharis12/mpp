@@ -85,10 +85,10 @@ export default function HolidayForm({
                     <CardContent className="pt-6">
                         <Form
                             {...(
-                                (holiday
-                                    ? update({ holiday: holiday.id })
-                                    : store) as any
-                            ).form()}
+                                holiday
+                                    ? { action: update.url({ holiday: holiday.id }), method: 'put' }
+                                    : store.form()
+                            ) as any}
                             className="space-y-4"
                         >
                             <input
